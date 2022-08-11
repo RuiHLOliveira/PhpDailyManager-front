@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <div v-if="exibirModal">
+  <div v-if="exibirModalImport">
     <div class="modalBackground">
       <div class="modal">
         <div class="flex-column alignitens-start pv5 ph10">
@@ -30,6 +30,9 @@
 <script>
 import deepCopy from '@/core/deepcopy.js';
 import Loader from '@/components/Loader.vue';
+import Request from '@/core/request.js';
+import AuthManager from '@/core/AuthManager.js';
+import config from '@/core/config.js'
 
 export default {
   name: "ImportData",
@@ -38,13 +41,12 @@ export default {
   },
   data () {
     return {
-      exibirModal: false,
+      // exibirModal: false,
       busy: false,
       fileToImport: null,
       editadoComSucesso: false,
     };
   },
-  // props: ["modalActive"],
   props: {
     exibirModalImport: Boolean,
   },
@@ -56,44 +58,61 @@ export default {
         // EventBus.$emit('LISTACONTAS_INDEX', {});
       }
     },
-    importFile() {
+    async importFile() {
       this.busy = true;
+      
+      let file = this.$refs.importfile.files[0];
+      let fileJson = await file.text();
 
-      let dataForm = new FormData();
-
-      for (let file of this.$refs.importfile.files) {
-        console.log('[file]',file);
-        dataForm.append(`file`, file);
-      }
-
-      console.log('[dataForm]',dataForm);
+      console.log('[fileJson]', fileJson);
 
       let headers = new Headers();
+      headers.append("Authorization", AuthManager.getToken());
+      headers.append('Accept','application/json');
 
-      fetch('http://localhost:8000' + "/backup/import", {
-        headers: headers,
-        method: 'POST',
-        body: dataForm,
-      }).then(async (response) => {
+      let requestData = {
+        'url': config.serverUrl + "/backup/import",
+        'headers': headers,
+        'method' : 'POST',
+        'data' : fileJson,
+      };
+
+      Request.fetch(requestData).then(([response,data]) => {
         console.log('[response]',response);
-        let responseText = await response.text();
-        console.log('[responseText]',responseText);
-        let responseData = JSON.parse(responseText);
-        console.log('[responseData]',responseData);
+        console.log('[data]',data);
         this.busy = false;
         this.editadoComSucesso = true;
-        // notify.notify(responseData.message, "success");
         this.fecharModal();
-      }).catch(error => {
-          this.busy = false;
-          // notify.notify(error, "error");
-      })
+      }).catch((error) => {
+        console.error(error);
+        this.busy = false;
+        alert(error);
+      });
+
+      // fetch(config.serverUrl + "/backup/import", {
+      //   headers: headers,
+      //   method: 'POST',
+      //   body: dataForm,
+      // }).then(async (response) => {
+      //   console.log('response',response);
+      //   let responseText = await response.text();
+      //   console.log('responseText',responseText);
+      //   let responseData = JSON.parse(responseText);
+      //   console.log('responseData',responseData);
+      //   this.busy = false;
+      //   this.editadoComSucesso = true;
+      // }).catch(error => {
+      //   console.error(error);
+      //   this.busy = false;
+      //   alert(error);
+      // })
+
     },
   },
   watch: {
-    exibirModalImport(newProp, oldProp) {
-      this.exibirModal = newProp;
-    },
+    // exibirModalImport(newProp, oldProp) {
+    //   this.exibirModal = newProp;
+    // },
   }
 }
 </script>

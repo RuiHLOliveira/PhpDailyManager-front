@@ -5,10 +5,11 @@
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
-        <div>Nova Atividade</div>
-        <input type="text" v-model="atividade.descricao">
-        <button class="btn form-input" @click="fecharModal()">Fechar</button>
-        <button class="btn form-input" @click="criarAtividade()">Salvar</button>
+        <h1>Nova Atividade</h1>
+        <label for="atividade">Atividade:</label>
+        <input name="atividade" type="text" placeholder="atividade" v-model="atividade.descricao">
+        <button @click="fecharModal()">Fechar</button>
+        <button @click="criarAtividade()">Salvar</button>
       </div>
     </div>
     <Loader :busy="busy"></Loader>
@@ -16,9 +17,10 @@
 </template>
 
 <script>
-// import EventBus from '@/core/EventBus.js';
 import deepCopy from '@/core/deepcopy.js';
 import Loader from '@/components/Loader.vue';
+import Request from '@/core/request.js';
+import config from '@/core/config.js'
 
 export default {
   components: {
@@ -30,48 +32,44 @@ export default {
       // horaLocal: {},
       atividade: {},
       busy: false,
-      editadoComSucesso: false
+      needReload: false
     }
   },
+  emits: ['reloadListaDias'],
   props: {
     exibirModal: Boolean,
     hora: Object
   },
   methods: {
     fecharModal() {
-      // this.exibirModalLocal = false;
       this.$emit('update:exibirModal', this.exibirModalLocal)
-      if(this.editadoComSucesso == true) {
-        // EventBus.$emit('LISTACONTAS_INDEX', {});
+      if(this.needReload == true) {
+        console.log('reload');
+        this.$emit('reloadListaDias', [])
       }
     },
     criarAtividade() {
       this.busy = true;
-      let url = 'http://localhost:8000/atividades';
       let body = {
         'descricao': this.atividade.descricao,
         'hora': this.hora.id
       };
-      let data = {
-        method: 'POST',
-        body: JSON.stringify(body)
+
+      let requestData = {
+        'url': config.serverUrl + '/atividades', //config.serverUrl + `/api/${this.localNote.notebook.id}/notes`;
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'POST',
+        'data' : body
       };
-      fetch(url,data)
-      .then(async response => {
-        data = await response.json();
-        console.log('[LOG]',response);
-        console.log('[LOG]',data);
-        if(!response.ok){
-          this.busy = false;
-          // notify.notify(data.message, "error");
-          return;
-        }
+      Request.fetch(requestData).then(([response, data]) => {
         this.busy = false;
-        // notify.notify('Editado!', "success");
-        this.editadoComSucesso = true;
-      })
-      .catch(error => {
-        console.log('[LOG]',error);
+        this.needReload = true;
+        alert('Atividade criada!');
+      }).catch((error) => {
+        console.error(error);
+        this.busy = false;
+        alert(error);
+        // notify.notify(error, "error");
       });
     },
   },
