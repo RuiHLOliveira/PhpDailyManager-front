@@ -63,8 +63,11 @@ export default {
       
       let file = this.$refs.importfile.files[0];
       let fileJson = await file.text();
+      console.log('1',fileJson);
+      let fileJson2 = JSON.parse(fileJson);
+      console.log('2',fileJson2);
 
-      console.log('[fileJson]', fileJson);
+      console.log('[fileJson2]', fileJson2);
 
       let headers = new Headers();
       headers.append("Authorization", AuthManager.getToken());
@@ -74,7 +77,7 @@ export default {
         'url': config.serverUrl + "/backup/import",
         'headers': headers,
         'method' : 'POST',
-        'data' : fileJson,
+        'data' : fileJson2,
       };
 
       Request.fetch(requestData).then(([response,data]) => {
@@ -88,24 +91,6 @@ export default {
         this.busy = false;
         alert(error);
       });
-
-      // fetch(config.serverUrl + "/backup/import", {
-      //   headers: headers,
-      //   method: 'POST',
-      //   body: dataForm,
-      // }).then(async (response) => {
-      //   console.log('response',response);
-      //   let responseText = await response.text();
-      //   console.log('responseText',responseText);
-      //   let responseData = JSON.parse(responseText);
-      //   console.log('responseData',responseData);
-      //   this.busy = false;
-      //   this.editadoComSucesso = true;
-      // }).catch(error => {
-      //   console.error(error);
-      //   this.busy = false;
-      //   alert(error);
-      // })
 
     },
   },

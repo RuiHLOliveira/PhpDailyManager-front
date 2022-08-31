@@ -57,6 +57,9 @@ export default {
       };
       fetch(url,data)
       .then(async response => {
+        if(!response.ok){
+          throw 'Error in loggin in';
+        }
         data = await response.json();
         console.log('[LOG]',response);
         console.log('[LOG]',data);

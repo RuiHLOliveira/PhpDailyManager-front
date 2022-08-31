@@ -6,25 +6,30 @@
     <div class="container">
 
       <h1>Dias</h1>
+      
 
-      <section>
+      <!-- <section>
         <h2>Criar Dia</h2>
         <label for="dataCompleta">Data:</label>
         <input name="dataCompleta" type="date" placeholder="nome" v-model="dataCompleta">
         <button @click="criarDia()">Criar dia</button>
+      </section> -->
+
+      <section class="flex-lateral-button">
+        <h2>Lista de Dias</h2>
+        <button class="btn btn-sm" type="button" @click="toggleModalCriarDia()">Novo +</button>
       </section>
 
       <section>
-        <h2>Lista de Dias</h2>
 
         <div v-for="dia in dias" :key="dia.id">
-          <button type="button" @click="toggleShowHoras(dia)">{{ dia.dataCompleta }}</button>
+          <button class='diaBox' type="button" @click="toggleShowHoras(dia)">{{ dia.dataCompleta }}</button>
           <div v-if="dia.showHoras">
             <div v-for="hora in dia.horas" :key="hora.id">
-              {{ hora.hora }}
-              <button class="btn-sm" type="button" @click="toggleModalCriarAtividade(hora)">+</button>
-              <button class="btn-sm" type="button" v-for="atividade in hora.atividades" :key="atividade.id"
-                @click="toggleModalEditarAtividade(atividade)" >
+              <span class='hora'>{{ hora.hora }}</span>
+              <button class="btn" type="button" @click="toggleModalCriarAtividade(hora,dia)">+</button>
+              <button class="btn" :class="{ btn_atividade_concluida: atividade.situacao == 1, btn_atividade_falhou: atividade.situacao == 2}" type="button" v-for="atividade in hora.atividades" :key="atividade.id"
+                @click="toggleModalEditarAtividade(atividade,hora,dia)" >
                 {{ atividade.descricao }}
               </button>
             </div>
@@ -34,16 +39,25 @@
     </div>
 
     <Loader :busy="busy"></Loader>
+    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
+
+    <ModalCriarDia
+      v-model:exibirModal="exibirModalCriarDia"
+      @reloadListaDias="buscaDias()">
+    </ModalCriarDia>
 
     <ModalCriarAtividade
       v-model:exibirModal="exibirModalCriarAtividade"
       :hora="horaModalNovaAtividade"
+      :dia="diaModalNovaAtividade"
       @reloadListaDias="buscaDias()">
     </ModalCriarAtividade>
     
     <ModalEditarAtividade
       v-model:exibirModal="exibirModalEditarAtividade"
       :atividade="atividadeModalEditarAtividade"
+      :hora="horaModalEditarAtividade"
+      :dia="diaModalEditarAtividade"
       @reloadListaDias="buscaDias()"><!-- @update:atividade="buscaDias()" -->
     </ModalEditarAtividade>
   </div>
@@ -51,71 +65,65 @@
 
 <script>
 import Loader from '@/components/Loader.vue';
+import Notifier from '@/components/Notifier.vue';
+import ModalCriarDia from '@/views/ModalCriarDia.vue';
 import ModalCriarAtividade from '@/views/ModalCriarAtividade.vue';
 import ModalEditarAtividade from '@/views/ModalEditarAtividade.vue';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
-// import ModalEditarConta from '@/views/ModalEditarConta.vue';
-// import ModalExcluirConta from '@/views/ModalExcluirConta.vue';
 
 export default {
   name: 'ListaDias',
   components: {
     Loader,
+    ModalCriarDia,
     ModalCriarAtividade,
     ModalEditarAtividade,
-    // ModalEditarConta,
-    // ModalExcluirConta
+    Notifier
   },
   data: () => {
     return {
       busy: false,
+      showNotify: false,
+      notifyMessage: '',
       dataCompleta: '',
       dias: [],
+      exibirModalCriarDia: false,
       exibirModalCriarAtividade: false,
       exibirModalEditarAtividade: false,
       horaModalNovaAtividade: [],
+      diaModalNovaAtividade: [],
       atividadeModalEditarAtividade: [],
-
-      // noticeboxQueue: [],
-      // exibirModalEdicao: false,
-      // exibirModalExcluirConta: false,
-      // contaEditar: {},
-      // contaExcluir: {}
+      horaModalEditarAtividade: [],
+      diaModalEditarAtividade: []
     }
   },
   methods: {
-    // ativarModalExcluirConta (contaId) {
-    //   let contaEncontrada = this.contas.filter((conta) => {
-    //     return conta.id == contaId;
-    //   });
-    //   contaEncontrada = contaEncontrada[0]
-    //   this.contaExcluir = contaEncontrada
-    //   this.exibirModalExcluirConta = true;
-    // },
-    // ativarModalEdicao (contaId) {
-    //   let contaEncontrada = this.contas.filter((conta) => {
-    //     return conta.id == contaId;
-    //   });
-    //   contaEncontrada = contaEncontrada[0]
-    //   this.contaEditar = contaEncontrada
-    //   this.exibirModalEdicao = true;
-    // },
+    notify(message, type = 'success'){
+        this.showNotify = true;
+        this.notifyMessage = message;
+    },
     toggleShowHoras(dia) {
       dia.showHoras = !dia.showHoras
     },
-    toggleModalCriarAtividade (hora) {
+    toggleModalCriarDia () {
+      this.exibirModalCriarDia = true;
+    },
+    toggleModalCriarAtividade (hora,dia) {
       this.horaModalNovaAtividade = hora
+      this.diaModalNovaAtividade = dia
       this.exibirModalCriarAtividade = true;
     },
-    toggleModalEditarAtividade (atividade) {
+    toggleModalEditarAtividade (atividade, hora, dia) {
       this.atividadeModalEditarAtividade = atividade
       this.exibirModalEditarAtividade = true;
+      this.horaModalEditarAtividade = hora
+      this.diaModalEditarAtividade = dia
     },
     buscaDias () {
       this.busy = true;
       let requestData = {
-        'url': config.serverUrl + '/dias', //config.serverUrl + `/api/${this.localNote.notebook.id}/notes`;
+        'url': config.serverUrl + '/dias' + '?orderBy=dataCompleta,desc',
       };
 
       Request.fetch(requestData)
@@ -124,69 +132,16 @@ export default {
         this.busy = false;
       })
       .catch((error) => {
-        console.error(error);
         this.busy = false;
-        alert(error);
-        // notify.notify(error, "error");
+        this.notify('Ocorreu um erro.');
+        console.error(error);
       });
     },
-
-    criarDia() {
-      this.busy = true;
-      let body = {
-        'dataCompleta': this.dataCompleta
-      };
-      let requestData = {
-        'url': config.serverUrl + '/dias', //config.serverUrl + `/api/${this.localNote.notebook.id}/notes`;
-        'headers': new Headers({'Content-Type': 'application/json'}),
-        'method' : 'post',
-        'data' : body
-      };
-      Request.fetch(requestData).then(([response, data]) => {
-        this.busy = false;
-        this.buscaDias();
-      }).catch((error) => {
-        console.error(error);
-        this.busy = false;
-        alert(error);
-        // notify.notify(error, "error");
-      });
-    },
-    // excluirConta(idConta){
-    //   this.busy = true;
-    //   let url = config.serverUrl + '/contas/' + idConta;
-    //   let data = {
-    //     method: 'delete',
-    //   };
-    //   fetch(url,data)
-    //   .then(async response => {
-    //     data = await response.json();
-    //     console.log('[LOG]',response);
-    //     console.log('[LOG]',data);
-    //     if(!response.ok){
-    //       this.busy = false;
-    //       notify.notify(data.message, "error");
-    //       return;
-    //     }
-    //     this.busy = false;
-    //     notify.notify('deletado!', "success");
-    //     this.buscaContas();
-    //   })
-    //   .catch(error => {
-    //     console.log('[LOG]',error);
-    //   });
-    // },
   },
   watch: {
   },
   created () {
     this.buscaDias();
-    // EventBus.$on('LISTACONTAS_INDEX', (data) => {
-    //   this.buscaContas();
-    // });
   },
-  destroyed() {
-    // EventBus.$off('LISTACONTAS_INDEX');
-  }
 }
 </script>

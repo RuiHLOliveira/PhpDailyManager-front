@@ -1,7 +1,25 @@
 
+/* default color ?? */
+:root {
+    --default-button-color: #2677a6;
+    --situacao1-button-color: #26a67b;
+    --default-button-color-background: #20648b;
+    --situacao1-button-color-background: #1c7c73;
+
+    
+    --default-button-color: #26a67b;
+    --situacao1-button-color: #235041;
+    --situacao2-button-color: #b93838;
+    --default-button-color-background: #26a67b;
+    --situacao1-button-color-background: #235041;
+    --situacao2-button-color-background: #b93838;
+
+    --red-button-color: #b93838;
+}
+
 a.btn,
 button {
-    background-color: #26a69a;
+    background-color: var(--default-button-color);
     color: #ffffff;
     display: inline-block;
     padding: 5px 10px;
@@ -20,11 +38,34 @@ button {
 
 a.btn:hover,
 button:hover {
-    background-color: #1f8a7f;
+    background-color: var(--default-button-color-background);
 }
+
+a.btn-red,
+button.btn-red {
+    background-color: var(--red-button-color)
+}
+
+
+.btn_atividade_concluida {
+    background-color: var(--situacao1-button-color)
+}
+
+.btn_atividade_concluida:hover {
+    background-color: var(--situacao1-button-color-background)
+}
+
+.btn_atividade_falhou {
+    background-color: var(--situacao2-button-color)
+}
+
+.btn_atividade_falhou:hover {
+    background-color: var(--situacao2-button-color-background)
+}
+
 
 a.btn.btn-sm,
 button.btn-sm {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 2px 5px;
 }

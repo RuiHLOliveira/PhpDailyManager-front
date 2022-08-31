@@ -5,7 +5,7 @@
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
-        <h1>Nova Atividade</h1>
+        <h1>Nova Atividade - {{dia.dataCompleta}} às {{hora.hora}} horas</h1>
         <label for="atividade">Atividade:</label>
         <input name="atividade" type="text" placeholder="atividade" v-model="atividade.descricao">
         <button @click="fecharModal()">Fechar</button>
@@ -13,18 +13,21 @@
       </div>
     </div>
     <Loader :busy="busy"></Loader>
+    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
   </div>
 </template>
 
 <script>
 import deepCopy from '@/core/deepcopy.js';
 import Loader from '@/components/Loader.vue';
+import Notifier from '@/components/Notifier.vue';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
 
 export default {
   components: {
-    Loader
+    Loader,
+    Notifier
   },
   data: function () {
     return {
@@ -32,20 +35,32 @@ export default {
       // horaLocal: {},
       atividade: {},
       busy: false,
-      needReload: false
+      needReload: false,
+      showNotify: false,
+      notifyMessage: '',
     }
   },
   emits: ['reloadListaDias'],
   props: {
     exibirModal: Boolean,
-    hora: Object
+    hora: Object,
+    dia: Object,
   },
   methods: {
+    resetFields(needReload = false){
+      this.needReload = needReload;
+      this.atividade = {};
+    },
+    notify(message, type = 'success'){
+        this.showNotify = true;
+        this.notifyMessage = message;
+    },
     fecharModal() {
       this.$emit('update:exibirModal', this.exibirModalLocal)
       if(this.needReload == true) {
         console.log('reload');
         this.$emit('reloadListaDias', [])
+        this.resetFields();
       }
     },
     criarAtividade() {
@@ -62,14 +77,14 @@ export default {
         'data' : body
       };
       Request.fetch(requestData).then(([response, data]) => {
+        this.notify('Atividade criada!');
         this.busy = false;
         this.needReload = true;
-        alert('Atividade criada!');
+        this.resetFields(true);
       }).catch((error) => {
         console.error(error);
         this.busy = false;
-        alert(error);
-        // notify.notify(error, "error");
+        this.notify('Ocorreu um erro.' + error);
       });
     },
   },

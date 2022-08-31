@@ -11,13 +11,20 @@ section {
 
       <section>
         <h1>Register</h1>
+
+        <label for="invitationToken">Palavra Passe:</label>
+        <input name="invitationToken" type="text" placeholder="invitationToken" v-model="invitationToken">
+
         <label for="email">Email:</label>
         <input name="email" type="email" placeholder="email" v-model="email">
 
         <label for="password">Senha:</label>
         <input name="password" type="password" placeholder="senha" v-model="password">
 
-        <button @click="login()">Criar conta</button>
+        <label for="repeatPassword">Repita a senha:</label>
+        <input name="repeatPassword" type="password" placeholder="repeatPassword" v-model="repeatPassword">
+
+        <button @click="register()">Criar conta</button>
       </section>
     </div>
 
@@ -28,6 +35,7 @@ section {
 <script>
 import Loader from '@/components/Loader.vue';
 import config from '@/core/config.js'
+import Request from '@/core/request.js'
 
 export default {
   name: 'ListaDias',
@@ -39,32 +47,55 @@ export default {
       busy: false,
       email: '',
       password: '',
+      invitationToken: '',
+      repeatPassword: '',
     }
   },
   methods: {
-    login () {
+    register () {
       this.busy = true;
       let url = config.serverUrl + '/auth/register';
       let body = {
         'email': this.email,
-        'password': this.password
+        'password': this.password,
+        'invitationToken': this.invitationToken,
+        'repeatPassword': this.repeatPassword
       };
       let data = {
         method: 'POST',
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       };
-      fetch(url,data)
-      .then(async response => {
-        data = await response.json();
-        console.log('[LOG]',response);
-        console.log('[LOG]',data);
-        this.dias = data
+
+      let requestData = {
+        'url': url,
+        method: 'POST',
+        data: body,
+        notAuthenticated: true
+      };
+      Request.fetch(requestData)
+      .then(([response, data]) => {
+        console.log('data',data);
         this.busy = false;
-        // notify.notify('carregado!', "success");
-      }).catch(error => {
-        console.log('[LOG]',error);
+      })
+      .catch((error) => {
+        console.error(error);
         this.busy = false;
+        alert(error);
+        // notify.notify(error, "error");
       });
+      
+      // fetch(url,data)
+      // .then(async response => {
+      //   data = await response.json();
+      //   console.log('[LOG]',response);
+      //   console.log('[LOG]',data);
+      //   this.dias = data
+      //   this.busy = false;
+      //   // notify.notify('carregado!', "success");
+      // }).catch(error => {
+      //   console.log('[LOG]',error);
+      //   this.busy = false;
+      // });
     },
   },
   watch: {

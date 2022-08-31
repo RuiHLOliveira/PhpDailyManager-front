@@ -4,6 +4,7 @@
     <nav class="shadow-1">
       <router-link class="btn" to="/">Login</router-link>
       <router-link class="btn" to="/register">Register</router-link>
+      <router-link class="btn" to="/invitations">invitations</router-link>
       <router-link class="btn" to="/listaDias">Lista Dias</router-link>
       <button @click="exportData()">Export Data</button>
       <button @click="openImportDataModal()">Import Data</button>
