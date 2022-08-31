@@ -32,12 +32,40 @@ h1,h2,h3,h4,h5,h6 {
     font-weight: normal;
 }
 
+.flex {
+    display: flex;
+}
+
+.flex-justify-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-lateral-button {
+    display: flex;
+    align-items: center;
+}
+
 section {
     border-top: 1px solid #b8b8b8;
     margin-top: 20px;
     padding-bottom: 20px;
     /* background-color: beige; */
 }
+
+.diaBox {
+    display:inline-block;
+    width: 130px;
+    text-align: center;
+}
+
+.hora {
+    display:inline-block;
+    width: 25px;
+    /* border: 1px solid black; */
+    text-align: center;
+}
+
 
 
 label {

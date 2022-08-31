@@ -2,14 +2,7 @@ import config from "./config.js";
 import AuthManager from "./AuthManager.js"
 export default {
 
-    fetch(params){
-
-        params.method = params.method !== undefined ? params.method : 'GET' //default
-        params.headers = params.headers != null ? params.headers : new Headers;
-        params.headers.append("Authorization", AuthManager.getToken()); //set authorization
-
-        //content headers
-        params.headers.append('Accept','application/json');
+    processRequestBodyConsideringContentType(params){
 
         let data = null;
         if(params.forceDefaultContentType !== true) {
@@ -20,6 +13,22 @@ export default {
             console.log('form mode');
             data = params.data
         }
+        return data;
+    },
+
+    fetch(params){
+
+        params.method = params.method !== undefined ? params.method : 'GET' //default
+        params.headers = params.headers != null ? params.headers : new Headers;
+
+        if(params.notAuthenticated !== true) {
+            params.headers.append("Authorization", AuthManager.getToken()); //set authorization
+        }
+
+        //content headers
+        params.headers.append('Accept','application/json');
+
+        let data = this.processRequestBodyConsideringContentType(params);
 
         return new Promise((resolve, reject) => {
             try {
@@ -37,7 +46,8 @@ export default {
                             console.log('[Log] [decoded text]', text)
                             try {
                                 let json = JSON.parse(text);
-                                reject('[Warning] [' +  json.message ? json.message : json.detail ? json.detail : "an error ocurred" + "]")
+                                let message = json.hasOwnProperty('message') ? json.message : json;
+                                reject('[Warning] [' + message  + "]")
                             } catch (error) {
                                 console.error('[Warning] [catch json.parse]', error)
                                 reject(text)
@@ -83,10 +93,11 @@ export default {
                     })
                 })
                 .catch ((error) => {
+                    console.error('catch 89', error);
                     reject(error);
                 })
             } catch (error) {
-                //NETWORK ERROR
+                console.error('catch 93', error);
                 reject(error);
             }
         });
@@ -132,13 +143,15 @@ export default {
     },
     
     requestRepeat(params){
-        const data = params.forceDefaultContentType !== true ? params.data : JSON.stringify(params.data);
+        // const data = params.forceDefaultContentType !== true ? params.data : JSON.stringify(params.data);
         params.method = params.method !== undefined ? params.method : 'GET';
         params.headers.delete('Authorization');
         params.headers.set("Authorization", AuthManager.getToken());
         
         if((params.method == 'POST' || params.method == 'PUT') && params.forceDefaultContentType !== true)
             params.headers.append('Content-Type','application/json');
+
+        let data = this.processRequestBodyConsideringContentType(params);
 
         return new Promise((resolve, reject) => {
             try {

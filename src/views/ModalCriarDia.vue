@@ -5,11 +5,11 @@
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
-        <h1>Nova Atividade - {{dia.dataCompleta}} às {{hora.hora}} horas</h1>
-        <label for="atividade">Atividade:</label>
-        <input name="atividade" type="text" placeholder="atividade" v-model="atividade.descricao">
+        <h1>Criar novo dia</h1>
+        <label for="dataCompleta">Data:</label>
+        <input name="dataCompleta" type="date" placeholder="nome" v-model="dataCompleta">
         <button @click="fecharModal()">Fechar</button>
-        <button @click="criarAtividade()">Salvar</button>
+        <button @click="criarDia()">Criar dia</button>
       </div>
     </div>
     <Loader :busy="busy"></Loader>
@@ -20,9 +20,9 @@
 <script>
 import deepCopy from '@/core/deepcopy.js';
 import Loader from '@/components/Loader.vue';
-import Notifier from '@/components/Notifier.vue';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
+import Notifier from '@/components/Notifier.vue';
 
 export default {
   components: {
@@ -31,9 +31,7 @@ export default {
   },
   data: function () {
     return {
-      // exibirModalLocal: false,
-      // horaLocal: {},
-      atividade: {},
+      dataCompleta: {},
       busy: false,
       needReload: false,
       showNotify: false,
@@ -43,8 +41,6 @@ export default {
   emits: ['reloadListaDias'],
   props: {
     exibirModal: Boolean,
-    hora: Object,
-    dia: Object,
   },
   methods: {
     notify(message, type = 'success'){
@@ -52,35 +48,34 @@ export default {
         this.notifyMessage = message;
     },
     resetFields(needReload = false){
-      this.needReload = needReload;
-      this.atividade = {};
+        this.needReload = needReload;
+        this.busy = false;
+        this.dataCompleta = {};
     },
     fecharModal() {
-      this.$emit('update:exibirModal', this.exibirModalLocal)
+      this.$emit('update:exibirModal', false)
       if(this.needReload == true) {
         console.log('reload');
         this.$emit('reloadListaDias', [])
-        this.resetFields();
       }
+      this.resetFields();
     },
-    criarAtividade() {
+    criarDia() {
       this.busy = true;
       let body = {
-        'descricao': this.atividade.descricao,
-        'hora': this.hora.id
+        'dataCompleta': this.dataCompleta,
       };
 
       let requestData = {
-        'url': config.serverUrl + '/atividades', //config.serverUrl + `/api/${this.localNote.notebook.id}/notes`;
+        'url': config.serverUrl + '/dias',
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'POST',
         'data' : body
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.notify('Atividade criada!');
         this.busy = false;
-        this.needReload = true;
-        this.resetFields(true);
+        this.resetFields(true)
+        this.notify('Dia criado!');
       }).catch((error) => {
         console.error(error);
         this.busy = false;
@@ -92,9 +87,6 @@ export default {
     exibirModal(newProp, oldProp) {
       // this.exibirModalLocal = newProp;
     },
-    hora(newProp, oldProp) {
-      // this.horaLocal = deepCopy.deepCopy(newProp);
-    }
   }
 }
 </script>

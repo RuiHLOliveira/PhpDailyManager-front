@@ -4,6 +4,7 @@
     <nav class="shadow-1">
       <router-link class="btn" to="/">Login</router-link>
       <router-link class="btn" to="/register">Register</router-link>
+      <router-link class="btn" to="/invitations">invitations</router-link>
       <router-link class="btn" to="/listaDias">Lista Dias</router-link>
       <button @click="exportData()">Export Data</button>
       <button @click="openImportDataModal()">Import Data</button>
@@ -15,7 +16,7 @@
 
     <ImportData v-model:exibirModalImport="exibirModalImport" />
     <Loader :busy="busy"></Loader>
-    <!-- <NoticeBox></NoticeBox> -->
+    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
   </div>
 </template>
 
@@ -24,26 +25,32 @@
 </style>
 
 <script>
-// import NoticeBox from '@/components/NoticeBox.vue';
 import Loader from '@/components/Loader.vue';
 import ImportData from "@/views/ImportData.vue";
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
+import Notifier from '@/components/Notifier.vue';
 
 export default {
   name: "App",
   components: {
     ImportData,
-    // NoticeBox,
-    Loader
+    Loader,
+    Notifier
   },
   data: function () {
     return {
       busy: false,
       exibirModalImport: false,
+      showNotify: false,
+      notifyMessage: '',
     }
   },
   methods: {
+    notify(message, type = 'success'){
+        this.showNotify = true;
+        this.notifyMessage = message;
+    },
     redirectAfterLogin(){
       this.$router.push({ path: '/listaDias' })
     },
@@ -72,13 +79,11 @@ export default {
         link.download = date + '.phpdailymanager.export.json'
         link.click()
         URL.revokeObjectURL(link.href)
-
         this.busy = false;
       }).catch((error) => {
-        console.error(error);
         this.busy = false;
-        alert(error);
-        // notify.notify(error, "error");
+        console.error(error);
+        this.notify(error);
       });
 
     },
