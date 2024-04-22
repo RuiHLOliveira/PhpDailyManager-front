@@ -7,30 +7,28 @@
       <div class="modal">
 
         <section>
-          <h1>Editar Atividade</h1>
+          <h1>Editar Tarefa</h1>
           <h3>
-            <span v-if="exibeDiaSemana">{{ getWeekDay(dia.dataCompletaObject) }}, </span>
-            {{ formatBrDate(dia.dataCompletaObject) }}
-            , às {{atividade.hora}} horas. 
-          <span>Atividade {{ atividade.situacaoDescritivo }}</span>
+            {{ projeto.nome }}
+          <span>Tarefa {{ tarefa.situacaoDescritivo }}</span>
           </h3>
 
-          <label for="atividade">Atividade:</label>
-          <input name="atividade" type="text" placeholder="atividade" v-model="atividadeLocal.descricao">
+          <label for="tarefa">Tarefa:</label>
+          <input name="tarefa" type="text" placeholder="tarefa" v-model="tarefaLocal.descricao">
           
           <label for="hora">Hora:</label>
-          <input name="hora" type="time" placeholder="hora" v-model="atividadeLocal.hora">
+          <input name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
 
         </section>
           
         <section class="flex-justify-space-between">
           <div>
             <button class="btn-wider btn-red" @click="fecharModal()">Fechar</button>
-            <button class="btn-wider" @click="editarAtividade()">Salvar</button>
+            <button class="btn-wider" @click="editarTarefa()">Salvar</button>
           </div>
-          <div v-if="atividadeLocal.situacao == 0">
-            <button class="btn-wider btn-red" @click="falheiAtividade()">Falhar</button>
-            <button class="btn-wider" @click="concluirAtividade()">Concluir</button>
+          <div v-if="tarefaLocal.situacao == 0">
+            <button class="btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
+            <button class="btn-wider" @click="concluirTarefa()">Concluir</button>
           </div>
         </section>
 
@@ -56,18 +54,18 @@ export default {
   },
   data: function () {
     return {
-      atividadeLocal: [],
+      tarefaLocal: [],
       busy: false,
       needReload: false,
       configuracoes: [],
-      exibeDiaSemana: false
+      exibeProjetoSemana: false
     }
   },
-  emits: ['reloadListaDiasHabitTracker','update:exibirModal'],
+  emits: ['reloadListaProjetosHabitTracker','update:exibirModal'],
   props: {
     exibirModal: Boolean,
-    atividade: Object,
-    dia: Object
+    tarefa: Object,
+    projeto: Object
   },
   methods: {
     /** 
@@ -89,7 +87,7 @@ export default {
       console.log('this.needReload',this.needReload);
       if(this.needReload == true) {
         console.log('reload');
-        this.$emit('reloadListaDiasHabitTracker', []);
+        this.$emit('reloadListaProjetosHabitTracker', []);
         this.resetFields();
       }
     },
@@ -97,20 +95,20 @@ export default {
     /**
      * APIS FETCH
      */
-    editarAtividade() {
+    editarTarefa() {
       this.busy = true;
       let body = {
-        'descricao': this.atividadeLocal.descricao,
-        'hora': this.atividadeLocal.hora,
+        'descricao': this.tarefaLocal.descricao,
+        'hora': this.tarefaLocal.hora,
       };
       let requestData = {
-        'url': config.serverUrl + '/atividades/' + this.atividade.id,
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id,
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'PUT',
         'data' : body
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Atividade editada!')
+        this.$refs.notifier.notify('Tarefa editada!')
         this.busy = false;
         this.resetFields(true);
       }).catch((error) => {
@@ -120,18 +118,18 @@ export default {
       });
     },
 
-    concluirAtividade() {
+    concluirTarefa() {
       this.busy = true;
       let requestData = {
-        'url': config.serverUrl + '/atividades/' + this.atividade.id + '/concluir',
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/concluir',
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'POST',
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Atividade concluída!')
+        this.$refs.notifier.notify('Tarefa concluída!')
         this.busy = false;
         this.resetFields(true);
-        atividadeLocal.situacao = 1
+        tarefaLocal.situacao = 1
       }).catch((error) => {
         console.error(error);
         this.busy = false;
@@ -139,18 +137,18 @@ export default {
       });
     },
 
-    falheiAtividade(){
+    falheiTarefa(){
       this.busy = true;
       let requestData = {
-        'url': config.serverUrl + '/atividades/' + this.atividade.id + '/falhar',
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/falhar',
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'POST',
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify("Atividade marcada como 'falhou'")
+        this.$refs.notifier.notify("Tarefa marcada como 'falhou'")
         this.busy = false;
         this.resetFields(true);
-        atividadeLocal.situacao = 2
+        tarefaLocal.situacao = 2
       }).catch((error) => {
         console.error(error);
         this.busy = false;
@@ -186,7 +184,7 @@ export default {
     //     //colocar em lista separada por nome
     //     novaLista[conf.chave] = conf;
     //   }
-    //   this.exibeDiaSemana = novaLista['exibir_dia_semana_habit_tracker'].valor == '1' ? true : false
+    //   this.exibeProjetoSemana = novaLista['exibir_projeto_semana_habit_tracker'].valor == '1' ? true : false
     //   return novaLista
     // },
 
@@ -195,8 +193,8 @@ export default {
     exibirModal(newProp, oldProp) {
       // this.exibirModalLocal = newProp;
     },
-    atividade(newProp, oldProp) {
-      this.atividadeLocal = deepCopy.deepCopy(newProp);
+    tarefa(newProp, oldProp) {
+      this.tarefaLocal = deepCopy.deepCopy(newProp);
     }
   },
   created () {

@@ -1,22 +1,23 @@
 <template>
   <div id="app">
+    <div v-if="appLoaded">
+      <nav class="shadow-1">
+        <router-link v-if="!loggedIn" class="btn btn-margin" to="/">Login</router-link>
+        <router-link v-if="!loggedIn" class="btn btn-margin" to="/register">Register</router-link>
+        <router-link v-if="loggedIn" class="btn btn-margin" to="/projetos">Projetos</router-link>
+        <router-link v-if="loggedIn" class="btn btn-margin" to="/habitTracker">Habit Tracker</router-link>
+        <router-link v-if="loggedIn" class="btn btn-margin" to="/backup">Backup</router-link>
+        <router-link v-if="loggedIn" class="btn btn-margin" to="/invitations">Convites</router-link>
+        <router-link v-if="loggedIn" class="btn btn-margin" to="/configuracoes">Configurações</router-link>
+        <button v-if="loggedIn" @click="logout()">Logout</button>
+      </nav>
 
-    <nav class="shadow-1">
-      <router-link class="btn" to="/">Login</router-link>
-      <router-link class="btn" to="/register">Register</router-link>
-      <router-link class="btn" to="/invitations">invitations</router-link>
-      <router-link class="btn" to="/listaDias">Lista Dias</router-link>
-      <button @click="exportData()">Export Data</button>
-      <button @click="openImportDataModal()">Import Data</button>
-    </nav>
-
-    <router-view
-      @redirectAfterLogin="redirectAfterLogin()"
-    />
-
-    <ImportData v-model:exibirModalImport="exibirModalImport" />
+      <router-view
+        @redirectAfterLogin="redirectAfterLogin()"
+      />
+    </div>
     <Loader :busy="busy"></Loader>
-    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
+    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
@@ -25,68 +26,101 @@
 </style>
 
 <script>
-import Loader from '@/components/Loader.vue';
-import ImportData from "@/views/ImportData.vue";
+import AuthManager from '@/core/AuthManager.js';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
+import Loader from '@/components/Loader.vue';
 import Notifier from '@/components/Notifier.vue';
+import { computed } from 'vue'
 
 export default {
   name: "App",
   components: {
-    ImportData,
     Loader,
-    Notifier
+    Notifier,
+  },
+  provide() {
+    return {
+      configuracoes: computed(() => this.configuracoes)
+    }
   },
   data: function () {
     return {
       busy: false,
-      exibirModalImport: false,
-      showNotify: false,
-      notifyMessage: '',
+      loggedIn: AuthManager.isLoggedIn(),
+      configuracoesArray: [],
+      configuracoes: {},
+      appLoaded: false
     }
   },
   methods: {
-    notify(message, type = 'success'){
-        this.showNotify = true;
-        this.notifyMessage = message;
+    updateLoggedIn(){
+      this.loggedIn = AuthManager.isLoggedIn();
     },
+    
     redirectAfterLogin(){
-      this.$router.push({ path: '/listaDias' })
+      this.updateLoggedIn()
+      this.$router.push({ path: '/habitTracker' })
     },
-    openImportDataModal() {
-      this.exibirModalImport = true;
-    },
-    exportData() {
-      this.busy = true;
 
+    logout() {
+      AuthManager.logout();
+      this.$refs.notifier.notify('Sessão encerrada.')
+      this.updateLoggedIn()
+      console.log('redirecting');
+      this.$router.push({ path: '/' })
+    },
+
+    async buscaConfiguracoes () {
+      console.log('[LOG] Carregando configuracoes');
       let requestData = {
-        'url': config.serverUrl + "/backup/export",
-        'headers': new Headers({'Content-Type': 'application/json'}),
+        'url': config.serverUrl + '/configuracoes'
       };
-
-      Request.fetch(requestData).then(([response, data]) => {
-        console.log('[LOG]',response);
-        console.log('[LOG]',data);
-        
-        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' })
-        const link = document.createElement('a')
-        link.href = URL.createObjectURL(blob)
-        let date = new Date();
-        date = date.toISOString().substr(0, 19);
-        date = date.replaceAll( ':','.');
-        console.log('date',date);
-        link.download = date + '.phpdailymanager.export.json'
-        link.click()
-        URL.revokeObjectURL(link.href)
-        this.busy = false;
-      }).catch((error) => {
-        this.busy = false;
+      await Request.fetch(requestData)
+      .then(( [response, data]) => {
+        let configuracoes = this.organizaESeparaConfiguracoes(data)
+        this.configuracoes = configuracoes;
+        console.log('[LOG] Configuracoes carregadas', this.configuracoes);
+      })
+      .catch((error) => {
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
         console.error(error);
-        this.notify(error);
       });
-
     },
-  }
+
+    organizaESeparaConfiguracoes(lista){
+      let novaLista = [];
+      for (let i = 0; i < lista.length; i++){
+        let conf = lista[i];
+        //verificar se a conf existe na lista permitida
+        //colocar em lista separada por nome
+        novaLista[conf.chave] = conf;
+      }
+      return novaLista
+    },
+
+    async loadConfiguracoesSeLogado(){
+      if(this.loggedIn){
+        await this.buscaConfiguracoes();
+      }
+    },
+
+    async loadApp(){
+      this.busy = true
+      this.appLoaded = true
+      this.busy = false
+    }
+
+  },
+  watch: {
+    loggedIn (a, b){
+      this.loadConfiguracoesSeLogado();
+    }
+  },
+  beforeCreate(){
+  },
+  async created () {
+    this.loadApp();
+  },
 };
 </script>

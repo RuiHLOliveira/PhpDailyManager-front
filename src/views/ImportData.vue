@@ -24,7 +24,7 @@
       </div>
     </div>
     <Loader :busy="busy"></Loader>
-    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
+    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
@@ -47,25 +47,19 @@ export default {
       // exibirModal: false,
       busy: false,
       fileToImport: null,
-      editadoComSucesso: false,
-      showNotify: false,
-      notifyMessage: '',
     };
   },
   props: {
     exibirModalImport: Boolean,
   },
   methods: {
-    notify(message, type = 'success'){
-        this.showNotify = true;
-        this.notifyMessage = message;
-    },
+    // notify(message, type = 'success'){
+    //     this.showNotify = true;
+    //     this.notifyMessage = message;
+    // },
     fecharModal() {
       this.exibirModal = false;
       this.$emit('update:exibirModalImport', this.exibirModal)
-      if(this.editadoComSucesso == true) {
-        // EventBus.$emit('LISTACONTAS_INDEX', {});
-      }
     },
     async importFile() {
       this.busy = true;
@@ -93,13 +87,12 @@ export default {
         console.log('[response]',response);
         console.log('[data]',data);
         this.busy = false;
-        this.editadoComSucesso = true;
-        this.fecharModal();
-        this.notify('Importado! Atualize a listagem.');
+        this.$refs.notifier.notify('Importado! Atualize a listagem.') //this.notify('Importado! Atualize a listagem.');
+        // this.fecharModal();
       }).catch((error) => {
         console.error(error);
         this.busy = false;
-        this.notify(error);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) //this.notify(error);
       });
 
     },

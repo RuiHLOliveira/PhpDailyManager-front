@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="showNotify" :class="{ modalNotifyContainer : modalMode == true }">
-      <div :class="{ modalNotify : modalMode == true }">
+      <div :class="{ modalNotify : modalMode == true, 'modalNotify-error' : error == true }">
         {{message}}
       </div>
     </div>
@@ -12,23 +12,36 @@
 export default {
   data: function () {
     return {
-      modalMode: true
+      modalMode: true,
+      message: '',
+      showNotify: false,
+      error: false
     }
   },
-  emits: ['update:showNotify'],
+  // emits: ['update:showNotify'],
   props: {
-    showNotify: Boolean,
-    message: String
+    // showNotify: Boolean,
+    // message: String
+  },
+  methods:{
+    notify(message, error = false){
+      this.message = message
+      this.error = error
+      this.showNotify = true
+      setTimeout(() => {
+        this.showNotify = false
+      }, 3000);
+    },
   },
   watch: {
-    showNotify (newValue, oldValue) {
-      if(newValue === true) {
-        setTimeout(() => {
-          this.$emit('update:showNotify', false)
-          console.log('emitted');
-        }, 3000);
-      }
-    }
+    // showNotify (newValue, oldValue) {
+    //   if(newValue === true) {
+    //     setTimeout(() => {
+    //       this.$emit('update:showNotify', false)
+    //       console.log('emitted');
+    //     }, 3000);
+    //   }
+    // }
   },
 }
 </script>
@@ -37,8 +50,8 @@ export default {
 .modalNotifyContainer {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100vw;
+  right: 0;
+  /* width: 50vw; */
   /* height: 100vh; */
   /* background: #0000008f; */
   display: flex;
@@ -48,15 +61,22 @@ export default {
 
 .modalNotify {
   margin-top: 20px;
+  margin-right: 20px;
   background-color: #29bb55;
   background-color: #67cc85;
+  background-color: #8fe7a9;
   border-radius: 3px;
-  padding: 10px 50px;
+  padding: 10px 20px;
   display: flex;
   justify-content: center;
   align-items: top;
+  width: 300px;
   /* min-width: 300px; */
   /* height: 50px; */
+}
+
+.modalNotify-error {
+  background-color: #e78f8f;
 }
 
 </style>

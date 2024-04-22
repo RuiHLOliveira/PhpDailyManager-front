@@ -29,18 +29,19 @@ section {
     </div>
 
     <Loader :busy="busy"></Loader>
-    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
+    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
 <script>
-import Loader from '@/components/Loader.vue';
+import AuthManager from '@/core/AuthManager.js';
 import config from '@/core/config.js'
 import Request from '@/core/request.js'
+import Loader from '@/components/Loader.vue';
 import Notifier from '@/components/Notifier.vue';
 
 export default {
-  name: 'ListaDias',
+  name: 'Register',
   components: {
     Loader,
     Notifier
@@ -52,15 +53,13 @@ export default {
       password: '',
       invitationToken: '',
       repeatPassword: '',
-      showNotify: false,
-      notifyMessage: '',
     }
   },
   methods: {
-    notify(message, type = 'success'){
-        this.showNotify = true;
-        this.notifyMessage = message;
-    },
+    // notify(message, type = 'success'){
+    //     this.showNotify = true;
+    //     this.notifyMessage = message;
+    // },
     register () {
       this.busy = true;
       let url = config.serverUrl + '/auth/register';
@@ -84,30 +83,22 @@ export default {
       Request.fetch(requestData)
       .then(([response, data]) => {
         console.log('data',data);
-        this.notify('Registrado! Faça o login.');
+        this.$refs.notifier.notify('Registrado! Faça o login.') //this.notify('Registrado! Faça o login.');
         this.busy = false;
       })
       .catch((error) => {
         console.error(error);
         this.busy = false;
-        this.notify('Ocorreu um erro.' + error);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) // this.notify('Ocorreu um erro: ' + error);
       });
-      
-      // fetch(url,data)
-      // .then(async response => {
-      //   data = await response.json();
-      //   console.log('[LOG]',response);
-      //   console.log('[LOG]',data);
-      //   this.dias = data
-      //   this.busy = false;
-      //   // notify.notify('carregado!', "success");
-      // }).catch(error => {
-      //   console.log('[LOG]',error);
-      //   this.busy = false;
-      // });
     },
   },
   watch: {
+  },
+  mounted () {
+    if(AuthManager.isLoggedIn()) {
+      this.$emit('redirectAfterLogin', [])
+    }
   },
   created () {
   },

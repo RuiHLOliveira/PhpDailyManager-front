@@ -1,5 +1,6 @@
 import config from "./config.js";
 import AuthManager from "./AuthManager.js"
+
 export default {
 
     processRequestBodyConsideringContentType(params){
@@ -47,7 +48,8 @@ export default {
                             try {
                                 let json = JSON.parse(text);
                                 let message = json.hasOwnProperty('message') ? json.message : json;
-                                reject('[Warning] [' + message  + "]")
+                                //reject('[Warning] [' + message  + "]")
+                                reject(message)
                             } catch (error) {
                                 console.error('[Warning] [catch json.parse]', error)
                                 reject(text)
@@ -87,7 +89,8 @@ export default {
                                 });
                             } else {
                                 //ELSE, THATS A REQUEST ERROR
-                                reject('[Warning] [' +  json.message ? json.message : json.detail ? json.detail : "an error ocurred" + "]")
+                                //reject('[Warning] [' +  json.message ? json.message : json.detail ? json.detail : "an error ocurred" + "]")
+                                reject(json.message ? json.message : json.detail ? json.detail : "an error ocurred")
                             }
                         }
                     })
@@ -131,6 +134,7 @@ export default {
                         } else {
                             //ELSE, THATS A REQUEST ERROR
                             // console.log(json.message);
+                            AuthManager.logout()
                             reject(json.message ? json.message : json.detail ? json.detail : "an error ocurred")
                         }
                     })

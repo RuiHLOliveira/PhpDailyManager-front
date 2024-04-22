@@ -23,7 +23,6 @@ button {
     color: #ffffff;
     display: inline-block;
     padding: 5px 10px;
-    margin: 5px 5px;
     border-radius: 3px;
 
     /* link */
@@ -35,7 +34,16 @@ button {
     font-family: inherit;
     cursor:pointer;
 }
+a.btn-margin,
+button.btn-margin {
+    margin: 5px 5px;
+}
 
+a.btn-wider,
+button.btn-wider {
+    padding: 5px 20px;
+    margin: 5px 10px;
+}
 a.btn:hover,
 button:hover {
     background-color: var(--default-button-color-background);

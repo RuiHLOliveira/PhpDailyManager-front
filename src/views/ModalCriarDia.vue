@@ -13,7 +13,7 @@
       </div>
     </div>
     <Loader :busy="busy"></Loader>
-    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
+    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
@@ -34,19 +34,19 @@ export default {
       dataCompleta: {},
       busy: false,
       needReload: false,
-      showNotify: false,
-      notifyMessage: '',
+      // showNotify: false,
+      // notifyMessage: '',
     }
   },
-  emits: ['reloadListaDias'],
+  emits: ['reloadListaDiasHabitTracker'],
   props: {
     exibirModal: Boolean,
   },
   methods: {
-    notify(message, type = 'success'){
-        this.showNotify = true;
-        this.notifyMessage = message;
-    },
+    // notify(message, type = 'success'){
+    //     this.showNotify = true;
+    //     this.notifyMessage = message;
+    // },
     resetFields(needReload = false){
         this.needReload = needReload;
         this.busy = false;
@@ -56,7 +56,7 @@ export default {
       this.$emit('update:exibirModal', false)
       if(this.needReload == true) {
         console.log('reload');
-        this.$emit('reloadListaDias', [])
+        this.$emit('reloadListaDiasHabitTracker', [])
       }
       this.resetFields();
     },
@@ -75,11 +75,11 @@ export default {
       Request.fetch(requestData).then(([response, data]) => {
         this.busy = false;
         this.resetFields(true)
-        this.notify('Dia criado!');
+        this.$refs.notifier.notify('Dia criado!') //this.notify('Dia criado!');
       }).catch((error) => {
         console.error(error);
         this.busy = false;
-        this.notify('Ocorreu um erro.' + error);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) //this.notify('Ocorreu um erro.' + error);
       });
     },
   },

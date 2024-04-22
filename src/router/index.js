@@ -2,8 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
-import ListaDias from '../views/ListaDias.vue'
+import Projetos from '../views/projetos/Projetos.vue'
+import HabitTracker from '../views/HabitTracker.vue'
 import Invitations from '../views/Invitations.vue'
+import Configuracoes from '../views/Configuracoes.vue'
+import Backup from '../views/Backup.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,9 +20,16 @@ const router = createRouter({
     //   component: () => import('../views/AboutView.vue')
     // },
     {
-      path: '/listaDias',
-      name: 'ListaDias',
-      component: ListaDias
+      path: '/projetos',
+      name: 'Projetos',
+      component: Projetos,
+      props: true
+    },
+    {
+      path: '/habitTracker',
+      name: 'HabitTracker',
+      component: HabitTracker,
+      props: true
     },
     {
       path: '/',
@@ -35,6 +45,16 @@ const router = createRouter({
       path: '/invitations',
       name: 'Invitations',
       component: Invitations
+    },
+    {
+      path: '/configuracoes',
+      name: 'Configuracoes',
+      component: Configuracoes
+    },
+    {
+      path: '/backup',
+      name: 'backup',
+      component: Backup
     },
     // {
     //   path: '/listaContas',

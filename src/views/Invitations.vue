@@ -25,7 +25,8 @@
     </div>
 
     <Loader :busy="busy"></Loader>
-    <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier>
+    <Notifier ref="notifier"></Notifier>
+    <!-- <Notifier v-model:showNotify="showNotify" :message="notifyMessage"></Notifier> -->
   </div>
 </template>
 
@@ -47,15 +48,15 @@ export default {
       newInvitationToken: '',
       email: '',
       invitations: [],
-      showNotify: false,
-      notifyMessage: '',
+      // showNotify: false,
+      // notifyMessage: '',
     }
   },
   methods: {
-    notify(message, type = 'success'){
-        this.showNotify = true;
-        this.notifyMessage = message;
-    },
+    // notify(message, type = 'success'){
+    //     this.showNotify = true;
+    //     this.notifyMessage = message;
+    // },
     buscaConvites () {
       this.busy = true;
       let requestData = {
@@ -70,7 +71,7 @@ export default {
       .catch((error) => {
         console.error(error);
         this.busy = false;
-        this.notify('Ocorreu um erro.' + error);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) // this.notify('Ocorreu um erro.' + error);
       });
     },
     criarConvite() {
@@ -86,13 +87,13 @@ export default {
         'data' : body
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.notify('Convite criado!');
+        this.$refs.notifier.notify('Convite criado!') //this.notify('Convite criado!');
         this.busy = false;
         this.buscaConvites();
       }).catch((error) => {
         console.error(error);
         this.busy = false;
-        this.notify('Ocorreu um erro.' + error);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) //this.notify('Ocorreu um erro.' + error);
       });
     },
   },

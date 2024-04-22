@@ -5,21 +5,20 @@
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
-        <h1>Nova Atividade</h1>
+        <h1>Nova Tarefa</h1>
         <h3>
-          <span v-if="exibeDiaSemana">{{ getWeekDay(dia.dataCompletaObject) }}, </span>
-          {{ formatBrDate(dia.dataCompletaObject) }}
+          {{ projeto.nome }}
           , às x:x horas
         </h3>
 
-        <label for="atividade">Atividade:</label>
-        <input name="atividade" type="text" placeholder="atividade" v-model="atividade.descricao">
+        <label for="tarefa">Tarefa:</label>
+        <input name="tarefa" type="text" placeholder="tarefa" v-model="tarefa.descricao">
         
         <label for="hora">Hora:</label>
         <input name="hora" type="time" placeholder="hora" v-model="hora">
 
         <button class="btn-wider btn-red" @click="fecharModal()">Fechar</button>
-        <button class="btn-wider" @click="criarAtividade()">Salvar</button>
+        <button class="btn-wider" @click="criarTarefa()">Salvar</button>
       </div>
     </div>
     <Loader :busy="busy"></Loader>
@@ -41,18 +40,18 @@ export default {
   },
   data: function () {
     return {
-      atividade: {},
+      tarefa: {},
       busy: false,
       needReload: false,
       hora: '',
       configuracoes: [],
-      exibeDiaSemana: false
+      exibeProjetoSemana: false
     }
   },
-  emits: ['reloadListaDiasHabitTracker'],
+  emits: ['reloadListaProjetosHabitTracker'],
   props: {
     exibirModal: Boolean,
-    dia: Object,
+    projeto: Object,
   },
   methods: {
 
@@ -68,14 +67,14 @@ export default {
      */
     resetFields(needReload = false){
       this.needReload = needReload;
-      this.atividade = {};
+      this.tarefa = {};
     },
     
     fecharModal() {
       this.$emit('update:exibirModal', this.exibirModalLocal)
       if(this.needReload == true) {
         console.log('reload');
-        this.$emit('reloadListaDiasHabitTracker', [])
+        this.$emit('reloadListaProjetosHabitTracker', [])
         this.resetFields();
       }
     },
@@ -83,22 +82,22 @@ export default {
     /**
      * APIS FETCH
      */
-    criarAtividade() {
+    criarTarefa() {
       this.busy = true;
       let body = {
-        'descricao': this.atividade.descricao,
-        'dia': this.dia.id,
+        'descricao': this.tarefa.descricao,
+        'projeto': this.projeto.id,
         'hora': this.hora
       };
 
       let requestData = {
-        'url': config.serverUrl + '/atividades', //config.serverUrl + `/api/${this.localNote.notebook.id}/notes`;
+        'url': config.serverUrl + '/tarefas', //config.serverUrl + `/api/${this.localNote.notebook.id}/notes`;
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'POST',
         'data' : body
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Atividade criada!') //this.notify('Atividade criada!');
+        this.$refs.notifier.notify('Tarefa criada!') //this.notify('Tarefa criada!');
         this.busy = false;
         this.needReload = true;
         this.resetFields(true);
@@ -137,7 +136,7 @@ export default {
     //     //colocar em lista separada por nome
     //     novaLista[conf.chave] = conf;
     //   }
-    //   this.exibeDiaSemana = novaLista['exibir_dia_semana_habit_tracker'].valor == '1' ? true : false
+    //   this.exibeProjetoSemana = novaLista['exibir_projeto_semana_habit_tracker'].valor == '1' ? true : false
     //   return novaLista
     // },
 

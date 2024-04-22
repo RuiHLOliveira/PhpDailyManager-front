@@ -20,8 +20,9 @@ section {
         <button @click="login()">Entrar</button>
       </section>
     </div>
-
+    
     <Loader :busy="busy"></Loader>
+    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
@@ -29,11 +30,14 @@ section {
 import Loader from '@/components/Loader.vue';
 import AuthManager from '@/core/AuthManager.js';
 import config from '@/core/config.js'
+import Request from '@/core/Request.js'
+import Notifier from '@/components/Notifier.vue'
 
 export default {
-  name: 'ListaDias',
+  name: 'Login',
   components: {
     Loader,
+    Notifier
   },
   data: () => {
     return {
@@ -44,6 +48,10 @@ export default {
   },
   emits: ['redirectAfterLogin'],
   methods: {
+    // notify(message, type = 'success'){
+    //     this.showNotify = true;
+    //     this.notifyMessage = message;
+    // },
     login () {
       this.busy = true;
       let url = config.serverUrl + '/auth/login';
@@ -51,36 +59,34 @@ export default {
         'email': this.email,
         'password': this.password
       };
-      let data = {
+      let requestData = {
+        'url': url,
         method: 'POST',
-        body: JSON.stringify(body)
+        data: body,
+        notAuthenticated: true
       };
-      fetch(url,data)
-      .then(async response => {
-        if(!response.ok){
-          throw 'Error in loggin in';
-        }
-        data = await response.json();
-        console.log('[LOG]',response);
-        console.log('[LOG]',data);
-        this.dias = data
-        this.busy = false;
+      Request.fetch(requestData)
+      .then(([response, data]) => {
+        console.log('data',data);
+        this.$refs.notifier.notify('Logado! Redirecionando...')
         AuthManager.storeToken(data.token);
         AuthManager.storeRefreshToken(data.refreshToken);
-        this.$emit('redirectAfterLogin', [])
-        // notify.notify('carregado!', "success");
-      }).catch(error => {
-        console.log('[LOG]',error);
         this.busy = false;
+        this.$emit('redirectAfterLogin', [])
+      })
+      .catch((error) => {
+        console.error(error);
+        this.busy = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) // this.notify('Ocorreu um erro: ' + error);
       });
     },
   },
   watch: {
   },
   mounted () {
-    // if(AuthManager.isLoggedIn()) {
-    //   this.$emit('redirectAfterLogin', [])
-    // }
+    if(AuthManager.isLoggedIn()) {
+      this.$emit('redirectAfterLogin', [])
+    }
   },
   destroyed() {
   }
