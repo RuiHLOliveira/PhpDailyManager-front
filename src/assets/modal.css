@@ -26,7 +26,8 @@
 
     .modal {
         margin-top: 50px;
-        max-height: 500px;
+        /* height: 500px; */
+        max-height: calc(100vh - 100px);
         max-width: 700px;
         padding: 20px;
     }

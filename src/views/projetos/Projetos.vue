@@ -4,6 +4,9 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+.whitespace-pre{
+  white-space: pre-wrap;
+}
 
 .pageTitleProjetos{
   display: flex;
@@ -317,7 +320,7 @@
                 <div class="bodyBox">
                   <div class="bodyBoxDiv">
                     <span style="font-size: 0.8rem; color: #444444">Anotações: </span>
-                    <div v-if="!projeto.editMode"  style="white-space: pre;">
+                    <div v-if="!projeto.editMode" class="whitespace-pre">
                       {{ projeto.anotacoes }}
                     </div>
                     <div v-if="projeto.editMode">
