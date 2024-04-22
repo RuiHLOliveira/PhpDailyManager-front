@@ -317,9 +317,9 @@
                 <div class="bodyBox">
                   <div class="bodyBoxDiv">
                     <span style="font-size: 0.8rem; color: #444444">Anotações: </span>
-                    <span v-if="!projeto.editMode">
+                    <div v-if="!projeto.editMode"  style="white-space: pre;">
                       {{ projeto.anotacoes }}
-                    </span>
+                    </div>
                     <div v-if="projeto.editMode">
                       <!-- <input name="atividade" type="text" v-model="projeto.anotacoesEditar"> -->
                       <textarea class="textarea" name="anotacoes" placeholder="anotacoes" v-model="projeto.anotacoesEditar"></textarea>
