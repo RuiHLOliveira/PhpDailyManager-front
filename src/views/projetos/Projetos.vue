@@ -60,6 +60,26 @@
   margin: 10px 0px;
 }
 
+
+.linhaTarefa {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.linhaTarefa-lined {
+  border-bottom: 1px solid #9c9c9c;
+}
+.linhaTarefa-round {
+  border-radius: 5px;
+  background-color: #ebebeb;
+}
+.linhaTarefa-round:hover {
+  background-color: #d4d4d4;
+}
+
 .btnPrioridade {
   display: inline;
   margin: 0px 5px 0px 0px;
@@ -337,11 +357,17 @@
                   <!-- TAREFAS -->
                   <div v-if="projeto.showTarefas">
                     <div v-for="tarefa in projeto.tarefas" :key="tarefa.id">
-                      [{{ tarefa.hora }}] {{ tarefa.descricao }}
-                      <button class="btn btn-sm btn_tarefa_concluida" type="button" 
-                        @click="toggleModalEditarTarefa(tarefa,projeto)" >
-                        Editar
-                      </button>
+                      <div class="linhaTarefa linhaTarefa-round">
+                        <div>
+                          [{{ tarefa.hora }}] {{ tarefa.descricao }}
+                        </div>
+                        <div>
+                          <button class="btn btn-sm btn_tarefa_concluida" type="button" 
+                            @click="toggleModalEditarTarefa(tarefa,projeto)" >
+                            Editar
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -420,7 +446,7 @@ export default {
       tarefaModalEditarTarefa: [],
       projetoModalEditarTarefa: [],
       exibirModalBackupProjetos: false,
-      carregarPreviamenteAsTarefas: false,
+      carregarPreviamenteAsTarefas: true,
       filtroPrioridade: null,
       filtroSituacao: null,
       nextProgramedListingAmount: 0,
