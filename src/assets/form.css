@@ -65,3 +65,18 @@ textarea.textarea:focus {
     outline: 2px solid #7da3ce;
     /* outline: none; */
 }
+
+input[type=text]:disabled,
+input[type=time]:disabled,
+input[type=email]:disabled,
+input[type=password]:disabled,
+input[type=date]:disabled,
+textarea.textarea:disabled {
+    background-color: #cfcfcf;
+    cursor: not-allowed;
+    /* outline: none; */
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+}

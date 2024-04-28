@@ -14,27 +14,28 @@
           </h3>
 
           <label for="tarefa">Tarefa:</label>
-          <input name="tarefa" type="text" placeholder="tarefa" v-model="tarefaLocal.descricao">
+          <input :disabled="busy" name="tarefa" type="text" placeholder="tarefa" v-model="tarefaLocal.descricao">
           
           <label for="hora">Hora:</label>
-          <input name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
+          <input :disabled="busy" name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
 
         </section>
           
         <section class="flex-justify-space-between">
           <div>
-            <button class="btn-wider btn-red" @click="fecharModal()">Fechar</button>
-            <button class="btn-wider" @click="editarTarefa()">Salvar</button>
+            <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
+            <button :disabled="busy" class="btn btn-wider" @click="editarTarefa()">Salvar</button>
           </div>
           <div v-if="tarefaLocal.situacao == 0">
-            <button class="btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
-            <button class="btn-wider" @click="concluirTarefa()">Concluir</button>
+            <button :disabled="busy" class="btn btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
+            <button :disabled="busy" class="btn btn-wider" @click="concluirTarefa()">Concluir</button>
           </div>
         </section>
+        
+        <InlineLoader :busy="busy"></InlineLoader>
 
       </div>
     </div>
-    <Loader :busy="busy"></Loader>
     <Notifier ref="notifier"></Notifier>
   </div>
 </template>
@@ -42,14 +43,14 @@
 <script>
 import DateTime from '@/core/DateTime.js'
 import deepCopy from '@/core/deepcopy.js';
-import Loader from '@/components/Loader.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import Request from '@/core/request.js'
 import config from '@/core/config.js'
 
 export default {
   components: {
-    Loader,
+    InlineLoader,
     Notifier
   },
   data: function () {

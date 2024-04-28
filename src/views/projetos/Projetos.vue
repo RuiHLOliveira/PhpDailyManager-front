@@ -360,7 +360,7 @@
                       <div class="linhaTarefa linhaTarefa-round">
                         <div>
                           {{ tarefa.situacao == 0 ? '🆕' : tarefa.situacao == 1 ? '✅' : '❌' }}
-                          [{{ tarefa.hora }}]
+                          {{ tarefa.hora != null ? `[${tarefa.hora}]` : '[]' }}
                           {{ tarefa.descricao }}
                         </div>
                         <div>

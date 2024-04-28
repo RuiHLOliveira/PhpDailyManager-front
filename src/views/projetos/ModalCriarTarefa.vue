@@ -12,30 +12,31 @@
         </h3>
 
         <label for="tarefa">Tarefa:</label>
-        <input name="tarefa" type="text" placeholder="tarefa" v-model="tarefa.descricao">
+        <input name="tarefa" :disabled="busy" type="text" placeholder="tarefa" v-model="tarefa.descricao">
         
         <label for="hora">Hora:</label>
-        <input name="hora" type="time" placeholder="hora" v-model="hora">
+        <input name="hora" :disabled="busy" type="time" placeholder="hora" v-model="hora">
 
-        <button class="btn-wider btn-red" @click="fecharModal()">Fechar</button>
-        <button class="btn-wider" @click="criarTarefa()">Salvar</button>
+        <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
+        <button :disabled="busy" class="btn btn-wider" @click="criarTarefa()">Salvar</button>
+        
+        <InlineLoader :busy="busy"></InlineLoader>
       </div>
     </div>
-    <Loader :busy="busy"></Loader>
     <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
 <script>
 import DateTime from '@/core/DateTime.js'
-import Loader from '@/components/Loader.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
 
 export default {
   components: {
-    Loader,
+    InlineLoader,
     Notifier
   },
   data: function () {
