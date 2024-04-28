@@ -126,10 +126,10 @@ export default {
         'method' : 'POST',
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Tarefa concluída!')
+        this.$refs.notifier.notify('Tarefa alterada para "concluída!""')
         this.busy = false;
         this.resetFields(true);
-        tarefaLocal.situacao = 1
+        this.tarefaLocal.situacao = 1
       }).catch((error) => {
         console.error(error);
         this.busy = false;
@@ -145,10 +145,10 @@ export default {
         'method' : 'POST',
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify("Tarefa marcada como 'falhou'")
+        this.$refs.notifier.notify('Tarefa alterada para "falhou"')
         this.busy = false;
         this.resetFields(true);
-        tarefaLocal.situacao = 2
+        this.tarefaLocal.situacao = 2
       }).catch((error) => {
         console.error(error);
         this.busy = false;

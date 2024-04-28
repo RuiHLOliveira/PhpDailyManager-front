@@ -359,7 +359,9 @@
                     <div v-for="tarefa in projeto.tarefas" :key="tarefa.id">
                       <div class="linhaTarefa linhaTarefa-round">
                         <div>
-                          [{{ tarefa.hora }}] {{ tarefa.descricao }}
+                          {{ tarefa.situacao == 0 ? '🆕' : tarefa.situacao == 1 ? '✅' : '❌' }}
+                          [{{ tarefa.hora }}]
+                          {{ tarefa.descricao }}
                         </div>
                         <div>
                           <button class="btn btn-sm btn_tarefa_concluida" type="button" 
