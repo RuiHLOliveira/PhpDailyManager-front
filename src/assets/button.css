@@ -39,6 +39,15 @@ button.btn-margin {
     margin: 5px 5px;
 }
 
+a.btn-clear,
+button.btn-clear {
+    background-color: #00000000;
+}
+a.btn-clear:hover,
+button.btn-clear:hover {
+    background-color: #00000055;
+}
+
 a.btn-wider,
 button.btn-wider {
     padding: 5px 20px;

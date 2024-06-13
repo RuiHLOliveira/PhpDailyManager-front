@@ -6,6 +6,7 @@
         <router-link v-if="!loggedIn" class="btn btn-margin" to="/register">Register</router-link>
         <router-link v-if="loggedIn" class="btn btn-margin" to="/projetos">Projetos</router-link>
         <router-link v-if="loggedIn" class="btn btn-margin" to="/habitTracker">Habit Tracker</router-link>
+        <router-link v-if="loggedIn" class="btn btn-margin" to="/habitTrackerold">Habit Tracker old</router-link>
         <router-link v-if="loggedIn" class="btn btn-margin" to="/backup">Backup</router-link>
         <router-link v-if="loggedIn" class="btn btn-margin" to="/invitations">Convites</router-link>
         <router-link v-if="loggedIn" class="btn btn-margin" to="/configuracoes">Configurações</router-link>
