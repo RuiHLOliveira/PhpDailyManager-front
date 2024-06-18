@@ -124,7 +124,7 @@
         <div class="titleBox"> <!-- TITLE -->
           <div class="pageTitleProjetos"> <!-- left side -->
             <div class="title">Habitos</div>
-            <button class="btn btn-margin btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
+            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
           </div>
           <div> <!-- right side -->
           </div>
@@ -141,7 +141,7 @@
                   <div class="titleBoxLeft" v-if="!habito.editMode"> <!-- common -->
                     <div>
                       <span>
-                        <button class="btn btn-clear btn-margin" type="button" @click="concluirHabito(habito)">
+                        <button class="btn btn-clear mx-5" type="button" @click="concluirHabito(habito)">
                           {{ habito.realizadoHoje ? '✅' : '🔲' }}
                         </button>
                         {{ habito.hora }} - {{ habito.descricao }}
@@ -160,9 +160,9 @@
 
                   <div class="titleBoxRight"> <!-- right buttons -->
                     <button v-if="!habito.editMode" class="btn btn-sm" type="button" @click="toggleEdicaoHabito(habito)">Editar</button>
-                    <button v-if="habito.editMode" class="btn btn-margin btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
-                    <button v-if="habito.editMode" class="btn btn-margin btn-sm" type="button" @click="salvarEdicaoHabito(habito)">Salvar</button>
-                    <button v-if="habito.editMode" class="btn btn-margin btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
+                    <button v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
+                    <button v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">Salvar</button>
+                    <button v-if="habito.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
                   </div>
 
                 </div>
@@ -172,7 +172,7 @@
 
                   <!-- corpo 1 - concluir -->
                   <!-- <div class="bodyBoxDiv">
-                    <button class="btn btn-margin btn-sm" type="button" @click="concluirHabito(habito)">Concluir agora!</button>
+                    <button class="btn mx-5 my-10 btn-sm" type="button" @click="concluirHabito(habito)">Concluir agora!</button>
                   </div> -->
 
                   <!-- corpo 2 - data hora -->

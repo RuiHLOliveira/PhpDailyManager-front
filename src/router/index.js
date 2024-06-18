@@ -4,7 +4,6 @@ import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
 import Projetos from '../views/projetos/Projetos.vue'
 import Habitos from '../views/habitos/Habitos.vue'
-import HabitTracker from '../views/HabitTracker.vue'
 import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
 import Backup from '../views/Backup.vue'
@@ -30,12 +29,6 @@ const router = createRouter({
       path: '/habitTracker',
       name: 'HabitTracker',
       component: Habitos,
-      props: true
-    },
-    {
-      path: '/habitTrackerold',
-      name: 'HabitTrackerOld',
-      component: HabitTracker,
       props: true
     },
     {

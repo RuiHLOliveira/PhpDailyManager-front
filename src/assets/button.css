@@ -2,6 +2,7 @@
 /* default color ?? */
 :root {
     --default-button-color: #2677a6;
+    --disabled-button-color: #bdbdbd;
     --situacao1-button-color: #26a67b;
     --default-button-color-background: #20648b;
     --situacao1-button-color-background: #1c7c73;
@@ -18,7 +19,7 @@
 }
 
 a.btn,
-button {
+button.btn {
     background-color: var(--default-button-color);
     color: #ffffff;
     display: inline-block;
@@ -34,9 +35,10 @@ button {
     font-family: inherit;
     cursor:pointer;
 }
-a.btn-margin,
-button.btn-margin {
-    margin: 5px 5px;
+
+a.btn:disabled,
+button.btn:disabled {
+    background-color: var(--disabled-button-color);
 }
 
 a.btn-clear,
@@ -85,4 +87,79 @@ a.btn.btn-sm,
 button.btn-sm {
     font-size: 0.8rem;
     padding: 2px 5px;
+}
+
+
+
+
+
+
+a.btnPrioridade,
+button.btnPrioridade {
+    display: inline;
+    margin: 0px 5px 0px 0px;
+}
+
+a.selected,
+button.selected {
+    outline: 3px solid #000000;
+}
+
+a.prioridadeUrgente,
+button.prioridadeUrgente,
+a.prioridadeUrgente:hover,
+button.prioridadeUrgente:hover {
+    background-color: rgb(109, 0, 0);
+}
+a.prioridadeAlta,
+button.prioridadeAlta,
+a.prioridadeAlta:hover,
+button.prioridadeAlta:hover {
+    background-color: rgb(255, 21, 21);
+}
+a.prioridadeMedia,
+button.prioridadeMedia,
+a.prioridadeMedia:hover,
+button.prioridadeMedia:hover {
+    background-color: rgb(255, 95, 21);
+}
+a.prioridadeBaixa,
+button.prioridadeBaixa,
+a.prioridadeBaixa:hover,
+button.prioridadeBaixa:hover {
+    background-color: rgb(255, 173, 21);
+}
+a.prioridadeBaixissima,
+button.prioridadeBaixissima,
+a.prioridadeBaixissima:hover,
+button.prioridadeBaixissima:hover {
+    color: #444444;
+    background-color: rgb(234, 238, 0);
+}
+
+a.situacaoPendente,
+button.situacaoPendente,
+a.situacaoPendente:hover,
+button.situacaoPendente:hover {
+    background-color: #20c920;
+}
+a.situacaoAguardandoResposta,
+button.situacaoAguardandoResposta,
+a.situacaoAguardandoResposta:hover,
+button.situacaoAguardandoResposta:hover {
+    background-color: #0099ff;
+}
+a.situacaoPausadoIndefinidamente,
+button.situacaoPausadoIndefinidamente,
+a.situacaoPausadoIndefinidamente:hover,
+button.situacaoPausadoIndefinidamente:hover {
+    background-color: #757575;
+}
+a.situacaoConcluido,
+button.situacaoConcluido,
+a.situacaoConcluido:hover,
+button.situacaoConcluido:hover {
+    color: #444444;
+    text-decoration: line-through;
+    background-color: #d8d8d8;
 }

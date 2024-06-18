@@ -2,15 +2,14 @@
   <div id="app">
     <div v-if="appLoaded">
       <nav class="shadow-1">
-        <router-link v-if="!loggedIn" class="btn btn-margin" to="/">Login</router-link>
-        <router-link v-if="!loggedIn" class="btn btn-margin" to="/register">Register</router-link>
-        <router-link v-if="loggedIn" class="btn btn-margin" to="/projetos">Projetos</router-link>
-        <router-link v-if="loggedIn" class="btn btn-margin" to="/habitTracker">Habit Tracker</router-link>
-        <router-link v-if="loggedIn" class="btn btn-margin" to="/habitTrackerold">Habit Tracker old</router-link>
-        <router-link v-if="loggedIn" class="btn btn-margin" to="/backup">Backup</router-link>
-        <router-link v-if="loggedIn" class="btn btn-margin" to="/invitations">Convites</router-link>
-        <router-link v-if="loggedIn" class="btn btn-margin" to="/configuracoes">Configurações</router-link>
-        <button v-if="loggedIn" @click="logout()">Logout</button>
+        <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link>
+        <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link>
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetos">Projetos</router-link>
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/habitTracker">Habit Tracker</router-link>
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/backup">Backup</router-link>
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/invitations">Convites</router-link>
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/configuracoes">Configurações</router-link>
+        <button class="btn mx-5 my-5" v-if="loggedIn" @click="logout()">Logout</button>
       </nav>
 
       <router-view

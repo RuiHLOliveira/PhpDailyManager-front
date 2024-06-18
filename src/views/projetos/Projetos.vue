@@ -80,46 +80,6 @@
   background-color: #d4d4d4;
 }
 
-.btnPrioridade {
-  display: inline;
-  margin: 0px 5px 0px 0px;
-}
-
-.selected {
-  outline: 3px solid #000000;
-}
-
-.prioridadeUrgente, .prioridadeUrgente:hover {
-  background-color: rgb(109, 0, 0);
-}
-.prioridadeAlta, .prioridadeAlta:hover {
-  background-color: rgb(255, 21, 21);
-}
-.prioridadeMedia, .prioridadeMedia:hover {
-  background-color: rgb(255, 95, 21);
-}
-.prioridadeBaixa, .prioridadeBaixa:hover {
-  background-color: rgb(255, 173, 21);
-}
-.prioridadeBaixissima, .prioridadeBaixissima:hover {
-  color: #444444;
-  background-color: rgb(234, 238, 0);
-}
-
-.situacaoPendente, .situacaoPendente:hover {
-  background-color: #20c920;
-}
-.situacaoAguardandoResposta, .situacaoAguardandoResposta:hover {
-  background-color: #0099ff;
-}
-.situacaoPausadoIndefinidamente, .situacaoPausadoIndefinidamente:hover {
-  background-color: #757575;
-}
-.situacaoConcluido, .situacaoConcluido:hover {
-  color: #444444;
-  text-decoration: line-through;
-  background-color: #d8d8d8;
-}
 
 .red, .red:hover {
   background-color: red;
@@ -150,7 +110,7 @@
           <!-- left side -->
           <div class="pageTitleProjetos">
             <div class="">Filtros</div>
-            <!-- <button class="btn btn-margin btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button> -->
+            <!-- <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button> -->
           </div>
           <!-- right side -->
           <div>
@@ -214,7 +174,7 @@
             </button>
           </div>
           <div>
-            <button class="btn btn-margin btn-sm" type="button" @click="buscaProjetos()">Filtrar</button>
+            <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Filtrar</button>
           </div>
         </div>
       </div>
@@ -225,7 +185,7 @@
           <!-- left side -->
           <div class="pageTitleProjetos">
             <div class="title">Projetos</div>
-            <button class="btn btn-margin btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
           </div>
           <!-- right side -->
           <div>
@@ -330,9 +290,9 @@
                   <!-- buttons -->
                   <div class="titleBoxRight">
                     <button v-if="!projeto.editMode" class="btn btn-sm" type="button" @click="toggleEdicaoProjeto(projeto)">Editar</button>
-                    <button v-if="projeto.editMode" class="btn btn-margin btn-sm" type="button" @click="cancelarEdicaoProjeto(projeto)">Cancelar</button>
-                    <button v-if="projeto.editMode" class="btn btn-margin btn-sm" type="button" @click="salvarEdicaoProjeto(projeto)">Salvar</button>
-                    <button v-if="projeto.editMode" class="btn btn-margin btn-sm btn-red" type="button" @click="excluirProjeto(projeto)">Excluir</button>
+                    <button v-if="projeto.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoProjeto(projeto)">Cancelar</button>
+                    <button v-if="projeto.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoProjeto(projeto)">Salvar</button>
+                    <button v-if="projeto.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button" @click="excluirProjeto(projeto)">Excluir</button>
                   </div>
                 </div>
 

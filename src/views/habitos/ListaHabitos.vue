@@ -174,7 +174,7 @@
           <!-- left side -->
           <div class="pageTitleProjetos">
             <div class="title">Habitos</div>
-            <button class="btn btn-margin btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
+            <button class="btn mx-5 my-5 btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
           </div>
           <!-- right side -->
           <div>
@@ -210,16 +210,16 @@
                   <!-- buttons -->
                   <div class="titleBoxRight">
                     <button v-if="!habito.editMode" class="btn btn-sm" type="button" @click="toggleEdicaoHabito(habito)">Editar</button>
-                    <button v-if="habito.editMode" class="btn btn-margin btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
-                    <button v-if="habito.editMode" class="btn btn-margin btn-sm" type="button" @click="salvarEdicaoHabito(habito)">Salvar</button>
-                    <button v-if="habito.editMode" class="btn btn-margin btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
+                    <button v-if="habito.editMode" class="btn mx-5 my-10 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
+                    <button v-if="habito.editMode" class="btn mx-5 my-10 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">Salvar</button>
+                    <button v-if="habito.editMode" class="btn mx-5 my-10 btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
                   </div>
                 </div>
 
                 <!-- BODY -->
                 <div class="bodyBox">
                   <div class="bodyBoxDiv">
-                    <button class="btn btn-margin btn-sm" type="button" @click="concluirHabito(habito)">Concluir agora!</button>
+                    <button class="btn mx-5 my-10 btn-sm" type="button" @click="concluirHabito(habito)">Concluir agora!</button>
                     <!-- <span style="font-size: 0.8rem; color: #444444">Anotações: </span>
                     <div v-if="!habito.editMode" class="whitespace-pre">
                       {{ habito.anotacoes }}
