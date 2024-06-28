@@ -299,7 +299,7 @@
                 <!-- BODY -->
                 <div class="bodyBox">
                   <div class="bodyBoxDiv">
-                    <span style="font-size: 0.8rem; color: #444444">Anotações: </span>
+                    <span style="font-size: 1rem; color: #444444">Anotações: </span>
                     <div v-if="!projeto.editMode" class="whitespace-pre">
                       {{ projeto.anotacoes }}
                     </div>
