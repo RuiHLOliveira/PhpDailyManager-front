@@ -30,7 +30,7 @@ section {
 import Loader from '@/components/Loader.vue';
 import AuthManager from '@/core/AuthManager.js';
 import config from '@/core/config.js'
-import Request from '@/core/Request.js'
+import Request from '@/core/request.js'
 import Notifier from '@/components/Notifier.vue'
 
 export default {
