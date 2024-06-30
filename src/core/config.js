@@ -1,4 +1,5 @@
 export default {
-    serverUrl: 'http://localhost/api',
+    serverUrl: 'https://sproject-back.onrender.com/api',
+    // serverUrl: 'http://localhost/api',
     // serverUrl: '/api'
 };
