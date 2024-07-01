@@ -12,22 +12,28 @@ section {
       <section>
         <h1>Login</h1>
         <label for="email">Email:</label>
-        <input name="email" type="email" placeholder="email" v-model="email">
+        <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
 
         <label for="password">Senha:</label>
-        <input name="password" type="password" placeholder="senha" v-model="password">
+        <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
 
-        <button @click="login()">Entrar</button>
+        <button :disabled="busy" @click="login()">Entrar</button>
+        
+        <InlineLoader
+          :textoAguarde="true"
+          :busy="busy"
+          :center="true">
+        </InlineLoader>
+
       </section>
     </div>
     
-    <Loader :busy="busy"></Loader>
     <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
 <script>
-import Loader from '@/components/Loader.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 import AuthManager from '@/core/AuthManager.js';
 import config from '@/core/config.js'
 import Request from '@/core/request.js'
@@ -36,7 +42,7 @@ import Notifier from '@/components/Notifier.vue'
 export default {
   name: 'Login',
   components: {
-    Loader,
+    InlineLoader,
     Notifier
   },
   data: () => {
