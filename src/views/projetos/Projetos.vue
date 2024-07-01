@@ -194,11 +194,25 @@
         </div>
         <!-- BODY -->
         <div class="bodyBox">
-          <div v-if="projetos != []">
+          
+          <InlineLoader
+            :textoAguarde="true"
+            :busy="busyProjetosLoad || busyProjetosDelete"
+            :center="true">
+          </InlineLoader>
+
+          <div v-if="projetos != [] && !busyProjetosLoad && !busyProjetosDelete">
             <div v-for="projeto in projetos" :key="projeto.id">
               <div class="cardBox">
+                
+                <InlineLoader
+                  :textoAguarde="true"
+                  :busy="busyProjetosUpdate"
+                  :center="true">
+                </InlineLoader>
+
                 <!-- TITLE -->
-                <div class="titleBox">
+                <div v-if="!busyProjetosUpdate" class="titleBox">
 
                   <!-- common -->
                   <div class="titleBoxLeft" v-if="!projeto.editMode">
@@ -343,7 +357,6 @@
 
         </div>
 
-
       </div>
       
       <BackupProjetos v-model:exibirModalBackupProjetos="exibirModalBackupProjetos" />
@@ -351,7 +364,6 @@
     </div>
 
     <Notifier ref="notifier"></Notifier>
-    <Loader :busy="busy"></Loader>
 
     <ModalCriarProjeto
       v-model:exibirModal="exibirModalCriarProjeto"
@@ -379,6 +391,7 @@ import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js'
 import Loader from '@/components/Loader.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import ModalCriarProjeto from '@/views/projetos/ModalCriarProjeto.vue';
 import ModalCriarTarefa from '@/views/projetos/ModalCriarTarefa.vue';
@@ -389,6 +402,7 @@ export default {
   name: 'HabitTracker',
   components: {
     Loader,
+    InlineLoader,
     ModalCriarProjeto,
     ModalCriarTarefa,
     ModalEditarTarefa,
@@ -398,7 +412,10 @@ export default {
   inject: ['configuracoes'],
   data: () => {
     return {
-      busy: false,
+      busyProjetosLoad: false,
+      busyProjetosDelete: false,
+      busyProjetosUpdate: false,
+      busyTarefasLoad: false,
       dataPrazo: '',
       projetos: [],
       exibirModalCriarProjeto: false,
@@ -494,20 +511,20 @@ export default {
         return;
       }
       console.log(projeto.id);
-      this.busy = true;
+      this.busyProjetosDelete = true;
       let requestData = {
         'url': `${config.serverUrl}/projetos/${projeto.id}`,
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'DELETE',
       };
       return Request.fetch(requestData).then(([response, data]) => {
-        this.busy = false;
+        this.busyProjetosDelete = false;
         this.$refs.notifier.notify('Projeto excluído!')
         this.toggleEdicaoProjeto(projeto)
         this.buscaProjetos();
       }).catch((error) => {
         console.error(error);
-        this.busy = false;
+        this.busyProjetosDelete = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
       });
     },
@@ -530,7 +547,7 @@ export default {
      * FUNCOES FETCH API
      */
     buscaProjetos () {
-      this.busy = true;
+      this.busyProjetosLoad = true;
       let params = {};
       params['loadTarefas'] = this.carregarPreviamenteAsTarefas;
       if(this.filtroPrioridade != null){
@@ -553,11 +570,11 @@ export default {
             this.toggleShowTarefas(this.projetos[i])
           }
         }
-        this.busy = false;
+        this.busyProjetosLoad = false;
         this.programNextListing();
       })
       .catch((error) => {
-        this.busy = false;
+        this.busyProjetosLoad = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
       });
@@ -565,7 +582,7 @@ export default {
 
     updateProjeto(projeto) {
       console.log(projeto.id);
-      this.busy = true;
+      this.busyProjetosUpdate = true;
       let body = {
         'dataPrazo': projeto.dataPrazo,
         'nome': projeto.nome,
@@ -581,20 +598,20 @@ export default {
         'data' : body
       };
       return Request.fetch(requestData).then(([response, data]) => {
-        this.busy = false;
+        this.busyProjetosUpdate = false;
         // this.resetFields(true)
         this.$refs.notifier.notify('Projeto salvo!')
         this.toggleEdicaoProjeto(projeto)
         this.buscaProjetos();
       }).catch((error) => {
         console.error(error);
-        this.busy = false;
+        this.busyProjetosUpdate = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
       });
     },
 
     loadTarefas(projeto){
-      this.busy = true;
+      this.busyTarefasLoad = true;
       const params = {'orderBy': 'hora,asc', 'projeto': projeto.id};
       let requestData = {
         'url': `${config.serverUrl}/tarefas${QueryStringConverter.toQueryString(params, true)}`,
@@ -603,10 +620,10 @@ export default {
       .then(([response, data]) => {
         // console.log('tarefas', {data}, 'into', projeto.id, projeto.nome);
         projeto.tarefas = data
-        this.busy = false;
+        this.busyTarefasLoad = false;
       })
       .catch((error) => {
-        this.busy = false;
+        this.busyTarefasLoad = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
       });

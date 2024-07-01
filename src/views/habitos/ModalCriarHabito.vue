@@ -23,7 +23,6 @@
 
       </div>
     </div>
-    <!-- <Loader :busy="busy"></Loader> -->
     <Notifier ref="notifier"></Notifier>
   </div>
 </template>
