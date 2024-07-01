@@ -1,41 +1,65 @@
 <style>
-section {
-  max-width: 700px;
-  margin: 0 auto;
+section.register {
+  min-width: 400px;
+  max-width: 400px;
+  /* min-height: 400px; */
+  /* max-height: 400px; */
+  margin: inherit auto;
+  background-color: rgb(255, 255, 255);
+  /* padding: 10px; */
+  /* margin-top: 20px; */
+  border-radius: 5px;
 }
 </style>
 
 <template>
-  <div>
-    <div class="container">
+  <div class="background">
+    <div class="background-blur">
+      <div class="container flex alignitens-center justify-center">
 
-      <section>
-        <h1>Register</h1>
+        <section class="register mt-15 px-15 py-30 px-30">
+          <div class="textCenter mb-20">
+            <h1>Register</h1>
+          </div>
+          
+          <div>
+            <label for="invitationToken">Palavra Passe:</label>
+            <input :disabled="busy" name="invitationToken" type="text" placeholder="invitationToken" v-model="invitationToken">
+          </div>
+          
+          <div>
+            <label for="email">Email:</label>
+            <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
+          </div>
+          
+          <div>
+            <label for="password">Senha:</label>
+            <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
+          </div>
+          
+          <div>
+            <label for="repeatPassword">Repita a senha:</label>
+            <input :disabled="busy" name="repeatPassword" type="password" placeholder="repeatPassword" v-model="repeatPassword">
+          </div>
+          
+          <div class="mt-10 flex-column">
+            <button class="btn mt-20 mb-30" :disabled="busy" @click="register()">Criar conta</button>
+            <router-link :disabled="busy" class="btn" to="/">Login</router-link>
+          </div>
+          
+          <div class="mt-30 mb-10">
+            <InlineLoader
+              :textoAguarde="true"
+              :busy="busy"
+              :center="true">
+            </InlineLoader>
+          </div>
 
-        <label for="invitationToken">Palavra Passe:</label>
-        <input :disabled="busy" name="invitationToken" type="text" placeholder="invitationToken" v-model="invitationToken">
+        </section>
+      </div>
 
-        <label for="email">Email:</label>
-        <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
-
-        <label for="password">Senha:</label>
-        <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
-
-        <label for="repeatPassword">Repita a senha:</label>
-        <input :disabled="busy" name="repeatPassword" type="password" placeholder="repeatPassword" v-model="repeatPassword">
-
-        <button :disabled="busy" @click="register()">Criar conta</button>
-
-        <InlineLoader
-          :textoAguarde="true"
-          :busy="busy"
-          :center="true">
-        </InlineLoader>
-
-      </section>
+      <Notifier ref="notifier"></Notifier>
     </div>
-
-    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 
