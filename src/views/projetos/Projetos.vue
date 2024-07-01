@@ -529,20 +529,6 @@ export default {
       });
     },
 
-    programNextListing() {
-      console.log('nextProgramedListingAmount', this.nextProgramedListingAmount);
-      if(this.nextProgramedListingAmount > 1) return; // nao registra se tem mais
-      this.nextProgramedListingAmount ++;
-      console.log('programmed...', this.nextProgramedListingAmount);
-      // in 30 sec run this
-      setTimeout(() => {
-        this.nextProgramedListingAmount --;
-        Request.fetch({'url': config.serverUrl + '/invitations'})
-        this.programNextListing();
-      }, 1000 * 60);
-    },
-    
-
     /**
      * FUNCOES FETCH API
      */
@@ -571,7 +557,6 @@ export default {
           }
         }
         this.busyProjetosLoad = false;
-        this.programNextListing();
       })
       .catch((error) => {
         this.busyProjetosLoad = false;
