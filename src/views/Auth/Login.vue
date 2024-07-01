@@ -1,34 +1,55 @@
 <style>
-section {
-  max-width: 700px;
-  margin: 0 auto;
+section.login {
+  min-width: 400px;
+  max-width: 400px;
+  /* min-height: 400px; */
+  /* max-height: 400px; */
+  margin: inherit auto;
+  background-color: rgb(255, 255, 255);
+  /* padding: 10px; */
+  /* margin-top: 20px; */
+  border-radius: 5px;
 }
 </style>
 
 <template>
-  <div>
-    <div class="container">
+  <div class="background">
+    <div class="background-blur">
+      <div class="container flex alignitens-center justify-center">
 
-      <section>
-        <h1>Login</h1>
-        <label for="email">Email:</label>
-        <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
+        <section class="login mt-15 px-15 py-30 px-30">
+          <div class="textCenter mb-20">
+            <h1 >Login</h1>
+          </div>
 
-        <label for="password">Senha:</label>
-        <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
+          <div>
+            <label for="email">Email:</label>
+            <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
+          </div>
 
-        <button :disabled="busy" @click="login()">Entrar</button>
-        
-        <InlineLoader
-          :textoAguarde="true"
-          :busy="busy"
-          :center="true">
-        </InlineLoader>
+          <div class="mt-15">
+            <label for="password">Senha:</label>
+            <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
+          </div>
 
-      </section>
+          <div class="mt-10 flex-column">
+            <button class="btn mt-20 mb-30" :disabled="busy" @click="login()">Entrar</button>
+            <router-link :disabled="busy" class="btn" to="/register">Register</router-link>
+          </div>
+          
+          <div class="mt-30 mb-10">
+            <InlineLoader
+              :textoAguarde="true"
+              :busy="busy"
+              :center="true">
+            </InlineLoader>
+          </div>
+
+        </section>
+      </div>
+      
+      <Notifier ref="notifier"></Notifier>
     </div>
-    
-    <Notifier ref="notifier"></Notifier>
   </div>
 </template>
 

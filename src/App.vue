@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div v-if="appLoaded">
-      <nav class="shadow-1">
-        <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link>
-        <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link>
+      <nav class="shadow-1" v-if="loggedIn">
+        <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
+        <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetos">Projetos</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/habitTracker">Habit Tracker</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/backup">Backup</router-link>
