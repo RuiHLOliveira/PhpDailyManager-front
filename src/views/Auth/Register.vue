@@ -13,22 +13,28 @@ section {
         <h1>Register</h1>
 
         <label for="invitationToken">Palavra Passe:</label>
-        <input name="invitationToken" type="text" placeholder="invitationToken" v-model="invitationToken">
+        <input :disabled="busy" name="invitationToken" type="text" placeholder="invitationToken" v-model="invitationToken">
 
         <label for="email">Email:</label>
-        <input name="email" type="email" placeholder="email" v-model="email">
+        <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
 
         <label for="password">Senha:</label>
-        <input name="password" type="password" placeholder="senha" v-model="password">
+        <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
 
         <label for="repeatPassword">Repita a senha:</label>
-        <input name="repeatPassword" type="password" placeholder="repeatPassword" v-model="repeatPassword">
+        <input :disabled="busy" name="repeatPassword" type="password" placeholder="repeatPassword" v-model="repeatPassword">
 
-        <button @click="register()">Criar conta</button>
+        <button :disabled="busy" @click="register()">Criar conta</button>
+
+        <InlineLoader
+          :textoAguarde="true"
+          :busy="busy"
+          :center="true">
+        </InlineLoader>
+
       </section>
     </div>
 
-    <Loader :busy="busy"></Loader>
     <Notifier ref="notifier"></Notifier>
   </div>
 </template>
@@ -37,13 +43,13 @@ section {
 import AuthManager from '@/core/AuthManager.js';
 import config from '@/core/config.js'
 import Request from '@/core/request.js'
-import Loader from '@/components/Loader.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 
 export default {
   name: 'Register',
   components: {
-    Loader,
+    InlineLoader,
     Notifier
   },
   data: () => {
