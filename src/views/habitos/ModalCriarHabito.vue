@@ -13,12 +13,17 @@
         <label for="hora">Hora:</label>
         <input name="hora" :disabled="busy" type="time" placeholder="hora" v-model="hora">
 
-        <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-        <button :disabled="busy" class="btn btn-wider" @click="criarHabito()">Salvar</button>
+        <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">
+          Fechar
+        </button>
+        <button :disabled="busy" class="btn btn-wider" @click="criarHabito()">
+          Salvar
+          <InlineLoader :busy="busy"></InlineLoader>
+        </button>
 
       </div>
     </div>
-    <Loader :busy="busy"></Loader>
+    <!-- <Loader :busy="busy"></Loader> -->
     <Notifier ref="notifier"></Notifier>
   </div>
 </template>
@@ -30,10 +35,12 @@ import Loader from '@/components/Loader.vue';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import Notifier from '@/components/Notifier.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 
 export default {
   components: {
     Loader,
+    InlineLoader,
     Notifier
   },
   data: function () {

@@ -1,9 +1,7 @@
 <style scoped>
 
-.inlineLoaderContainer {
-  /* margin: 0 auto; */
-  /* padding: 10px; */
-  font-size: 0.8rem;
+/* .inlineLoaderContainer {
+  font-size: 1rem;
   border-radius: 5px;
   width: 100px;
   height: 30px;
@@ -11,22 +9,26 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-}
+} */
 
 .inlineLoaderContainerTexto {
   /* margin: 0 auto; */
   /* padding: 10px; */
-  font-size: 0.8rem;
+  font-size: 1rem;
   border-radius: 5px;
-  width: 100px;
-  height: 30px;
-  background: #e0e0e0;
+  width: 120px;
+  height: 40px;
+  background: #f1f1f1;
+  /* border: 1px solid; */
+  /* border-color: #f1f1f1; */
+  /* display: inline-block; */
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
 
 .inlineLoader {
+  padding: 0px;
   display: inline-block;
   vertical-align: middle;
   border: 3px solid #f3f3f3; /* Light grey */
@@ -37,6 +39,10 @@
   animation: spin 2s linear infinite;
 }
 
+.textoAguarde {
+  display:inline-block;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -44,11 +50,13 @@
 </style>
 
 <template>
-    <span v-if="busy" :class="{ inlineLoaderContainer }">
-      <span v-if="textoAguarde">
-        Aguarde...
+    <span v-if="busy" :class="{ xcenter : center }">
+      <span v-if="busy" :class="{ inlineLoaderContainerTexto : textoAguarde }">
+        <span class="mr-10" v-if="textoAguarde">
+          Aguarde...
+        </span>
+        <div class="inlineLoader"></div>
       </span>
-      <div class="inlineLoader"></div>
     </span>
 </template>
 
@@ -61,7 +69,8 @@ export default {
   },
   props: {
     busy: Boolean,
-    textoAguarde: Boolean
+    textoAguarde: Boolean,
+    center: Boolean
   }
 }
 </script>

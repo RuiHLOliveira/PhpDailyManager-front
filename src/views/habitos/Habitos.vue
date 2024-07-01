@@ -131,8 +131,15 @@
         </div>
         
         <div class="bodyBox"> <!-- BODY -->
+          
+          <InlineLoader
+            :textoAguarde="true"
+            :busy="busyHabitosLoad"
+            :center="true">
+          </InlineLoader>
 
-          <div v-if="habitos != []"> <!-- lista de habitos -->
+          <!--  && busyHabitosLoad == true  -->
+          <div v-if="habitos != [] && !busyHabitosLoad"> <!-- lista de habitos -->
             <div v-for="habito in habitos" :key="habito.id">
               <div class="cardBox">
                 
@@ -151,8 +158,8 @@
 
                   <div class="titleBoxLeft titleBoxLeft-editBox" v-if="habito.editMode"> <!-- edicao -->
                     <div class="marginVerticalSpacer titleEditInput">
-                      <input name="hora" type="time" v-model="habito.horaEditar">
-                      <input name="descricao" type="text" v-model="habito.descricaoEditar">
+                      <input :disabled="busyHabitosUpdate" name="hora" type="time" v-model="habito.horaEditar">
+                      <input :disabled="busyHabitosUpdate" name="descricao" type="text" v-model="habito.descricaoEditar">
                     </div>
                     <div class="marginVerticalSpacer">
                     </div>
@@ -160,9 +167,12 @@
 
                   <div class="titleBoxRight"> <!-- right buttons -->
                     <button v-if="!habito.editMode" class="btn btn-sm" type="button" @click="toggleEdicaoHabito(habito)">Editar</button>
-                    <button v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
-                    <button v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">Salvar</button>
-                    <button v-if="habito.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
+                    <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
+                    <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">
+                      Salvar
+                      <InlineLoader :busy="busyHabitosUpdate"></InlineLoader>
+                    </button>
+                    <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
                   </div>
 
                 </div>
@@ -204,7 +214,6 @@
     </div>
 
     <Notifier ref="notifier"></Notifier>
-    <Loader :busy="busy"></Loader>
 
     <ModalCriarHabito
       v-model:exibirModal="exibirModalCriarHabito"
@@ -220,6 +229,7 @@ import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js'
 import Loader from '@/components/Loader.vue';
+import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import ModalCriarHabito from '@/views/habitos/ModalCriarHabito.vue';
 
@@ -227,6 +237,7 @@ export default {
   name: 'Habitos',
   components: {
     Loader,
+    InlineLoader,
     ModalCriarHabito,
     Notifier,
   },
@@ -234,6 +245,10 @@ export default {
   data: () => {
     return {
       busy: false,
+      // busyHabitosLoad: false,
+      busyHabitosLoad: false,
+      busyHabitosUpdate: false,
+      busyHabitosConcluir: true,
       // dataPrazo: '',
       meses: [],
       semana: [],
@@ -322,7 +337,7 @@ export default {
      * FUNCOES FETCH API
      */
     buscaHabitos () {
-      this.busy = true;
+      this.busyHabitosLoad = true;
       let params = {
         'relations': 'habitoRealizados'
       };
@@ -337,10 +352,10 @@ export default {
         data = this.defineRealizadoHoje(data)
         data = this.fillSemanaRealizados(data)
         this.habitos = data
-        this.busy = false;
+        this.busyHabitosLoad = false;
       })
       .catch((error) => {
-        this.busy = false;
+        this.busyHabitosLoad = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
       });
@@ -384,7 +399,7 @@ export default {
     
     updateHabito(habito) {
       console.log(habito.id);
-      this.busy = true;
+      this.busyHabitosUpdate = true;
       let body = {
         'descricao': habito.descricao,
         'hora': habito.hora,
@@ -400,14 +415,14 @@ export default {
         'data' : body
       };
       return Request.fetch(requestData).then(([response, data]) => {
-        this.busy = false;
+        this.busyHabitosUpdate = false;
         // this.resetFields(true)
         this.$refs.notifier.notify('Habito salvo!')
         this.toggleEdicaoHabito(habito)
         this.buscaHabitos();
       }).catch((error) => {
         console.error(error);
-        this.busy = false;
+        this.busyHabitosUpdate = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
       });
     },
@@ -415,7 +430,7 @@ export default {
     concluirHabito(habito) {
       if(habito.realizadoHoje == true) return;
       console.log(habito.id);
-      this.busy = true;
+      this.busyHabitosConcluir = true;
       let body = {};
 
       let requestData = {
@@ -425,13 +440,13 @@ export default {
         'data' : body
       };
       return Request.fetch(requestData).then(([response, data]) => {
-        this.busy = false;
+        this.busyHabitosConcluir = false;
         this.$refs.notifier.notify('Habito concluído!')
         // this.toggleEdicaoHabito(habito)
         this.buscaHabitos();
       }).catch((error) => {
         console.error(error);
-        this.busy = false;
+        this.busyHabitosConcluir = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
       });
     },
