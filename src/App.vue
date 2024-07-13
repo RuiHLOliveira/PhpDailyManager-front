@@ -5,6 +5,7 @@
         <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
         <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetos">Projetos</router-link>
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/tarefas">Tarefas</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/habitTracker">Habit Tracker</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/backup">Backup</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/invitations">Convites</router-link>

@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
 import Projetos from '../views/projetos/Projetos.vue'
+import Tarefas from '../views/tarefas/Tarefas.vue'
 import Habitos from '../views/habitos/Habitos.vue'
 import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
@@ -23,6 +24,12 @@ const router = createRouter({
       path: '/projetos',
       name: 'Projetos',
       component: Projetos,
+      props: true
+    },
+    {
+      path: '/tarefas',
+      name: 'Tarefas',
+      component: Tarefas,
       props: true
     },
     {
