@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/PhpDailyManager-front',
+  base: '/PhpDailyManager-front/',
   plugins: [vue()],
   resolve: {
     alias: {
