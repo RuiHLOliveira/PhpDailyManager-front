@@ -13,8 +13,6 @@ section.login {
 </style>
 
 <template>
-  <div class="background">
-    <div class="background-blur">
       <div class="container flex alignitens-center justify-center">
 
         <section class="login mt-15 px-15 py-30 px-30">
@@ -49,8 +47,6 @@ section.login {
       </div>
       
       <Notifier ref="notifier"></Notifier>
-    </div>
-  </div>
 </template>
 
 <script>

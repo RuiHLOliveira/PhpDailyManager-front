@@ -55,6 +55,7 @@
 }
 .bodyBox {
   padding: 10px 10px;
+  background-color: #ffffff77;
 }
 .bodyBoxDiv {
   margin: 10px 0px;

@@ -45,6 +45,11 @@ nav {
     margin: 0 auto;
     padding: 5px;
 }
+.containerFullWidth {
+    max-width: 100svw;
+    margin: 0 auto;
+    padding: 5px;
+}
 
 h1,h2,h3,h4,h5,h6 {
     font-weight: normal;
@@ -52,7 +57,11 @@ h1,h2,h3,h4,h5,h6 {
     padding: 0;
 }
 
-section {
+.whitespace-pre{
+    white-space: pre-wrap;
+}
+
+section.sectionBorder {
     border-top: 1px solid #b8b8b8;
     margin-top: 20px;
     padding-bottom: 20px;

@@ -150,10 +150,10 @@ a.situacaoAguardandoResposta:hover,
 button.situacaoAguardandoResposta:hover {
     background-color: #0099ff;
 }
-a.situacaoPausadoIndefinidamente,
-button.situacaoPausadoIndefinidamente,
-a.situacaoPausadoIndefinidamente:hover,
-button.situacaoPausadoIndefinidamente:hover {
+a.situacaoPausado,
+button.situacaoPausado,
+a.situacaoPausado:hover,
+button.situacaoPausado:hover {
     background-color: #757575;
 }
 a.situacaoConcluido,

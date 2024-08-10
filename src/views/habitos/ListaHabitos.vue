@@ -136,7 +136,7 @@
 .situacaoAguardandoResposta, .situacaoAguardandoResposta:hover {
   background-color: #0099ff;
 }
-.situacaoPausadoIndefinidamente, .situacaoPausadoIndefinidamente:hover {
+.situacaoPausado, .situacaoPausado:hover {
   background-color: #757575;
 }
 .situacaoConcluido, .situacaoConcluido:hover {

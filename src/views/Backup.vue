@@ -1,15 +1,19 @@
 <style>
+.divBgBlur {
+  background-color: #ffffff77;
+}
 </style>
 
 <template>
   <div>
     <div class="container">
 
-      <h1>Backup</h1>
+      <section class="divBgBlur my-10 p-10">
+        <h1>Backup</h1>
+      </section>
       
-      <section>
-
-        <div style="border-top: 1px solid #999999; padding-bottom: 20px;">
+      <section class="divBgBlur my-10 p-10">
+        <div class="mb-15">
           <h3 class="pageTitle">Baixar Backup</h3>
           <div>
             <button type="button" class="btn"  :disabled="busyExportProjetos == 1"  @click="exportProjetos()">
@@ -24,8 +28,10 @@
             </button>
           </div>
         </div>
+      </section>
 
-        <div style="padding-bottom: 20px; border-top: 1px solid #999999; border-bottom: 1px solid #999999">
+      <section class="divBgBlur my-10 p-10">
+        <div class="mb-15">
           <h3 class="pageTitle">Importar Backup</h3>
           <div>
             Arquivo <input type="file" name="importfile" id="importfile" ref="importfile">
@@ -36,7 +42,6 @@
             </button>
           </div>
         </div>
-
       </section>
     </div>
 

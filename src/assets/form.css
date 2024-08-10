@@ -77,6 +77,33 @@ textarea.textarea:disabled {
     /* outline: none; */
 }
 
+
+select {
+    font-size: 1rem;
+    color: #181818;
+    border: 0px;
+
+    border: 1px solid #b8b8b8;
+    /* border: 2px solid #7da3ce; */
+    padding: 5px;
+    border-radius: 3px;
+    
+    /* mobile */
+    width: 95%;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+select:focus {
+    outline: 2px solid #7da3ce;
+    /* outline: none; */
+}
+select:disabled {
+    background-color: #cfcfcf;
+    cursor: not-allowed;
+    /* outline: none; */
+}
+
 .btn:disabled {
     cursor: not-allowed;
 }

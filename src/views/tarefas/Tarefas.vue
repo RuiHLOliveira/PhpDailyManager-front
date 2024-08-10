@@ -4,11 +4,14 @@ h1.titulo {
 
 }
 .tarefa {
-  border-bottom: 2px solid rgb(194, 194, 194);
+  /* border-bottom: 2px solid rgb(194, 194, 194); */
+  border-radius: 5px;
+  background-color: #ffffff77;
 }
 .projetoNaTarefa {
     font-size: 0.8rem;
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(109, 109, 109);
+    color: white;
     border-radius: 5px;
 }
 
@@ -17,10 +20,10 @@ h1.titulo {
 <template>
   <div>
     <div class="container">
-
-      <div>
+      
+      <section class="divBgBlur my-10 p-10">
         <h1 class="titulo">Tarefas</h1>
-      </div>
+      </section>
 
       <!-- LOADER -->
       <InlineLoader
@@ -33,7 +36,7 @@ h1.titulo {
       <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete">
         <div v-for="tarefa in tarefas" :key="tarefa.id">
 
-          <div class="tarefa mb-10 py-10" >
+          <div class="tarefa mb-10 py-10 px-10" >
 
             <div class="flex justify-spacebetween"> <!-- LINHA SUPERIOR -->
 

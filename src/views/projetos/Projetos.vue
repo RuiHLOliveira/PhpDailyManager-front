@@ -132,7 +132,7 @@
               @click="toggleFiltroSituacao(2)">
               1-Aguardando Resposta
             </button>
-            <button type="button" class="btn btn-sm btnPrioridade situacaoPausadoIndefinidamente"
+            <button type="button" class="btn btn-sm btnPrioridade situacaoPausado"
               :class="{selected : filtroSituacao == 3}"
               @click="toggleFiltroSituacao(3)">
               2-Pausado Indefinidamente
@@ -226,7 +226,7 @@
                         :class="{
                           situacaoPendente : projeto.situacao == 1,
                           situacaoAguardandoResposta : projeto.situacao == 2,
-                          situacaoPausadoIndefinidamente : projeto.situacao == 3,
+                          situacaoPausado : projeto.situacao == 3,
                           situacaoConcluido : projeto.situacao == 4,
                         }">
                         {{ projeto.situacao }}-{{ projeto.situacaoDescritivo }}
@@ -260,7 +260,7 @@
                         @click="toggleEditarSituacao(projeto, 2)">
                         1-Aguardando Resposta
                       </button>
-                      <button type="button" class="btn btn-sm btnPrioridade situacaoPausadoIndefinidamente"
+                      <button type="button" class="btn btn-sm btnPrioridade situacaoPausado"
                         :class="{selected : projeto.situacaoEditar == 3}"
                         @click="toggleEditarSituacao(projeto, 3)">
                         2-Pausado Indefinidamente
