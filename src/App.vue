@@ -4,6 +4,7 @@
       <nav class="shadow-1" v-if="loggedIn">
         <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
         <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
+        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/inbox">Inbox</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetos">Projetos</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetosList">Lista de Projetos</router-link>
         <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/tarefas">Tarefas</router-link>

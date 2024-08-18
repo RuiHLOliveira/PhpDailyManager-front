@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router
 
 import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
+import Inbox from '../views/inbox/Inbox.vue'
 import Projetos from '../views/projetos/Projetos.vue'
 import ProjetosList from '../views/projetos/ProjetosList.vue'
 import Tarefas from '../views/tarefas/Tarefas.vue'
@@ -21,6 +22,12 @@ const router = createRouter({
     //   // which is lazy-loaded when the route is visited.
     //   component: () => import('../views/AboutView.vue')
     // },
+    {
+      path: '/inbox',
+      name: 'Inbox',
+      component: Inbox,
+      props: true
+    },
     {
       path: '/projetos',
       name: 'Projetos',
