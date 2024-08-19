@@ -25,19 +25,24 @@ body {
 }
 
 .background {
+    padding-top: 40px;
     background-image: url('./../bgimg.jpg');
-    height: 100vh;
-    background-position: center;
+    background-attachment: fixed;
     background-repeat: no-repeat;
+    background-position: center;
     background-size: cover;
+    min-height: 100svh;
   }
   .background-blur {
     backdrop-filter: blur(4px);
-    height: 100vh;
   }
 
 nav {
     border-bottom: 1px solid #b8b8b8;
+    position: absolute;
+    min-width: 100svw;
+    background-color: #eeeeee;
+    z-index: 10;
 }
 
 .container {

@@ -6,12 +6,12 @@ h1.titulo {
 .inboxItem {
   /* border-bottom: 2px solid rgb(194, 194, 194); */
   border-radius: 5px;
-  background-color: #ffffff77;
+  background-color: #ffffffa9;
   min-width: 285px;
   max-width: 285px;
 }
 .inboxItem:hover {
-  background-color: #ffffffce;
+  background-color: #ffffffdd;
 }
 .additionalTag {
     font-size: 0.8rem;
@@ -62,6 +62,21 @@ a.link:visited {
         :inboxItem="inboxItemModalEditarInboxItem"
         @reloadListaInboxItem="loadInboxItem()">
       </ModalEditarInboxItem>
+
+      <!-- CATEGORIAS -->
+      <section class="flex-column divBgBlur my-10 p-10">
+        <div>
+          <h3>Categoria: {{ categoriaEscolhida.categoria }}</h3>
+        </div>
+        <div class="flex alignitens-center">
+          <button class="btn btn-sm m-5" @click="loadInboxItemCategoria(null)" type="button">
+            Sem Categoria
+          </button>
+          <button class="btn btn-sm m-5" @click="loadInboxItemCategoria(categoriaItem)" type="button" v-for="categoriaItem in listaCategorias">
+            {{ categoriaItem.categoria }}
+          </button>
+        </div>
+      </section>
 
       <!-- LISTA INBOXITEMS -->
       <div class="flex-wrap" v-if="inboxItems != [] && !busyInboxLoad && !busyInboxDelete">
@@ -144,6 +159,7 @@ import Notifier from '@/components/Notifier.vue';
 import ModalCriarInboxItem from '@/views/inbox/ModalCriarInboxItem.vue';
 import ModalCriarInboxItemLote from '@/views/inbox/ModalCriarInboxItemLote.vue';
 import ModalEditarInboxItem from '@/views/inbox/ModalEditarInboxItem.vue';
+import CategoriaApi from '@/core/apis/CategoriaApi.js'
 
 export default {
   name: 'HabitTracker',
@@ -161,6 +177,9 @@ export default {
       busyInboxDelete: false,
       busyInboxUpdate: false,
       busyInboxLoad: false,
+      busyLoadCategorias: false,
+      listaCategorias: [],
+      categoriaEscolhida: [],
       dataPrazo: '',
       inboxItems: [],
       exibirModalCriarInboxItem: false,
@@ -238,10 +257,24 @@ export default {
     //     this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
     //   });
     // },
+    loadInboxItemCategoria(categoriaItem = null)
+    {
+      this.setCategoriaEscolhida(categoriaItem)
+      this.loadInboxItem(categoriaItem?.id ?? null)
+    },
+
+    setCategoriaEscolhida(categoriaItem){
+      this.categoriaEscolhida = categoriaItem ?? {'categoria':'Sem Categoria'};
+    },
 
     loadInboxItem(){
+      let categoria = this.categoriaEscolhida?.id ?? null
       this.busyInboxLoad = true;
-      const params = {'orderBy': 'nome,asc'};
+      if(categoria == null) categoria = '0'
+      const params = {
+        'categoriaItem': categoria,
+        'orderBy': 'nome,asc'
+      };
       let requestData = {
         'url': `${config.serverUrl}/inboxItems${QueryStringConverter.toQueryString(params, true)}`,
       };
@@ -268,6 +301,21 @@ export default {
       }
       return inboxItems;
     },
+    
+    
+    loadListaCategorias()
+    {
+      this.busyLoadCategorias = true;
+      CategoriaApi.loadListaCategorias().then(([response, data]) => {
+        console.log('lista categorias', data)
+        this.listaCategorias = data
+        this.busyLoadCategorias = false;
+      }).catch((error) => {
+        this.busyLoadCategorias = false;
+        console.error(error)
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
 
   },
   watch: {
@@ -276,7 +324,8 @@ export default {
     }
   },
   created () {
-    this.loadInboxItem();
+    this.loadListaCategorias();
+    this.loadInboxItemCategoria(null);
   },
 }
 </script>
