@@ -74,7 +74,7 @@ a.link:visited {
               <div> <!-- TEXTO -->
                 <div class="mb-10">
                   <span class="additionalTag p-5 mr-10">
-                    {{ inboxItem.categoriaDescritivo }}
+                    {{ inboxItem.categoriaItem?.categoria ?? '-'}}
                   </span>
                   <span class="additionalTag p-5 mr-10">
                     {{ inboxItem.origemDescritivo }}

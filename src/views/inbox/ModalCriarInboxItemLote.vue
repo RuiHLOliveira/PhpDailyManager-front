@@ -14,7 +14,11 @@
         <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
         <button :disabled="busy" class="btn btn-wider" @click="criarinboxItemLote()">Salvar</button>
         
-        <InlineLoader :busy="busy"></InlineLoader>
+        <InlineLoader
+          :textoAguarde="true"
+          :busy="busy"
+          :center="true">
+        </InlineLoader>
 
         <div>
           <div v-for="link in links">

@@ -35,41 +35,65 @@ a.link:visited {
             </div>
             
             <div class="mt-5 mb-5">
+              <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.categoriaItem?.categoria ?? '-' }}</span>
               <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.origemDescritivo }}</span>
-              <span class=" m-5 p-5 modalAdditionalTag">{{  getCategoriaDescricao(inboxItemLocal.categoria) }}</span>
             </div>
           </div>
 
           <div>
             <h1>Edição</h1>
 
-            <label for="nome">nome:</label>
-            <input :disabled="busy" name="nome" type="text" placeholder="nome" v-model="inboxItemLocal.nome">
+            <div class="mt-15">
+              <label for="nome">nome:</label>
+              <input :disabled="busyEditarItem" name="nome" type="text" placeholder="nome" v-model="inboxItemLocal.nome">
+            </div>
 
-            <label for="link">link:</label>
-            <input :disabled="busy" name="link" type="text" placeholder="link" v-model="inboxItemLocal.link">
-
-            <label for="categoria">categoria:</label>
+            <div class="mt-15">
+              <label for="link">link:</label>
+              <input :disabled="busyEditarItem" name="link" type="text" placeholder="link" v-model="inboxItemLocal.link">
+            </div>
             
-            <select v-model="inboxItemLocal.categoria" name="categoria" id="situacao">
-              <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id" :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
-            </select>
+            <div class="mt-15">
+              <label for="categoria">categoria:</label>
+              <button type="button" class=" ml-5 btn btn-sm" @click="toggleCriarCategoria()">Criar</button>
 
-            <!-- <input disabled="true" name="categoria" type="text" placeholder="categoria" v-model="inboxItemLocal.categoria"> -->
+              <div v-if="showCriarCategoria" class="modalInboxItem my-10 p-10">
+                <label for="nome">Nova categoria:</label>
+                <input :disabled="busyCriarCategoria" name="nome" type="text" placeholder="nome" v-model="novaCategoria">
+                <button :disabled="busyCriarCategoria" type="button" class="my-5 btn btn-sm" @click="criarCategoria()">Criar Categoria</button>
+                
+                <InlineLoader
+                  :textoAguarde="true"
+                  :busy="busyCriarCategoria"
+                  :center="false">
+                </InlineLoader>
+              </div>
 
-            <label for="acao">acao:</label>
-            <input :disabled="busy" name="acao" type="text" placeholder="acao" v-model="inboxItemLocal.acao">
+              <select v-model="inboxItemLocal.categoriaItem" name="categoria" id="situacao">
+                <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id" :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
+              </select>
+            </div>
+
+            <div class="mt-15">
+              <label for="acao">acao:</label>
+              <input :disabled="busyEditarItem" name="acao" type="text" placeholder="acao" v-model="inboxItemLocal.acao">
+            </div>
+
           </div>
         </section>
           
         <section class="flex-justify-space-between">
           <div>
-            <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-            <button :disabled="busy" class="btn btn-wider" @click="editarInboxItem()">Salvar</button>
+            <button :disabled="busyEditarItem" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
+            <button :disabled="busyEditarItem" class="btn btn-wider" @click="editarInboxItem()">Salvar</button>
           </div>
         </section>
         
-        <InlineLoader :busy="busy"></InlineLoader>
+        <InlineLoader
+          :textoAguarde="true"
+          :busy="busyEditarItem"
+          :center="true">
+        </InlineLoader>
 
       </div>
     </div>
@@ -84,6 +108,7 @@ import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import Request from '@/core/request.js'
 import config from '@/core/config.js'
+import CategoriaApi from '@/core/apis/CategoriaApi.js'
 
 export default {
   components: {
@@ -93,11 +118,14 @@ export default {
   data: function () {
     return {
       inboxItemLocal: [],
-      busy: false,
+      busyEditarItem: false,
+      busyCriarCategoria: false,
       needReload: false,
+      showCriarCategoria: false,
       configuracoes: [],
       listaCategorias: [],
       listaOrigens: [],
+      novaCategoria: [],
     }
   },
   emits: ['reloadListaInboxItem','update:exibirModal'],
@@ -113,6 +141,10 @@ export default {
     formatBrDate(dateObject){return DateTime.formatBrDate(dateObject);},
     getWeekDay(dateObject){return DateTime.getWeekDay(dateObject);},
     
+    toggleCriarCategoria(){
+      this.showCriarCategoria = !this.showCriarCategoria;
+    },
+
     /**
      * CONTROLES DE TELA
      */
@@ -148,12 +180,13 @@ export default {
     /**
      * APIS FETCH
      */
+
     editarInboxItem() {
-      this.busy = true;
+      this.busyEditarItem = true;
       let body = {
         'nome': this.inboxItemLocal.nome,
         'link': this.inboxItemLocal.link,
-        'categoria': this.inboxItemLocal.categoria,
+        'categoriaItem': this.inboxItemLocal.categoriaItem,
         'acao': this.inboxItemLocal.acao,
       };
       let requestData = {
@@ -164,24 +197,44 @@ export default {
       };
       Request.fetch(requestData).then(([response, data]) => {
         this.$refs.notifier.notify('InboxItem editada!')
-        this.busy = false;
+        this.busyEditarItem = false;
         this.resetFields(true);
       }).catch((error) => {
         console.error(error);
-        this.busy = false;
+        this.busyEditarItem = false;
         this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
       });
     },
 
-    loadListaCategorias(){
-      this.listaCategorias = [
-        { id: 0, categoria: '-'},
-        { id: 1, categoria: 'Desenvolvimento Pessoal'},
-        { id: 2, categoria: 'Exercício'},
-        { id: 3, categoria: 'Finanças'},
-        { id: 4, categoria: 'Receitas'},
-        { id: 5, categoria: 'Mkt Instagram'},
-      ];
+    criarCategoria () {
+      this.busyCriarCategoria = true;
+      CategoriaApi.criarCategoria(this.novaCategoria)
+      .then(([response, data]) => {
+        console.log('categoria criada', data)
+        this.$refs.notifier.notify('Categoria criada!')
+        this.busyCriarCategoria = false;
+        this.novaCategoria = ''
+        this.toggleCriarCategoria();
+        this.loadListaCategorias()
+      }).catch((error) => {
+        this.busyCriarCategoria = false;
+        console.error(error)
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+
+    loadListaCategorias()
+    {
+      this.busyEditarItem = true;
+      CategoriaApi.loadListaCategorias().then(([response, data]) => {
+        console.log('lista categorias', data)
+        this.listaCategorias = data
+        this.busyEditarItem = false;
+      }).catch((error) => {
+        this.busyEditarItem = false;
+        console.error(error)
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
     },
     
     loadListaOrigens(){
@@ -195,7 +248,6 @@ export default {
   },
   watch: {
     exibirModal(newProp, oldProp) {
-      // this.exibirModalLocal = newProp;
     },
     inboxItem(newProp, oldProp) {
       this.inboxItemLocal = deepCopy.deepCopy(newProp);
