@@ -5,6 +5,11 @@ export default {
             'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'
         ];
     },
+    listWeekDayFirstLetter () {
+        return [
+            'D', 'S', 'T', 'Q', 'Q', 'S', 'S'
+        ];
+    },
 
     add(text, number) {
         return parseInt(number) + parseInt(text)
@@ -19,6 +24,9 @@ export default {
     },
     getWeekDay(dateObject){
         return this.listWeekDay()[dateObject.getDay()]
+    },
+    getWeekDayFirstLetter(dateObject){
+        return this.listWeekDayFirstLetter()[dateObject.getDay()]
     },
     getYear(dateObject){
         return dateObject.getFullYear()

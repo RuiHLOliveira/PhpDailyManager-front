@@ -42,6 +42,17 @@ button.btn:disabled {
     background-color: var(--disabled-button-color);
 }
 
+a.btn-checkbox,
+button.btn-checkbox {
+    background-color: #00000000;
+    padding: 0;
+    font-size: 1.3rem;
+}
+a.btn-checkbox:hover,
+button.btn-checkbox:hover {
+    background-color: #00000055;
+}
+
 a.btn-clear,
 button.btn-clear {
     background-color: #00000000;

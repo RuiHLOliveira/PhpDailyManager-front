@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 
 .marginVerticalSpacer {
   margin-top: 10px;
@@ -8,60 +8,15 @@
   white-space: pre-wrap;
 }
 
-.pageTitleProjetos{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-.pageTitleProjetos > .title {
-  font-size: 1.5rem;
-}
-.cardBox {
+.cardBoxHabito {
   border: 1px solid #bbbbbb;
   border-radius: 5px;
-  margin: 20px 0px 20px 0px;
-}
-.titleBox {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #bbbbbb;
-  border-radius: 5px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  padding: 10px 10px;
   background-color: #f1f1f1;
-}
-.titleBoxLeft {
-  flex-grow: 1;
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-}
-.titleBoxLeft-editBox {
-  flex-grow: 1;
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
 }
 .titleEditInput {
   flex-grow: 1;
   color: red;
 }
-.titleBoxRight {
-  display: flex;
-  flex-flow: column;
-}
-.bodyBox {
-  padding: 10px 10px;
-  background-color: #ffffff77;
-}
-.bodyBoxDiv {
-  margin: 10px 0px;
-}
-
-
 
 .monthLine{
   margin: 0px;
@@ -72,37 +27,14 @@
   border: 1px solid #757575;
   border-radius: 1px;
   text-align: center;
-  min-width: 10px;
-  max-width: 10px;
-  min-height: 10px;
-  max-height: 10px;
+  min-width: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  max-height: 20px;
   margin: 1px;
 }
 .daySquareGreen {
   background-color: #20c920;
-}
-
-
-
-
-
-.linhaTarefa {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.linhaTarefa-lined {
-  border-bottom: 1px solid #9c9c9c;
-}
-.linhaTarefa-round {
-  border-radius: 5px;
-  background-color: #ebebeb;
-}
-.linhaTarefa-round:hover {
-  background-color: #d4d4d4;
 }
 
 .btnPrioridade {
@@ -120,18 +52,22 @@
   <div>
     <div class="container">
 
-      <div class="cardBox"> <!-- HABITOS -->
+      <div class="divBgBlur"> <!-- HABITOS -->
         
-        <div class="titleBox"> <!-- TITLE -->
-          <div class="pageTitleProjetos"> <!-- left side -->
-            <div class="title">Habitos</div>
-            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
+        <div class="flex justify-spacebetween py-5 px-15"> <!-- TITLE -->
+          <div class="flex justify-spacebetween alignitens-center"> <!-- left side -->
+            <div class="mr-10">
+              <h1>Habitos</h1>
+            </div>
+            <div>
+              <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
+            </div>
           </div>
           <div> <!-- right side -->
           </div>
         </div>
         
-        <div class="bodyBox"> <!-- BODY -->
+        <div class="px-15"> <!-- BODY -->
           
           <InlineLoader
             :textoAguarde="true"
@@ -142,14 +78,17 @@
           <!--  && busyHabitosLoad == true  -->
           <div v-if="habitos != [] && !busyHabitosLoad"> <!-- lista de habitos -->
             <div v-for="habito in habitos" :key="habito.id">
-              <div class="cardBox">
-                
-                <div class="titleBox"> <!-- TITLE -->
 
-                  <div class="titleBoxLeft" v-if="!habito.editMode"> <!-- common -->
+              <div class="cardBoxHabito p-10 m-5">
+
+                <!-- LINE 1 -->
+                <div class="flex-wrap justify-spacebetween alignitens-center"> 
+
+                  <!-- common -->
+                  <div class="flexGrow1 flex-column alignitens-start" v-if="!habito.editMode"> 
                     <div>
                       <span>
-                        <button class="btn btn-clear mx-5" type="button" @click="concluirHabito(habito)">
+                        <button class="btn btn-checkbox mx-5" type="button" @click="concluirHabito(habito)">
                           {{ habito.realizadoHoje ? '✅' : '🔲' }}
                         </button>
                         {{ habito.hora }} - {{ habito.descricao }}
@@ -157,7 +96,8 @@
                     </div>
                   </div>
 
-                  <div class="titleBoxLeft titleBoxLeft-editBox" v-if="habito.editMode"> <!-- edicao -->
+                  <!-- edicao -->
+                  <div class="flexGrow1 flex-column alignitens-start" v-if="habito.editMode"> 
                     <div class="marginVerticalSpacer titleEditInput">
                       <input :disabled="busyHabitosUpdate" name="hora" type="time" v-model="habito.horaEditar">
                       <input :disabled="busyHabitosUpdate" name="descricao" type="text" v-model="habito.descricaoEditar">
@@ -166,7 +106,8 @@
                     </div>
                   </div>
 
-                  <div class="titleBoxRight"> <!-- right buttons -->
+                  <!-- right buttons -->
+                  <div class="flex-column"> 
                     <button v-if="!habito.editMode" class="btn btn-sm" type="button" @click="toggleEdicaoHabito(habito)">Editar</button>
                     <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
                     <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">
@@ -178,9 +119,8 @@
 
                 </div>
 
-                <!-- BODY -->
-                <div class="bodyBox">
-
+                <!-- LINE 2 -->
+                <div class="mt-15 mb-10">
                   <!-- corpo 1 - concluir -->
                   <!-- <div class="bodyBoxDiv">
                     <button class="btn mx-5 my-10 btn-sm" type="button" @click="concluirHabito(habito)">Concluir agora!</button>
@@ -194,9 +134,15 @@
                   </div> -->
 
                   <!-- corpo 3 - quadrinhos-->
-                  <div class="bodyBoxDiv">
-                    <div class="daySquare" :class="{ daySquareGreen : dia.realizado }" v-for="dia in habito.semana" :key="dia.dia">
-                    </div>
+                  <div class="flex-wrap">
+                    <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
+                      <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
+                        {{ dia.weekDayFirstLetter }}
+                      </div>
+                      <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
+                        {{ dia.dia }}
+                      </div>
+                    </span>
                   </div>
                   
                 </div>
@@ -265,6 +211,7 @@ export default {
     formatDevDate(dateObject){return DateTime.formatDevDate(dateObject);},
     formatBrDate(dateObject){return DateTime.formatBrDate(dateObject);},
     getWeekDay(dateObject){return DateTime.getWeekDay(dateObject);},
+    getWeekDayFirstLetter(dateObject){return DateTime.getWeekDayFirstLetter(dateObject);},
     getYear(dateObject){return DateTime.getYear(dateObject);},
     getMonth(dateObject){return DateTime.getMonth(dateObject);},
     getDate(dateObject){return DateTime.getDate(dateObject);},
@@ -467,6 +414,8 @@ export default {
           dia: this.getDate(new Date(dia.getTime())),
           mes: this.getMonth(new Date(dia.getTime())),
           ano: this.getYear(new Date(dia.getTime())),
+          weekDay: this.getWeekDay(new Date(dia.getTime())),
+          weekDayFirstLetter: this.getWeekDayFirstLetter(new Date(dia.getTime())),
           realizado: false
         })
       }
