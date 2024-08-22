@@ -18,87 +18,87 @@ a.link:visited {
 </style>
 
 <template>
-  <div v-if="exibirModal">
-    <div class="modalBackground">
-      <div class="modal">
+<Teleport to="body">
+  <div v-if="exibirModal" class="modalBackground">
+    <div class="modal">
 
-        <section>
-          <h1>InboxItem - Dados</h1>
+      <section>
+        <h1>InboxItem - Dados</h1>
 
-          <div class="modalInboxItem p-10">
-            <div class="mt-5">
-              <span>{{ inboxItemLocal.nome }}</span>
-            </div>
-            
-            <div class="mt-5">
-              <span v-html="inboxItemLocal.linkTag"></span>
-            </div>
-            
-            <div class="mt-5 mb-5">
-              <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.categoriaItem?.categoria ?? '-' }}</span>
-              <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.origemDescritivo }}</span>
-            </div>
+        <div class="modalInboxItem p-10">
+          <div class="mt-5">
+            <span>{{ inboxItemLocal.nome }}</span>
           </div>
-
-          <div>
-            <h1>Edição</h1>
-
-            <div class="mt-15">
-              <label for="nome">nome:</label>
-              <input :disabled="busyEditarItem" name="nome" type="text" placeholder="nome" v-model="inboxItemLocal.nome">
-            </div>
-
-            <div class="mt-15">
-              <label for="link">link:</label>
-              <input :disabled="busyEditarItem" name="link" type="text" placeholder="link" v-model="inboxItemLocal.link">
-            </div>
-            
-            <div class="mt-15">
-              <label for="categoria">categoria:</label>
-              <button type="button" class=" ml-5 btn btn-sm" @click="toggleCriarCategoria()">Criar</button>
-
-              <div v-if="showCriarCategoria" class="modalInboxItem my-10 p-10">
-                <label for="nome">Nova categoria:</label>
-                <input :disabled="busyCriarCategoria" name="nome" type="text" placeholder="nome" v-model="novaCategoria">
-                <button :disabled="busyCriarCategoria" type="button" class="my-5 btn btn-sm" @click="criarCategoria()">Criar Categoria</button>
-                
-                <InlineLoader
-                  :textoAguarde="true"
-                  :busy="busyCriarCategoria"
-                  :center="false">
-                </InlineLoader>
-              </div>
-
-              <select v-model="inboxItemLocal.categoriaItem" name="categoria" id="situacao">
-                <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id" :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
-              </select>
-            </div>
-
-            <div class="mt-15">
-              <label for="acao">acao:</label>
-              <input :disabled="busyEditarItem" name="acao" type="text" placeholder="acao" v-model="inboxItemLocal.acao">
-            </div>
-
-          </div>
-        </section>
           
-        <section class="flex-justify-space-between">
-          <div>
-            <button :disabled="busyEditarItem" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-            <button :disabled="busyEditarItem" class="btn btn-wider" @click="editarInboxItem()">Salvar</button>
+          <div class="mt-5">
+            <span v-html="inboxItemLocal.linkTag"></span>
           </div>
-        </section>
-        
-        <InlineLoader
-          :textoAguarde="true"
-          :busy="busyEditarItem"
-          :center="true">
-        </InlineLoader>
+          
+          <div class="mt-5 mb-5">
+            <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.categoriaItem?.categoria ?? '-' }}</span>
+            <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.origemDescritivo }}</span>
+          </div>
+        </div>
 
-      </div>
+        <div>
+          <h1>Edição</h1>
+
+          <div class="mt-15">
+            <label for="nome">nome:</label>
+            <input :disabled="busyEditarItem" name="nome" type="text" placeholder="nome" v-model="inboxItemLocal.nome">
+          </div>
+
+          <div class="mt-15">
+            <label for="link">link:</label>
+            <input :disabled="busyEditarItem" name="link" type="text" placeholder="link" v-model="inboxItemLocal.link">
+          </div>
+          
+          <div class="mt-15">
+            <label for="categoria">categoria:</label>
+            <button type="button" class=" ml-5 btn btn-sm" @click="toggleCriarCategoria()">Criar</button>
+
+            <div v-if="showCriarCategoria" class="modalInboxItem my-10 p-10">
+              <label for="nome">Nova categoria:</label>
+              <input :disabled="busyCriarCategoria" name="nome" type="text" placeholder="nome" v-model="novaCategoria">
+              <button :disabled="busyCriarCategoria" type="button" class="my-5 btn btn-sm" @click="criarCategoria()">Criar Categoria</button>
+              
+              <InlineLoader
+                :textoAguarde="true"
+                :busy="busyCriarCategoria"
+                :center="false">
+              </InlineLoader>
+            </div>
+
+            <select v-model="inboxItemLocal.categoriaItem" name="categoria" id="situacao">
+              <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id" :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
+            </select>
+          </div>
+
+          <div class="mt-15">
+            <label for="acao">acao:</label>
+            <input :disabled="busyEditarItem" name="acao" type="text" placeholder="acao" v-model="inboxItemLocal.acao">
+          </div>
+
+        </div>
+      </section>
+        
+      <section class="flex-justify-space-between">
+        <div>
+          <button :disabled="busyEditarItem" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
+          <button :disabled="busyEditarItem" class="btn btn-wider" @click="editarInboxItem()">Salvar</button>
+        </div>
+      </section>
+      
+      <InlineLoader
+        :textoAguarde="true"
+        :busy="busyEditarItem"
+        :center="true">
+      </InlineLoader>
+
     </div>
-    <Notifier ref="notifier"></Notifier>
+  <!-- <Notifier ref="notifier"></Notifier> -->
   </div>
+</Teleport>
 </template>
 
 <script>

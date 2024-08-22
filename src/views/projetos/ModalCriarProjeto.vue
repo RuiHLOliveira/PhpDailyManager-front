@@ -2,6 +2,7 @@
 </style>
 
 <template>
+<Teleport to="body">
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
@@ -54,6 +55,7 @@
     <Loader :busy="busy"></Loader>
     <Notifier ref="notifier"></Notifier>
   </div>
+</Teleport>
 </template>
 
 <script>

@@ -2,6 +2,7 @@
 </style>
 
 <template>
+<Teleport to="body">
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
@@ -21,6 +22,7 @@
     </div>
     <Notifier ref="notifier"></Notifier>
   </div>
+</Teleport>
 </template>
 
 <script>
