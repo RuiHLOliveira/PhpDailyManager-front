@@ -46,29 +46,29 @@ a.link:visited {
         :busy="busyInboxLoad || busyInboxDelete"
         :center="true">
       </InlineLoader>
-
-      <ModalCriarInboxItem
-        v-model:exibirModal="exibirModalCriarInboxItem"
-        @reloadListaInboxItem="loadInboxItem()">
-      </ModalCriarInboxItem>
       
-      <ModalCriarInboxItemLote
-        v-model:exibirModal="exibirModalCriarInboxItemLote"
-        @reloadListaInboxItem="loadInboxItem()">
-      </ModalCriarInboxItemLote>
+    <ModalCriarInboxItem
+      v-model:exibirModal="exibirModalCriarInboxItem"
+      @reloadListaInboxItem="loadInboxItem()">
+    </ModalCriarInboxItem>
+    
+    <ModalCriarInboxItemLote
+      v-model:exibirModal="exibirModalCriarInboxItemLote"
+      @reloadListaInboxItem="loadInboxItem()">
+    </ModalCriarInboxItemLote>
 
-      <ModalEditarInboxItem
-        v-model:exibirModal="exibirModalEditarInboxItem"
-        :inboxItem="inboxItemModalEditarInboxItem"
-        @reloadListaInboxItem="loadInboxItem()">
-      </ModalEditarInboxItem>
+    <ModalEditarInboxItem
+      v-model:exibirModal="exibirModalEditarInboxItem"
+      :inboxItem="inboxItemModalEditarInboxItem"
+      @reloadListaInboxItem="loadInboxItem()">
+    </ModalEditarInboxItem>
 
       <!-- CATEGORIAS -->
       <section class="flex-column divBgBlur my-10 p-10">
         <div>
           <h3>Categoria: {{ categoriaEscolhida.categoria }}</h3>
         </div>
-        <div class="flex alignitens-center">
+        <div class="flex-wrap alignitens-center">
           <button class="btn btn-sm m-5" @click="loadInboxItemCategoria(null)" type="button">
             Sem Categoria
           </button>
