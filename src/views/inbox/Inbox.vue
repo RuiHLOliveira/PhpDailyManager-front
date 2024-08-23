@@ -94,18 +94,19 @@ a.link:visited {
                   <span class="additionalTag p-5 mr-10">
                     {{ inboxItem.origemDescritivo }}
                   </span>
+                  <span v-html="inboxItem.linkTag"></span>
                 </div>
                 <div class="mb-10">
                   <span>
                       {{ inboxItem.nome }}
                   </span>
                 </div>
-                <div class="mb-10">
+                <!-- <div class="mb-10">
                   <span v-html="inboxItem.linkTag"></span>
-                </div>
+                </div> -->
                 <div class="mb-10">
                   <span>
-                      {{ inboxItem.acao }}
+                      {{ limit(inboxItem.acao,50) }}
                   </span>
                 </div>
                 
@@ -199,6 +200,9 @@ export default {
     formatDevDate(dateObject){return DateTime.formatDevDate(dateObject);},
     formatBrDate(dateObject){return DateTime.formatBrDate(dateObject);},
     getWeekDay(dateObject){return DateTime.getWeekDay(dateObject);},
+    limit(string, limit){
+      return string.substring(0,limit) + (string.length > limit ? '...' : '')
+    },
 
     /**
      * EDIT FORMS
@@ -296,7 +300,7 @@ export default {
     {
       for (let i = 0; i < inboxItems.length; i++) {
         inboxItems[i].editMode = false;
-        inboxItems[i].linkTag = `<a class='link' target='blank' href='${inboxItems[i].link}'>${inboxItems[i].link}</a> `;
+        inboxItems[i].linkTag = `<a class='btn btn-sm btn-blue' target='blank' href='${inboxItems[i].link}'>Conteúdo</a> `;
         inboxItems[i].busyInboxUpdate = false;
       }
       return inboxItems;

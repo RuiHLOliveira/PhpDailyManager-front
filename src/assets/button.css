@@ -11,6 +11,8 @@
     /* novos */
     --default-button-color: #26a67b;
     --default-hover-button-color:#109060;
+    --blue-button-color: #2677a6;
+    --blue-hover-button-color:#106090;
     --situacao1-button-color: #235041;
     --situacao2-button-color: #b93838;
     --default-button-color-background: #26a67b;
@@ -21,6 +23,7 @@
     --red-button-color: #b93838;
 }
 
+/* DEFAULT BUTTON */
 a.btn,
 button.btn {
     text-align: center;
@@ -39,12 +42,18 @@ button.btn {
     font-family: inherit;
     cursor:pointer;
 }
+a.btn:hover,
+button:hover {
+    background-color: var(--default-hover-button-color-background);
+}
 
+/* DISABLED BUTTON */
 a.btn:disabled,
 button.btn:disabled {
     background-color: var(--disabled-button-color);
 }
 
+/* CHECKBOX BUTTON */
 a.btn-checkbox,
 button.btn-checkbox {
     background-color: #00000000;
@@ -56,6 +65,23 @@ button.btn-checkbox:hover {
     background-color: #00000055;
 }
 
+/* BLUE BUTTON */
+a.btn-blue,
+button.btn-blue {
+    background-color: var(--blue-button-color);
+}
+a.btn-blue:hover,
+button.btn-blue:hover {
+    background-color: var(--blue-hover-button-color);
+}
+
+/* RED BUTTON */
+a.btn-red,
+button.btn-red {
+    background-color: var(--red-button-color)
+}
+
+/* CLEAR BUTTON */
 a.btn-clear,
 button.btn-clear {
     background-color: #00000000;
@@ -65,6 +91,7 @@ button.btn-clear:hover {
     background-color: #00000055;
 }
 
+/* CIRCLE BUTTON */
 a.btn-circle,
 button.btn-circle {
     border-radius: 50%;
@@ -74,20 +101,13 @@ button.btn-circle {
     line-height:1em;
 }
 
+/* WIDER BUTTON */
 a.btn-wider,
 button.btn-wider {
     padding: 5px 20px;
     margin: 5px 10px;
 }
-a.btn:hover,
-button:hover {
-    background-color: var(--default-hover-button-color-background);
-}
 
-a.btn-red,
-button.btn-red {
-    background-color: var(--red-button-color)
-}
 
 
 .btn_atividade_concluida {
@@ -105,7 +125,6 @@ button.btn-red {
 .btn_atividade_falhou:hover {
     background-color: var(--situacao2-button-color-background)
 }
-
 
 a.btn.btn-sm,
 button.btn-sm {

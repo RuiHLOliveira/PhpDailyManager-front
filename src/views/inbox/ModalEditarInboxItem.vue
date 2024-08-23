@@ -76,7 +76,7 @@ a.link:visited {
 
           <div class="mt-15">
             <label for="acao">acao:</label>
-            <input :disabled="busyEditarItem" name="acao" type="text" placeholder="acao" v-model="inboxItemLocal.acao">
+            <textarea class="textarea" name="anotacoes" placeholder="anotacoes" :disabled="busyEditarItem" v-model="inboxItemLocal.acao"></textarea>
           </div>
 
         </div>
@@ -96,7 +96,7 @@ a.link:visited {
       </InlineLoader>
 
     </div>
-  <!-- <Notifier ref="notifier"></Notifier> -->
+  <Notifier ref="notifier"></Notifier>
   </div>
 </Teleport>
 </template>
