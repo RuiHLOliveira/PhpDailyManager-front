@@ -1,17 +1,20 @@
 
 /* default color ?? */
 :root {
+    /* antigos */
     --default-button-color: #2677a6;
     --disabled-button-color: #bdbdbd;
     --situacao1-button-color: #26a67b;
     --default-button-color-background: #20648b;
     --situacao1-button-color-background: #1c7c73;
 
-    
+    /* novos */
     --default-button-color: #26a67b;
+    --default-hover-button-color:#109060;
     --situacao1-button-color: #235041;
     --situacao2-button-color: #b93838;
     --default-button-color-background: #26a67b;
+    --default-hover-button-color-background: #109060;
     --situacao1-button-color-background: #235041;
     --situacao2-button-color-background: #b93838;
 
@@ -62,6 +65,15 @@ button.btn-clear:hover {
     background-color: #00000055;
 }
 
+a.btn-circle,
+button.btn-circle {
+    border-radius: 50%;
+    display:block;
+    height: 40px;
+    width: 40px;
+    line-height:1em;
+}
+
 a.btn-wider,
 button.btn-wider {
     padding: 5px 20px;
@@ -69,7 +81,7 @@ button.btn-wider {
 }
 a.btn:hover,
 button:hover {
-    background-color: var(--default-button-color-background);
+    background-color: var(--default-hover-button-color-background);
 }
 
 a.btn-red,

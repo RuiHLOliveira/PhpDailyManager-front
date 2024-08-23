@@ -1,25 +1,37 @@
 <template>
   <div id="app">
-    <div v-if="appLoaded">
-      <nav class="shadow-1" v-if="loggedIn">
-        <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
-        <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/inbox">Inbox</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetos">Projetos</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/projetosList">Lista de Projetos</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/tarefas">Tarefas</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/habitTracker">Habit Tracker</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/backup">Backup</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/invitations">Convites</router-link>
-        <router-link v-if="loggedIn" class="btn mx-5 my-5" to="/configuracoes">Configurações</router-link>
-        <button class="btn mx-5 my-5" v-if="loggedIn" @click="logout()">Logout</button>
-      </nav>
 
-      <div class="background">
-        <div class="background-blur">
-          <router-view
-            @redirectAfterLogin="redirectAfterLogin()"
-          />
+    <div v-if="appLoaded" >
+      
+      <div class="menuButton" v-if="isSmallScreen">
+        <button type="button" class="btn btn-circle shadow-2" v-if="loggedIn" @click="toggleMenu()">
+          <i v-if="!showMenu" class="fi fi-rs-burger-menu"></i>
+          <i v-if="showMenu" class="fi fi-rs-cross"></i>
+        </button>
+      </div>
+      <div class="flex">
+        <nav class="leftNav shadow-1" v-if="loggedIn && (!isSmallScreen || showMenu)">
+          <span class="leftNavTitle my-15">Daily Manager R</span>
+          <span class="leftNavText my-15">Olá, usuario!</span>
+          <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
+          <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inbox"><i class="fi fi-rs-inbox-in"></i> Inbox</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetos"><i class="fi fi-rs-journal-alt"></i> Projetos</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetosList"><i class="fi fi-rs-journal-alt"></i> Lista de Projetos</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/tarefas"><i class="fi fi-rs-list-check"></i> Tarefas</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker"><i class="fi fi-rs-brightness"></i> Habit Tracker</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/backup"><i class="fi fi-rs-disk"></i> Backup</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/invitations"><i class="fi fi-rs-file-user"></i> Convites</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/configuracoes"><i class="fi fi-rs-gears"></i> Configurações</router-link>
+          <span class="menuItem" v-if="loggedIn" @click="logout()"><i class="fi fi-rs-sign-out-alt"></i> Logout</span>
+        </nav>
+
+        <div class="mainPageDiv background">
+          <div class="background-blur">
+            <router-view
+              @redirectAfterLogin="redirectAfterLogin()"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -57,10 +69,27 @@ export default {
       loggedIn: AuthManager.isLoggedIn(),
       configuracoesArray: [],
       configuracoes: {},
-      appLoaded: false
+      appLoaded: false,
+      showMenu: false,
+      windowWidth: 0,
+      windowHeight: 0,
     }
   },
+  computed: {
+    isSmallScreen() {
+      return this.windowWidth < 800
+    },
+  },
   methods: {
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+    },
+
+    getDimensions() {
+      this.windowWidth = document.documentElement.clientWidth;
+      this.windowHeight = document.documentElement.clientHeight;
+    },
+
     updateLoggedIn(){
       this.loggedIn = AuthManager.isLoggedIn();
     },
@@ -125,6 +154,13 @@ export default {
     }
   },
   beforeCreate(){
+  },
+  mounted() {
+    window.addEventListener('resize', this.getDimensions);
+    this.getDimensions()
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.getDimensions);
   },
   async created () {
     this.loadApp();

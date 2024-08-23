@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
+
+@import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-rounded/css/uicons-regular-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-straight/css/uicons-regular-straight.css');
+
 @import url('./margins-paddings.css');
 @import url('./flexbox.css');
 @import url('./button.css');
@@ -24,8 +28,19 @@ body {
     padding: 0px;
 }
 
+.mainPageDiv {
+    flex-grow: 1;
+}
+
+.menuButton {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    padding: 5px;
+}
+
 .background {
-    padding-top: 40px;
     background-image: url('./../bgimg.jpg');
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -37,12 +52,48 @@ body {
     backdrop-filter: blur(4px);
   }
 
-nav {
+nav.topNav {
     border-bottom: 1px solid #b8b8b8;
     position: absolute;
     min-width: 100svw;
     background-color: #eeeeee;
     z-index: 10;
+}
+
+nav.leftNav {
+    display: flex;
+    flex-direction: column;
+    min-width: 100svw;
+    max-width: 100svw;
+    background-color: var(--default-button-color);
+    font-size: 1.1rem;
+    .leftNavTitle {
+        padding: 0 10px;
+        text-align: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+    .leftNavText {
+        padding: 0 10px;
+        text-align: center;
+        color: white;
+    }
+    .menuItem {
+        padding: 10px 15px;
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .menuItem:hover {
+        background-color:  var(--default-hover-button-color);
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    nav.leftNav {
+        min-width: 200px;
+        max-width: 200px;
+    }
 }
 
 .container {
@@ -51,9 +102,9 @@ nav {
     padding: 5px;
 }
 .containerFullWidth {
-    max-width: 100svw;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 5px;
+    padding: 5px 20px;
 }
 
 h1,h2,h3,h4,h5,h6 {
