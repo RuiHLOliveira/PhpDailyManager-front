@@ -216,6 +216,7 @@ export default {
     getMonth(dateObject){return DateTime.getMonth(dateObject);},
     getDate(dateObject){return DateTime.getDate(dateObject);},
     getWeekDayNumber(dateObject){return DateTime.getWeekDayNumber(dateObject);},
+    newDatetimeTz(dateString){return DateTime.newDatetimeTz(dateString);},
 
     /**
      * FUNCOES TOGGLE
@@ -313,7 +314,7 @@ export default {
       for (let i = 0; i < habitos.length; i++) {
         habitos[i].realizadoHoje = false;
         for (let j = 0; j < habitos[i].habitoRealizados.length; j++) {
-          const dataRealizadoEm = this.formatDevDate(new Date(habitos[i].habitoRealizados[j].realizadoEm));
+          const dataRealizadoEm = this.formatDevDate(this.newDatetimeTz(habitos[i].habitoRealizados[j].realizadoEm));
           const dataHoje = this.formatDevDate(new Date());
           if( dataRealizadoEm == dataHoje ){
             habitos[i].realizadoHoje = true;
@@ -328,7 +329,7 @@ export default {
         habitos[i].semana = this.montaSemanaAtual()
         for (let j = 0; j < habitos[i].habitoRealizados.length; j++) {
           console.log('habito Realizado', habitos[i].habitoRealizados[j])
-          const realizadoEmDateObject = new Date(habitos[i].habitoRealizados[j].realizadoEm);
+          const realizadoEmDateObject = this.newDatetimeTz(habitos[i].habitoRealizados[j].realizadoEm);
           const weekDayNumber = this.getWeekDayNumber(realizadoEmDateObject)
           const date = this.getDate(realizadoEmDateObject)
           const month = this.getMonth(realizadoEmDateObject)

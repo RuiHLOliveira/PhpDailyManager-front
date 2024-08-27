@@ -11,6 +11,15 @@ export default {
         ];
     },
 
+
+    newDatetimeTz(dateString){
+        let date = new Date(dateString);
+        const minutos = date.getTimezoneOffset() * -1;
+        const miliseconds = minutos * 60 * 1000;
+        date.setTime(date.getTime() + miliseconds)
+        return date;
+    },
+
     add(text, number) {
         return parseInt(number) + parseInt(text)
     },
