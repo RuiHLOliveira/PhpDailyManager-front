@@ -76,7 +76,7 @@ a.link:visited {
 
           <div class="mt-15">
             <label for="acao">acao:</label>
-            <textarea class="textarea" name="anotacoes" placeholder="anotacoes" :disabled="busyEditarItem" v-model="inboxItemLocal.acao"></textarea>
+            <textarea class="textarea textareaHeight150" name="anotacoes" placeholder="anotacoes" :disabled="busyEditarItem" v-model="inboxItemLocal.acao"></textarea>
           </div>
 
         </div>

@@ -319,7 +319,7 @@
                     </div>
                     <div v-if="projeto.editMode">
                       <!-- <input name="atividade" type="text" v-model="projeto.anotacoesEditar"> -->
-                      <textarea class="textarea" name="anotacoes" placeholder="anotacoes" v-model="projeto.anotacoesEditar"></textarea>
+                      <textarea class="textarea textareaHeight150" name="anotacoes" placeholder="anotacoes" v-model="projeto.anotacoesEditar"></textarea>
                     </div>
                   </div>
                   

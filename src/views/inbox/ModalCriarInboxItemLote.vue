@@ -10,7 +10,7 @@
 
         <label for="link">Lote de Links:</label>
 
-        <textarea :disabled="busy" class="textarea" name="anotacoes" placeholder="anotacoes" v-model="loteLinks"></textarea>
+        <textarea :disabled="busy" class="textarea textareaHeight150" name="anotacoes" placeholder="anotacoes" v-model="loteLinks"></textarea>
         
         <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
         <button :disabled="busy" class="btn btn-wider" @click="criarinboxItemLote()">Salvar</button>

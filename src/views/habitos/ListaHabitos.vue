@@ -225,7 +225,7 @@
                       {{ habito.anotacoes }}
                     </div> -->
                     <!-- <div v-if="habito.editMode">
-                      <textarea class="textarea" name="anotacoes" placeholder="anotacoes" v-model="habito.anotacoesEditar"></textarea>
+                      <textarea class="textarea textareaHeight150" name="anotacoes" placeholder="anotacoes" v-model="habito.anotacoesEditar"></textarea>
                     </div> -->
                   </div>
                   <div class="bodyBoxDiv">

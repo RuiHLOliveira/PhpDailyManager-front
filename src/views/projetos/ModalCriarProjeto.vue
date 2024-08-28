@@ -44,7 +44,7 @@
         
         <label for="anotacoes">Anotações:</label>
         <br>
-        <textarea class="textarea" rows="4" cols="80" name="anotacoes" placeholder="anotacoes" v-model="anotacoes"></textarea>
+        <textarea class="textarea textareaHeight150" rows="4" cols="80" name="anotacoes" placeholder="anotacoes" v-model="anotacoes"></textarea>
         <br>
         <br>
 
