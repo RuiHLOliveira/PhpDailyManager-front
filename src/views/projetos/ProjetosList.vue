@@ -94,6 +94,9 @@ section.projetoShow {
 
             <!-- FILTER -->
             <div class="mt-10 p-5 divBgBlur">
+              <div>
+                <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
+              </div>
               <!-- SITUACAO -->
               <select v-model="selectedSituacao" name="situacao" id="situacao">
                 <option value="0">Todos</option>
@@ -380,6 +383,7 @@ export default {
       busyTarefasLoad: false,
       dataPrazo: '',
       projetos: [],
+      projetoBackup: [],
       exibirModalCriarProjeto: false,
       exibirModalCriarTarefa: false,
       exibirModalEditarTarefa: false,
@@ -391,6 +395,7 @@ export default {
       filtroPrioridade: null,
       filtroSituacao: null,
       nextProgramedListingAmount: 0,
+      filtroNomeProjeto: '',
 
       projetoExibir: [],
       selectedSituacao: 0,
@@ -602,6 +607,21 @@ export default {
       });
     },
 
+    filtraListaProjeto()
+    {
+      if(this.projetoBackup.length == 0){
+        this.projetoBackup = this.projetos;
+      }
+      this.projetos = this.projetoBackup;
+      var arrayfilter = [];
+      for (let i = 0; i < this.projetos.length; i++) {
+        if(this.projetos[i].nome.toLowerCase().includes(this.filtroNomeProjeto.toLowerCase())){
+          arrayfilter.push(this.projetos[i])
+        }
+      }
+      this.projetos = arrayfilter
+    },
+
     getDimensions() {
       this.windowWidth = document.documentElement.clientWidth;
       this.windowHeight = document.documentElement.clientHeight;
@@ -611,7 +631,7 @@ export default {
   watch: {
     configuracoes(a, b) {
       // do something
-    }
+    },
   },
   mounted() {
     window.addEventListener('resize', this.getDimensions);
