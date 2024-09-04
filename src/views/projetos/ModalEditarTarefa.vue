@@ -9,20 +9,48 @@
 
         <section>
           <h1>Editar Tarefa</h1>
-          <h3>
-            {{ projeto.nome }}
-          <span>Tarefa {{ tarefa.situacaoDescritivo }}</span>
-          </h3>
 
+          <div class="flex-wrap">
+            <div class="verticalalign-center mr-10">
+              Projeto:
+            </div>
+            <div>
+              <h3>{{ projeto.nome }}</h3>
+            </div>
+          </div>
+
+          <div class="flex-wrap">
+            <div class="verticalalign-center mr-10">
+              Tarefa:
+            </div>
+            <div>
+              <h3>{{ tarefa.descricao }}</h3>
+            </div>
+          </div>
+
+          <div class="flex-wrap">
+            <div class="verticalalign-center mr-10">
+              {{ tarefa.situacaoDescritivo }}
+            </div>
+            <div>
+              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
+              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
+            </div>
+            <div>
+              <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+              <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
+              <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+            </div>
+          </div>
+          
           <label for="tarefa">Tarefa:</label>
           <input :disabled="busy" name="tarefa" type="text" placeholder="tarefa" v-model="tarefaLocal.descricao">
           
           <label for="hora">Hora:</label>
           <input :disabled="busy" name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
-
         </section>
           
-        <section class="flex-justify-space-between">
+        <section class="my-15 flex-justify-space-between">
           <div>
             <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
             <button :disabled="busy" class="btn btn-wider" @click="editarTarefa()">Salvar</button>
@@ -30,6 +58,15 @@
           <div v-if="tarefaLocal.situacao == 0">
             <button :disabled="busy" class="btn btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
             <button :disabled="busy" class="btn btn-wider" @click="concluirTarefa()">Concluir</button>
+          </div>
+        </section>
+
+        <section class="my-15 flex-justify-space-between">
+          <div v-if="!tarefa.meuDia">
+            <button :disabled="busy" class="btn btn-wider" @click="adicionarAoMeuDiaTarefa()">Meu Dia</button>
+          </div>
+          <div v-if="tarefa.meuDia">
+            <button :disabled="busy" class="btn btn-wider" @click="removerMeuDiaTarefa()">Remover Do Dia</button>
           </div>
         </section>
         
@@ -121,6 +158,45 @@ export default {
       });
     },
 
+    adicionarAoMeuDiaTarefa() {
+      this.busy = true;
+      let requestData = {
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/meu-dia',
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'POST',
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
+        this.busy = false;
+        this.resetFields(true);
+        this.tarefaLocal.meuDia = true
+        this.tarefa.meuDia = true
+      }).catch((error) => {
+        console.error(error);
+        this.busy = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+    removerMeuDiaTarefa() {
+      this.busy = true;
+      let requestData = {
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/remover-meu-dia',
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'POST',
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
+        this.busy = false;
+        this.resetFields(true);
+        this.tarefaLocal.meuDia = false
+        this.tarefa.meuDia = false
+      }).catch((error) => {
+        console.error(error);
+        this.busy = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+
     concluirTarefa() {
       this.busy = true;
       let requestData = {
@@ -129,10 +205,11 @@ export default {
         'method' : 'POST',
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Tarefa alterada para "concluída!""')
+        this.$refs.notifier.notify('Tarefa alterada para "concluída!"')
         this.busy = false;
         this.resetFields(true);
         this.tarefaLocal.situacao = 1
+        this.tarefa.situacao = 1
       }).catch((error) => {
         console.error(error);
         this.busy = false;
@@ -152,6 +229,7 @@ export default {
         this.busy = false;
         this.resetFields(true);
         this.tarefaLocal.situacao = 2
+        this.tarefa.situacao = 2
       }).catch((error) => {
         console.error(error);
         this.busy = false;

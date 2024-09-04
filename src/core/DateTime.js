@@ -64,5 +64,17 @@ export default {
         return dateString
     },
 
+    isSameYMD(date1, date2)
+    {
+        if(
+            this.getYear(date1) == this.getYear(date2) &&
+            this.getMonth(date1) == this.getMonth(date2) &&
+            this.getDate(date1) == this.getDate(date2)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
 }
   

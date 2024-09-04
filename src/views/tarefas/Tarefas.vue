@@ -40,11 +40,19 @@ h1.titulo {
 
             <div class="flex justify-spacebetween"> <!-- LINHA SUPERIOR -->
 
-              <div> <!-- TEXTO -->
-                <div>
-                  <span class="mr-10">{{ tarefa.situacao == 0 ? '🆕' : tarefa.situacao == 1 ? '✅' : '❌' }}</span>
+              <div class=""> <!-- TEXTO -->
+                <div class="flex-wrap" >
+                  <div>
+                    <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
+                    <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
+                  </div>
+                  <div>
+                    <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+                    <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
+                    <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+                  </div>
                   <span class="mr-10">
-                      {{ tarefa.descricao }}
+                    {{ tarefa.descricao }}
                   </span>
                   <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
                 </div>
@@ -53,8 +61,12 @@ h1.titulo {
                 </div>
               </div>
               <div> <!-- BUTTONS -->
-                <button v-if="!tarefa.editMode" class="btn btn-sm btn_tarefa_concluida" type="button" 
+                <!-- <button v-if="!tarefa.editMode" class="btn btn-sm btn_tarefa_concluida" type="button" 
                   @click="toggleEdicaoTarefa(tarefa)">
+                  Editar1
+                </button> -->
+                <button v-if="!tarefa.editMode" class="btn btn-sm btn_tarefa_concluida" type="button" 
+                  @click="toggleModalEditarTarefa(tarefa)">
                   Editar
                 </button>
                 <button v-if="tarefa.editMode" class="btn mx-5 my-5 btn-sm" type="button"
@@ -85,6 +97,19 @@ h1.titulo {
 
         </div>
       </div>
+      
+    <ModalCriarTarefa
+      v-model:exibirModal="exibirModalCriarTarefa"
+      :projeto="projetoModalNovaTarefa"
+      @reloadListaProjetosHabitTracker="loadTarefas()">
+    </ModalCriarTarefa>
+    
+    <ModalEditarTarefa
+      v-model:exibirModal="exibirModalEditarTarefa"
+      :tarefa="tarefaModalEditarTarefa"
+      :projeto="projetoModalEditarTarefa"
+      @reloadListaProjetosHabitTracker="loadTarefas()">
+    </ModalEditarTarefa>
 
     <Notifier ref="notifier"></Notifier>
 
@@ -97,23 +122,17 @@ import DateTime from '@/core/DateTime.js'
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js'
-// import Loader from '@/components/Loader.vue';
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
-// import ModalCriarProjeto from '@/views/projetos/ModalCriarProjeto.vue';
-// import ModalCriarTarefa from '@/views/projetos/ModalCriarTarefa.vue';
-// import ModalEditarTarefa from '@/views/projetos/ModalEditarTarefa.vue';
-// import BackupProjetos from "@/views/projetos/BackupProjetos.vue";
+import ModalCriarTarefa from '@/views/projetos/ModalCriarTarefa.vue';
+import ModalEditarTarefa from '@/views/projetos/ModalEditarTarefa.vue';
 
 export default {
   name: 'HabitTracker',
   components: {
-    // Loader,
     InlineLoader,
-    // ModalCriarProjeto,
-    // ModalCriarTarefa,
-    // ModalEditarTarefa,
-    // BackupProjetos,
+    ModalCriarTarefa,
+    ModalEditarTarefa,
     Notifier,
   },
   inject: ['configuracoes'],
@@ -125,13 +144,11 @@ export default {
       busyTarefasLoad: false,
       dataPrazo: '',
       tarefas: [],
-      // exibirModalCriarProjeto: false,
       exibirModalCriarTarefa: false,
       exibirModalEditarTarefa: false,
-      // projetoModalNovaTarefa: [],
+      projetoModalNovaTarefa: [],
       tarefaModalEditarTarefa: [],
-      // projetoModalEditarTarefa: [],
-      // exibirModalBackupProjetos: false,
+      projetoModalEditarTarefa: [],
       carregarPreviamenteAsTarefas: true,
       filtroPrioridade: null,
       filtroSituacao: null,
@@ -146,6 +163,13 @@ export default {
     formatDevDate(dateObject){return DateTime.formatDevDate(dateObject);},
     formatBrDate(dateObject){return DateTime.formatBrDate(dateObject);},
     getWeekDay(dateObject){return DateTime.getWeekDay(dateObject);},
+    getWeekDayFirstLetter(dateObject){return DateTime.getWeekDayFirstLetter(dateObject);},
+    getYear(dateObject){return DateTime.getYear(dateObject);},
+    getMonth(dateObject){return DateTime.getMonth(dateObject);},
+    getDate(dateObject){return DateTime.getDate(dateObject);},
+    getWeekDayNumber(dateObject){return DateTime.getWeekDayNumber(dateObject);},
+    newDatetimeTz(dateString){return DateTime.newDatetimeTz(dateString);},
+    isSameYMD(date1, date2){return DateTime.isSameYMD(date1, date2);},
 
     /**
      * FUNCOES TOGGLE
@@ -153,15 +177,16 @@ export default {
     // toggleModalCriarProjeto () {
     //   this.exibirModalCriarProjeto = true;
     // },
-    // toggleModalCriarTarefa (projeto) {
-    //   this.projetoModalNovaTarefa = projeto
-    //   this.exibirModalCriarTarefa = true;
-    // },
-    // toggleModalEditarTarefa (tarefa, projeto) {
-    //   this.tarefaModalEditarTarefa = tarefa
-    //   this.exibirModalEditarTarefa = true;
-    //   this.projetoModalEditarTarefa = projeto
-    // },
+    toggleModalCriarTarefa (projeto) {
+      this.projetoModalNovaTarefa = projeto
+      this.exibirModalCriarTarefa = true;
+    },
+    toggleModalEditarTarefa (tarefa) {
+      console.log('entrou');
+      this.tarefaModalEditarTarefa = tarefa
+      this.exibirModalEditarTarefa = true;
+      this.projetoModalEditarTarefa = tarefa.projeto
+    },
     // toggleFiltroSituacao(novaSituacao){
     //   this.filtroSituacao = novaSituacao;
     // },
@@ -291,6 +316,7 @@ export default {
       Request.fetch(requestData)
       .then(([response, data]) => {
         data = this.tarefasFillDefaults(data)
+        data = this.organizaTarefasMeuDia(data)
         console.log(data)
         this.tarefas = data
         this.busyTarefasLoad = false;
@@ -302,9 +328,62 @@ export default {
       });
     },
 
+    organizaTarefasMeuDia (tarefas) {
+
+      let tarefasMeuDiaHoje = [];
+      let tarefasMeuDiaAnteriores = [];
+      let tarefasComuns = [];
+      let novoArrayTarefas = [];
+      let tarefasMeuDiaHojeConcluidas = [];
+      let tarefasMeuDiaAnterioresConcluidas = [];
+      let tarefasComunsConcluidas = [];
+
+      for (let i = 0; i < tarefas.length; i++) {
+        const element = tarefas[i];
+        if(element.meuDia === null) {
+          if(element.situacao == 1) {
+            tarefasComunsConcluidas.push(element);
+            continue;
+          } else {
+            tarefasComuns.push(element);
+            continue;
+          }
+          tarefasComuns.push(element);
+          continue;
+        }
+        let dateMeuDia = this.newDatetimeTz(element.meuDia);
+        let dateHoje = new Date();
+        let tarefaDeHoje = this.isSameYMD(dateMeuDia, dateHoje);
+        if(tarefaDeHoje){
+          element.meuDiaHoje = true;
+          if(element.situacao == 1){
+            tarefasMeuDiaHojeConcluidas.push(element);
+          } else {
+            tarefasMeuDiaHoje.push(element);
+          }
+          continue;
+        }
+        if(element.situacao == 1){
+          tarefasMeuDiaAnterioresConcluidas.push(element);
+        } else {
+          tarefasMeuDiaAnteriores.push(element);
+        }
+        continue;
+      }
+
+      novoArrayTarefas.push(...tarefasMeuDiaHoje);
+      novoArrayTarefas.push(...tarefasMeuDiaHojeConcluidas);
+      novoArrayTarefas.push(...tarefasMeuDiaAnteriores);
+      novoArrayTarefas.push(...tarefasMeuDiaAnterioresConcluidas);
+      novoArrayTarefas.push(...tarefasComuns);
+      novoArrayTarefas.push(...tarefasComunsConcluidas);
+      return novoArrayTarefas;
+    },
+
     tarefasFillDefaults(tarefas)
     {
       for (let i = 0; i < tarefas.length; i++) {
+        tarefas[i].meuDiaHoje = false;
         tarefas[i].editMode = false;
         tarefas[i].busyTarefasUpdate = false;
       }

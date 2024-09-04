@@ -2,6 +2,7 @@
 
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-rounded/css/uicons-regular-rounded.css');
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-straight/css/uicons-regular-straight.css');
+@import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-rounded/css/uicons-solid-rounded.css');
 
 @import url('./margins-paddings.css');
 @import url('./flexbox.css');
@@ -167,3 +168,31 @@ section.sectionBorder {
     align-items: center;
 }
 
+.verticalalign-center {
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+.star-meudia {
+    font-size: 1.2rem;
+}
+.check-pendente {
+    font-size: 1.2rem;
+    color: rgb(0, 0, 0);
+}
+.check-concluido {
+    font-size: 1.2rem;
+    color: green;
+}
+.check-falhado {
+    font-size: 1.2rem;
+    color: red;
+}
