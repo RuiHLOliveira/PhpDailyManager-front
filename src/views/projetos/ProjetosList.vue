@@ -537,6 +537,7 @@ export default {
       .then(([response, data]) => {
         console.log({data});
         this.projetos = this.projetosFillAdditionalProps(data)
+        this.projetoBackup = this.projetos
         this.busyProjetosLoad = false;
       })
       .catch((error) => {
@@ -614,12 +615,15 @@ export default {
       }
       this.projetos = this.projetoBackup;
       var arrayfilter = [];
+
+      //aplica filtragem por texto
       for (let i = 0; i < this.projetos.length; i++) {
         if(this.projetos[i].nome.toLowerCase().includes(this.filtroNomeProjeto.toLowerCase())){
           arrayfilter.push(this.projetos[i])
         }
       }
       this.projetos = arrayfilter
+
     },
 
     getDimensions() {
