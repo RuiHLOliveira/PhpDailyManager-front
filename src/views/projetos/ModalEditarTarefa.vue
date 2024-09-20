@@ -101,7 +101,7 @@ export default {
       exibeProjetoSemana: false
     }
   },
-  emits: ['reloadListaProjetosHabitTracker','update:exibirModal'],
+  emits: ['reloadListaProjetosHabitTracker','update:exibirModal','updateTaskEvent'],
   props: {
     exibirModal: Boolean,
     tarefa: Object,
@@ -128,6 +128,7 @@ export default {
       if(this.needReload == true) {
         console.log('reload');
         this.$emit('reloadListaProjetosHabitTracker', []);
+        this.$emit('updateTaskEvent', this.tarefaLocal)
         this.resetFields();
       }
     },

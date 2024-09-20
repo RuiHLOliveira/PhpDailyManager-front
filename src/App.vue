@@ -18,6 +18,7 @@
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inbox"><i class="fi fi-rs-inbox-in"></i> Inbox</router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetos"><i class="fi fi-rs-journal-alt"></i> Projetos</router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetosList"><i class="fi fi-rs-journal-alt"></i> Lista de Projetos</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetosListV2"><i class="fi fi-rs-journal-alt"></i> Lista de Projetos V2</router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/tarefas"><i class="fi fi-rs-list-check"></i> Tarefas</router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker"><i class="fi fi-rs-brightness"></i> Habit Tracker</router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/backup"><i class="fi fi-rs-disk"></i> Backup</router-link>

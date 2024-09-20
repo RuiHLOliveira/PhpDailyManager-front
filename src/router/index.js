@@ -5,6 +5,7 @@ import Register from '../views/Auth/Register.vue'
 import Inbox from '../views/inbox/Inbox.vue'
 import Projetos from '../views/projetos/Projetos.vue'
 import ProjetosList from '../views/projetos/ProjetosList.vue'
+import ProjetosListV2 from '../views/projetos/ProjetosListV2.vue'
 import Tarefas from '../views/tarefas/Tarefas.vue'
 import Habitos from '../views/habitos/Habitos.vue'
 import Invitations from '../views/Invitations.vue'
@@ -38,6 +39,12 @@ const router = createRouter({
       path: '/projetosList',
       name: 'ProjetosList',
       component: ProjetosList,
+      props: true
+    },
+    {
+      path: '/projetosListV2',
+      name: 'ProjetosListV2',
+      component: ProjetosListV2,
       props: true
     },
     {

@@ -69,7 +69,7 @@ a.link:visited {
               </InlineLoader>
             </div>
 
-            <select v-model="inboxItemLocal.categoriaItem" name="categoria" id="situacao">
+            <select class="fullSelect" v-model="inboxItemLocal.categoriaItem" name="categoria" id="situacao">
               <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id" :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
             </select>
           </div>

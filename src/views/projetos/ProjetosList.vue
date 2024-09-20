@@ -98,7 +98,7 @@ section.projetoShow {
                 <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
               </div>
               <!-- SITUACAO -->
-              <select v-model="selectedSituacao" name="situacao" id="situacao">
+              <select class="fullSelect"  v-model="selectedSituacao" name="situacao" id="situacao">
                 <option value="0">Todos</option>
                 <option value="1">Pendente</option>
                 <option value="2">Aguardando Resposta</option>
@@ -106,7 +106,7 @@ section.projetoShow {
                 <option value="4">Concluído</option>
               </select>
               <!-- PRIORIDADE -->
-              <select v-model="selectedPrioridade" name="prioridade" id="prioridade">
+              <select class="fullSelect"  v-model="selectedPrioridade" name="prioridade" id="prioridade">
                 <option value="0">Todos</option>
                 <option value="1">Urgente</option>
                 <option value="2">Alta</option>

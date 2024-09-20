@@ -48,10 +48,14 @@ export default {
       needReload: false,
       hora: '',
       configuracoes: [],
-      exibeProjetoSemana: false
+      exibeProjetoSemana: false,
+      tarefaCriada: [],
     }
   },
-  emits: ['reloadListaProjetosHabitTracker'],
+  emits: [
+    'reloadListaProjetosHabitTracker',
+    'updateTaskEvent'
+  ],
   props: {
     exibirModal: Boolean,
     projeto: Object,
@@ -78,6 +82,7 @@ export default {
       if(this.needReload == true) {
         console.log('reload');
         this.$emit('reloadListaProjetosHabitTracker', [])
+        this.$emit('updateTaskEvent', this.tarefaCriada)
         this.resetFields();
       }
     },
@@ -103,6 +108,7 @@ export default {
         this.$refs.notifier.notify('Tarefa criada!') //this.notify('Tarefa criada!');
         this.busy = false;
         this.needReload = true;
+        this.tarefaCriada = data;
         this.resetFields(true);
       }).catch((error) => {
         console.error(error);
