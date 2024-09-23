@@ -8,11 +8,39 @@
   white-space: pre-wrap;
 }
 
+.habitosList{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+@media only screen and (min-width: 800px) {
+  .habitosList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
 .cardBoxHabito {
   border: 1px solid #bbbbbb;
   border-radius: 5px;
   background-color: #f1f1f1;
+  /* min-width: 90svw; */
+  /* min-width: 400px; */
+  flex-grow: 1;
+  flex-shrink: 0;
 }
+
+@media only screen and (min-width: 800px) {
+  .cardBoxHabito {
+    flex:1;
+    max-height: 87svh;
+    overflow-y: scroll;
+    min-width: 350px;
+  }
+}
+
+
 .titleEditInput {
   flex-grow: 1;
   color: red;
@@ -76,7 +104,7 @@
           </InlineLoader>
 
           <!--  && busyHabitosLoad == true  -->
-          <div v-if="habitos != [] && !busyHabitosLoad"> <!-- lista de habitos -->
+          <div v-if="habitos != [] && !busyHabitosLoad" class="habitosList"> <!-- lista de habitos -->
             <div v-for="habito in habitos" :key="habito.id">
 
               <div class="cardBoxHabito p-10 m-5">
@@ -288,9 +316,9 @@ export default {
     buscaHabitos () {
       this.busyHabitosLoad = true;
       let params = {
-        'relations': 'habitoRealizados'
+        'relations': 'habitoRealizados',
+        'orderBy': 'hora,asc'
       };
-      // params['orderBy'] = 'dataPrazo,desc';
       params = QueryStringConverter.toQueryString(params, true);
       let requestData = {
         'url': `${config.serverUrl}/habitos${params}`,
@@ -298,6 +326,7 @@ export default {
       Request.fetch(requestData)
       .then(([response, data]) => {
         console.log({data});
+        data = this.ordenarHabitos(data)
         data = this.defineRealizadoHoje(data)
         data = this.fillSemanaRealizados(data)
         this.habitos = data
@@ -308,6 +337,13 @@ export default {
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
       });
+    },
+
+    ordenarHabitos(habitos){
+      habitos = habitos.sort((a,b) => {
+        return a.hora > b.hora
+      })
+      return habitos
     },
 
     defineRealizadoHoje(habitos){
@@ -328,7 +364,7 @@ export default {
       for (let i = 0; i < habitos.length; i++) {
         habitos[i].semana = this.montaSemanaAtual()
         for (let j = 0; j < habitos[i].habitoRealizados.length; j++) {
-          console.log('habito Realizado', habitos[i].habitoRealizados[j])
+          // console.log('habito Realizado', habitos[i].habitoRealizados[j])
           const realizadoEmDateObject = this.newDatetimeTz(habitos[i].habitoRealizados[j].realizadoEm);
           const weekDayNumber = this.getWeekDayNumber(realizadoEmDateObject)
           const date = this.getDate(realizadoEmDateObject)
@@ -340,7 +376,7 @@ export default {
           ){
             habitos[i].semana[weekDayNumber]['realizado'] = true
           }
-          console.log('depois ', habitos[i].semana[weekDayNumber]);
+          // console.log('depois ', habitos[i].semana[weekDayNumber]);
         }
       }
       return habitos;
@@ -425,11 +461,11 @@ export default {
     montaSemanaAtual() {
       const oneDayTimestamp = 24 * 60 * 60 * 1000
       let hoje = new Date()
-      console.log('hoje', hoje.getDay(), hoje.getDate());
+      // console.log('hoje', hoje.getDay(), hoje.getDate());
       let domingo = new Date(hoje.getTime() - (hoje.getDay() * oneDayTimestamp)); //returns to sunday
-      console.log('domingo', domingo.getDay(), domingo.getDate());
+      // console.log('domingo', domingo.getDay(), domingo.getDate());
       let semana = this.montaSemanaAPartirDomingo(domingo);
-      console.log(semana);
+      // console.log(semana);
       this.semana = semana
       return semana;
     },
