@@ -107,19 +107,23 @@ section.projetoShow {
   <div>
     <div class="containerFullWidth">
 
-        <!-- HEADER -->
-        <section class="divBgBlur my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
-          <div class="flex alignitens-center">
-            <h1>Projetos</h1>
-            <div>
-              <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
-            </div>
-          </div>
+      <!-- HEADER -->
+      <section class="divBgBlur my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
+        <div class="flex alignitens-center">
+          <h1>Projetos</h1>
           <div>
+            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
           </div>
-        </section>
+        </div>
+        <div>
+        </div>
+      </section>
 
-        <section class="">
+      <div>
+
+        <!-- PROJETO LIST -->
+        <section class="projetoList" v-if="projetoExibir.id == null">
+          
           <!-- FILTER -->
           <div class="mt-10 p-5 divBgBlur flex-wrap">
             <div class="mr-15">
@@ -147,21 +151,6 @@ section.projetoShow {
               <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Filtrar</button>
             </div>
           </div>
-        </section>
-
-      <div>
-
-        <div class="divBgBlur my-5 py-5" v-if="busyProjetosLoad">
-          <InlineLoader
-            :textoAguarde="true"
-            :busy="busyProjetosLoad"
-            :center="true">
-          </InlineLoader>
-        </div>
-
-        <!-- PROJETO LIST -->
-        <section class="projetoList" v-if="projetoExibir.id == null">
-
           <!-- FOR EACH PROJETOS -->
           <div class="divBgBlur mt-10 pt-5" v-if="projetos != [] && !busyProjetosLoad && !busyProjetosDelete">
 
@@ -217,6 +206,14 @@ section.projetoShow {
           </div>
         </section>
 
+        <div class="divBgBlur my-5 py-5" v-if="busyProjetosLoad">
+          <InlineLoader
+            :textoAguarde="true"
+            :busy="busyProjetosLoad"
+            :center="true">
+          </InlineLoader>
+        </div>
+
         <!-- PROJETO SHOW -->
         <section class="projetoShow divBgBlur my-10 p-10 mx-5" v-if="projetoExibir.id != null">
         <!-- <div v-if="projetoExibir != [] && !busyProjetosLoad && !busyProjetosDelete"> -->
@@ -224,13 +221,13 @@ section.projetoShow {
 
           <div class="mb-10 flex justify-spacebetween">
             <div>
-              <button v-if="!projetoExibir.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="hideProjeto(projetoExibir)">Voltar</button>
-              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoProjeto(projetoExibir)">Cancelar</button>
-              <button v-if="!projetoExibir.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="toggleEdicaoProjeto(projetoExibir)">Editar</button>
+              <button v-if="!projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">Voltar</button>
+              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="cancelarEdicaoProjeto(projetoExibir)">Cancelar</button>
+              <button v-if="!projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="toggleEdicaoProjeto(projetoExibir)">Editar</button>
             </div>
             <div>
-              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoProjeto(projetoExibir)">Salvar</button>
-              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button" @click="excluirProjeto(projetoExibir)">Excluir</button>
+              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="salvarEdicaoProjeto(projetoExibir)">Salvar</button>
+              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn btn-red" type="button" @click="excluirProjeto(projetoExibir)">Excluir</button>
             </div>
           </div>
 
@@ -240,139 +237,162 @@ section.projetoShow {
             :center="true">
           </InlineLoader>
 
-          <div class="mb-15">
-            <div class="mb-5">
-              <span class="projetoShowLabel">Título: </span>
-            </div>
-            <div v-if="!projetoExibir.editMode" class="linhaBox whitespace-pre">
-              {{ projetoExibir.nome }}
-            </div>
-            <div v-if="projetoExibir.editMode">
-              <input name="atividade" type="text" v-model="projetoExibir.nomeEditar">
-            </div>
-          </div>
-
-          <div class="mb-15">
-            <div v-if="!projetoExibir.editMode" class="linhaBox">
-              <button type="button" class="btn btn-sm btnPrioridade"
-                :class="{
-                  situacaoFixedWidth : configs.situacaoFixedWidth == true,
-                  situacaoPendente : projetoExibir.situacao == 1,
-                  situacaoAguardandoResposta : projetoExibir.situacao == 2,
-                  situacaoPausado : projetoExibir.situacao == 3,
-                  situacaoConcluido : projetoExibir.situacao == 4,
-                }">
-                {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
-              </button>
-              <button type="button" class="btn btn-sm btnPrioridade"
-                :class="{
-                  prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
-                  prioridadeUrgente : projetoExibir.prioridade == 1,
-                  prioridadeAlta : projetoExibir.prioridade == 2,
-                  prioridadeMedia : projetoExibir.prioridade == 3,
-                  prioridadeBaixa : projetoExibir.prioridade == 4,
-                  prioridadeBaixissima : projetoExibir.prioridade == 5,
-                }">
-                {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
-              </button>
-            </div>
-
-            <div v-if="projetoExibir.editMode">
-              <div class="marginVerticalSpacer">
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoPendente"
-                  :class="{selected : projetoExibir.situacaoEditar == 1}"
-                  @click="toggleEditarSituacao(projetoExibir, 1)">
-                  0-Pendente
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoAguardandoResposta"
-                  :class="{selected : projetoExibir.situacaoEditar == 2}"
-                  @click="toggleEditarSituacao(projetoExibir, 2)">
-                  1-Aguardando Resposta
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoPausado"
-                  :class="{selected : projetoExibir.situacaoEditar == 3}"
-                  @click="toggleEditarSituacao(projetoExibir, 3)">
-                  2-Pausado Indefinidamente
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoConcluido"
-                  :class="{selected : projetoExibir.situacaoEditar == 4}"
-                  @click="toggleEditarSituacao(projetoExibir, 4)">
-                  3-Concluído
-                </button>
+          <div class="flex-wrap">
+            <!-- COL 1 DADOS E TAREFAS -->
+            <div class="mr-5">
+              <div class="mb-15">
+                <div class="mb-5">
+                  <span class="projetoShowLabel">Título: </span>
+                </div>
+                <div v-if="!projetoExibir.editMode" class="linhaBox whitespace-pre">
+                  {{ projetoExibir.nome }}
+                </div>
+                <div v-if="projetoExibir.editMode">
+                  <input name="atividade" type="text" v-model="projetoExibir.nomeEditar">
+                </div>
               </div>
-              <div class="marginVerticalSpacer">
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeUrgente"
-                  :class="{selected : projetoExibir.prioridadeEditar == 1}"
-                  @click="toggleEditarPrioridade(projetoExibir, 1)">
-                  1-Urgente
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeAlta"
-                  :class="{selected : projetoExibir.prioridadeEditar == 2}"
-                  @click="toggleEditarPrioridade(projetoExibir, 2)">
-                  2-Alta
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeMedia"
-                  :class="{selected : projetoExibir.prioridadeEditar == 3}"
-                  @click="toggleEditarPrioridade(projetoExibir, 3)">
-                  3-Media
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeBaixa"
-                  :class="{selected : projetoExibir.prioridadeEditar == 4}"
-                  @click="toggleEditarPrioridade(projetoExibir, 4)">
-                  4-Baixa
-                </button>
-                <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeBaixissima"
-                  :class="{selected : projetoExibir.prioridadeEditar == 5}"
-                  @click="toggleEditarPrioridade(projetoExibir, 5)">
-                  5-Baixissima
-                </button>
-              </div>
-            </div>
-          </div>
 
-          <!-- TAREFAS -->
-          <div class="mb-15">
-            <div class="mb-5">
-              <span class="projetoShowLabel">Tarefas: </span>
-            </div>
-            <div class="mb-5">
-              <button class="btn btn-sm" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
-            </div>
-            <div v-if="projetoExibir.tarefas != []">
-              <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
-                <div class="linhaTarefa linhaTarefa-round">
-                  <div>
-                    {{ tarefa.situacao == 0 ? '🆕' : tarefa.situacao == 1 ? '✅' : '❌' }}
-                    {{ tarefa.hora != null ? `[${tarefa.hora}]` : '[]' }}
-                    {{ tarefa.descricao }}
+              <div class="mb-15">
+                <div v-if="!projetoExibir.editMode" class="">
+                  <button type="button" class="btn btn-sm btnPrioridade"
+                    :class="{
+                      situacaoFixedWidth : configs.situacaoFixedWidth == true,
+                      situacaoPendente : projetoExibir.situacao == 1,
+                      situacaoAguardandoResposta : projetoExibir.situacao == 2,
+                      situacaoPausado : projetoExibir.situacao == 3,
+                      situacaoConcluido : projetoExibir.situacao == 4,
+                    }">
+                    {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
+                  </button>
+                  <button type="button" class="btn btn-sm btnPrioridade"
+                    :class="{
+                      prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
+                      prioridadeUrgente : projetoExibir.prioridade == 1,
+                      prioridadeAlta : projetoExibir.prioridade == 2,
+                      prioridadeMedia : projetoExibir.prioridade == 3,
+                      prioridadeBaixa : projetoExibir.prioridade == 4,
+                      prioridadeBaixissima : projetoExibir.prioridade == 5,
+                    }">
+                    {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
+                  </button>
+                </div>
+
+                <div v-if="projetoExibir.editMode">
+                  <div class="marginVerticalSpacer">
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoPendente"
+                      :class="{selected : projetoExibir.situacaoEditar == 1}"
+                      @click="toggleEditarSituacao(projetoExibir, 1)">
+                      0-Pendente
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoAguardandoResposta"
+                      :class="{selected : projetoExibir.situacaoEditar == 2}"
+                      @click="toggleEditarSituacao(projetoExibir, 2)">
+                      1-Aguardando Resposta
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoPausado"
+                      :class="{selected : projetoExibir.situacaoEditar == 3}"
+                      @click="toggleEditarSituacao(projetoExibir, 3)">
+                      2-Pausado Indefinidamente
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade situacaoConcluido"
+                      :class="{selected : projetoExibir.situacaoEditar == 4}"
+                      @click="toggleEditarSituacao(projetoExibir, 4)">
+                      3-Concluído
+                    </button>
                   </div>
-                  <div>
-                    <button class="btn btn-sm btn_tarefa_concluida" type="button" 
-                      @click="toggleModalEditarTarefa(tarefa,projetoExibir)" >
-                      Editar
+                  <div class="marginVerticalSpacer">
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeUrgente"
+                      :class="{selected : projetoExibir.prioridadeEditar == 1}"
+                      @click="toggleEditarPrioridade(projetoExibir, 1)">
+                      1-Urgente
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeAlta"
+                      :class="{selected : projetoExibir.prioridadeEditar == 2}"
+                      @click="toggleEditarPrioridade(projetoExibir, 2)">
+                      2-Alta
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeMedia"
+                      :class="{selected : projetoExibir.prioridadeEditar == 3}"
+                      @click="toggleEditarPrioridade(projetoExibir, 3)">
+                      3-Media
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeBaixa"
+                      :class="{selected : projetoExibir.prioridadeEditar == 4}"
+                      @click="toggleEditarPrioridade(projetoExibir, 4)">
+                      4-Baixa
+                    </button>
+                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade prioridadeBaixissima"
+                      :class="{selected : projetoExibir.prioridadeEditar == 5}"
+                      @click="toggleEditarPrioridade(projetoExibir, 5)">
+                      5-Baixissima
                     </button>
                   </div>
                 </div>
               </div>
+
+              <!-- TAREFAS -->
+              <div class="mb-15">
+                <div class="mb-5">
+                  <span class="projetoShowLabel">Tarefas: </span>
+                </div>
+                <div class="mb-5">
+                  <button class="btn btn-sm" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
+                </div>
+                <div v-if="projetoExibir.tarefas != []">
+                  <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
+                    <div class="linhaTarefa linhaTarefa-round">
+                      <div class="flex-wrap">
+                        <div>
+                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
+                        </div>
+                        <div>
+                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
+                        </div>
+                        <div>
+                          <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+                          <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
+                          <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+                        </div>
+                        <div>
+                          {{ tarefa.hora != null ? `[${tarefa.hora}]` : '' }}
+                        </div>
+                        <div>
+                          {{ tarefa.descricao }}
+                        </div>
+                      </div>
+                      <div>
+                        <button class="btn btn-sm btn_tarefa_concluida" type="button" 
+                          @click="toggleModalEditarTarefa(tarefa,projetoExibir)" >
+                          Editar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="min-width: 500px; flex-grow: 2;">
+              <!-- ANOTAÇÕES -->
+              <div class="mb-15">
+                <div class="mb-5">
+                  <span class="projetoShowLabel">Anotações: </span>
+                </div>
+                <div v-if="!projetoExibir.editMode" class="whitespace-pre mb-5 linhaBox">
+                  {{ projetoExibir.anotacoes }}
+                </div>
+                <div v-if="projetoExibir.editMode" class="mb-5">
+                  <textarea
+                    rows="20"
+                    class="textarea"
+                    name="anotacoes"
+                    placeholder="anotacoes"
+                    v-model="projetoExibir.anotacoesEditar">
+                  </textarea>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="mb-15">
-            <div class="mb-5">
-              <span class="projetoShowLabel">Anotações: </span>
-            </div>
-            <div v-if="!projetoExibir.editMode" class="whitespace-pre mb-5 linhaBox">
-              {{ projetoExibir.anotacoes }}
-            </div>
-            <div v-if="projetoExibir.editMode" class="mb-5">
-              <textarea
-                rows="20"
-                class="textarea"
-                name="anotacoes"
-                placeholder="anotacoes"
-                v-model="projetoExibir.anotacoesEditar">
-              </textarea>
-            </div>
-          </div>
+
 
         </div>
         </section>
@@ -474,6 +494,13 @@ export default {
     formatDevDate(dateObject){return DateTime.formatDevDate(dateObject);},
     formatBrDate(dateObject){return DateTime.formatBrDate(dateObject);},
     getWeekDay(dateObject){return DateTime.getWeekDay(dateObject);},
+    getWeekDayFirstLetter(dateObject){return DateTime.getWeekDayFirstLetter(dateObject);},
+    getYear(dateObject){return DateTime.getYear(dateObject);},
+    getMonth(dateObject){return DateTime.getMonth(dateObject);},
+    getDate(dateObject){return DateTime.getDate(dateObject);},
+    getWeekDayNumber(dateObject){return DateTime.getWeekDayNumber(dateObject);},
+    newDatetimeTz(dateString){return DateTime.newDatetimeTz(dateString);},
+    isSameYMD(date1, date2){return DateTime.isSameYMD(date1, date2);},
 
     /**
      * FUNCOES TOGGLE
@@ -636,7 +663,9 @@ export default {
       Request.fetch(requestData)
       .then(([response, data]) => {
         console.log({data});
-        this.projetos = this.projetosFillAdditionalProps(data)
+        data = this.projetosFillAdditionalProps(data)
+        data = this.projetosTarefasFillAdditionalProps(data)
+        this.projetos = data
         this.projetoBackup = this.projetos
         this.busyProjetosLoad = false;
       })
@@ -646,6 +675,21 @@ export default {
         console.error(error);
       });
     },
+    
+    projetosTarefasFillAdditionalProps(projetos){
+      let dateHoje = new Date();
+      for (let i = 0; i < projetos.length; i++) {
+        for (let j = 0; j < projetos[i].tarefas.length; j++) {
+          let dateMeuDia = this.newDatetimeTz(projetos[i].tarefas[j].meuDia);
+          let tarefaDeHoje = this.isSameYMD(dateMeuDia, dateHoje);
+          if(tarefaDeHoje){
+            projetos[i].tarefas[j].meuDiaHoje = true;
+          }
+        }
+      }
+      return projetos;
+    },
+
 
     projetosFillAdditionalProps(projetos) {
       for (let i = 0; i < projetos.length; i++) {
