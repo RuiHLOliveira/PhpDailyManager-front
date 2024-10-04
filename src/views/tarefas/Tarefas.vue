@@ -19,7 +19,7 @@ h1.titulo {
 
 <template>
   <div>
-    <div class="container">
+    <div class="container divBgBlur">
       
       <section class="divBgBlur my-10 p-10">
         <h1 class="titulo">Tarefas</h1>
@@ -41,20 +41,27 @@ h1.titulo {
             <div class="flex justify-spacebetween"> <!-- LINHA SUPERIOR -->
 
               <div class=""> <!-- TEXTO -->
-                <div class="flex-wrap" >
-                  <div>
-                    <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
-                    <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
+                <div class="flex-wrap">
+                  <div class="ycenter mt-5">
+                    <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
+                    <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
                   </div>
-                  <div>
-                    <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
-                    <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
-                    <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+                  <div class="ycenter mt-5">
+                    <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+                    <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
+                    <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                   </div>
+                  <!-- <span class="mr-10">
+                    {{ tarefa.descricao }}
+                  </span> -->
+                  <div class="ycenter">
+                    <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
+                  </div>
+                </div>
+                <div>
                   <span class="mr-10">
                     {{ tarefa.descricao }}
                   </span>
-                  <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
                 </div>
                 <div v-if="tarefa.editMode" class="m-10">
                     <input :disabled="tarefa.busyTarefasUpdate" name="descricao" type="text" v-model="tarefa.descricaoEditar">
@@ -108,7 +115,7 @@ h1.titulo {
       v-model:exibirModal="exibirModalEditarTarefa"
       :tarefa="tarefaModalEditarTarefa"
       :projeto="projetoModalEditarTarefa"
-      @reloadListaProjetosHabitTracker="loadTarefas()">
+      @updateTaskEvent="guardarTarefaAtualizada">
     </ModalEditarTarefa>
 
     <Notifier ref="notifier"></Notifier>
@@ -194,6 +201,21 @@ export default {
     //   this.filtroPrioridade = novaPrioridade;
     // },
 
+    guardarTarefaAtualizada(tarefaAtualizada)
+    {
+      console.log(tarefaAtualizada)
+      let tarefas = this.tarefas
+      for (let i = 0; i < tarefas.length; i++) {
+        if(tarefas[i].id == tarefaAtualizada.id){
+          console.log('encontrei! substitui!');
+          tarefas[i] = tarefaAtualizada
+          break;
+        }
+      }
+      tarefas = this.tarefasFillDefaults(tarefas)
+      tarefas = this.organizaTarefasMeuDia(tarefas)
+      this.tarefas = tarefas;
+    },
 
     /**
      * EDIT FORMS
@@ -309,7 +331,7 @@ export default {
 
     loadTarefas(){
       this.busyTarefasLoad = true;
-      const params = {'orderBy': 'descricao,asc', 'properties' : 'projeto'};
+      const params = {'orderBy': 'projeto,asc', 'properties' : 'projeto'};
       let requestData = {
         'url': `${config.serverUrl}/tarefas${QueryStringConverter.toQueryString(params, true)}`,
       };
@@ -340,7 +362,7 @@ export default {
 
       for (let i = 0; i < tarefas.length; i++) {
         const element = tarefas[i];
-        if(element.meuDia === null) {
+        if(element.meuDia === null || element.meuDia === false) {
           if(element.situacao == 1) {
             tarefasComunsConcluidas.push(element);
             continue;
@@ -348,8 +370,6 @@ export default {
             tarefasComuns.push(element);
             continue;
           }
-          tarefasComuns.push(element);
-          continue;
         }
         let dateMeuDia = this.newDatetimeTz(element.meuDia);
         let dateHoje = new Date();

@@ -170,8 +170,10 @@ export default {
         this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
         this.busy = false;
         this.resetFields(true);
-        this.tarefaLocal.meuDia = true
-        this.tarefa.meuDia = true
+        this.tarefaLocal.meuDia = data.meuDia
+        this.tarefaLocal.meuDiaObj = data.meuDiaObj
+        this.tarefa.meuDia = data.meuDia
+        this.tarefa.meuDiaObj = data.meuDiaObj
       }).catch((error) => {
         console.error(error);
         this.busy = false;
@@ -189,8 +191,10 @@ export default {
         this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
         this.busy = false;
         this.resetFields(true);
-        this.tarefaLocal.meuDia = false
-        this.tarefa.meuDia = false
+        this.tarefaLocal.meuDia = data.meuDia
+        this.tarefaLocal.meuDiaObj = data.meuDiaObj
+        this.tarefa.meuDia = data.meuDia
+        this.tarefa.meuDiaObj = data.meuDiaObj
       }).catch((error) => {
         console.error(error);
         this.busy = false;
