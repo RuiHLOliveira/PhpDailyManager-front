@@ -57,6 +57,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: top;
+  z-index: 99;
 }
 
 .modalNotify {
@@ -73,6 +74,7 @@ export default {
   width: 300px;
   /* min-width: 300px; */
   /* height: 50px; */
+    z-index: 99;
 }
 
 .modalNotify-error {
