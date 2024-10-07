@@ -173,7 +173,7 @@
         <div class="titleBox">
           <!-- left side -->
           <div class="pageTitleProjetos">
-            <div class="title">Habitos</div>
+            <div class="title">Lista de Habitos</div>
             <button class="btn mx-5 my-5 btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
           </div>
           <!-- right side -->

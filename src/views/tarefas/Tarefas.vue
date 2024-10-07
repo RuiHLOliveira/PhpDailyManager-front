@@ -60,9 +60,15 @@ h1.titulo {
                 </div>
                 <div>
                   <span class="mr-10">
-                    {{ tarefa.descricao }}
+                    {{ tarefa.descricao }} <button type="button" class="btn btn-sm" @click="toggleShowMotivoTarefa(tarefa)">?</button>
                   </span>
                 </div>
+                <div>
+                  <span class="mr-10" v-if="showMotivo[tarefa.id]">
+                    {{ tarefa.motivo ?? 'sem motivo cadastrado' }}
+                  </span>
+                </div>
+
                 <div v-if="tarefa.editMode" class="m-10">
                     <input :disabled="tarefa.busyTarefasUpdate" name="descricao" type="text" v-model="tarefa.descricaoEditar">
                 </div>
@@ -160,6 +166,7 @@ export default {
       filtroPrioridade: null,
       filtroSituacao: null,
       nextProgramedListingAmount: 0,
+      showMotivo: [],
     }
   },
   methods: {
@@ -200,6 +207,10 @@ export default {
     // toggleFiltroPrioridade(novaPrioridade){
     //   this.filtroPrioridade = novaPrioridade;
     // },
+
+    toggleShowMotivoTarefa (tarefa) {
+      this.showMotivo[tarefa.id] = !this.showMotivo[tarefa.id];
+    },
 
     guardarTarefaAtualizada(tarefaAtualizada)
     {
@@ -337,6 +348,7 @@ export default {
       };
       Request.fetch(requestData)
       .then(([response, data]) => {
+        this.fillShowMotivo(data)
         data = this.tarefasFillDefaults(data)
         data = this.organizaTarefasMeuDia(data)
         console.log(data)
@@ -348,6 +360,13 @@ export default {
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
       });
+    },
+    
+    fillShowMotivo(tarefas)
+    {
+      for (let i = 0; i < tarefas.length; i++) {
+        this.showMotivo[tarefas[i].id] = false;
+      }
     },
 
     organizaTarefasMeuDia (tarefas) {

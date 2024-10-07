@@ -119,8 +119,14 @@
                         <button class="btn btn-checkbox mx-5" type="button" @click="concluirHabito(habito)">
                           {{ habito.realizadoHoje ? '✅' : '🔲' }}
                         </button>
-                        {{ habito.hora }} - {{ habito.descricao }}
+                        {{ habito.hora }} - {{ habito.descricao }} <button type="button" class="btn btn-sm" @click="toggleShowMotivoHabito(habito)">?</button>
                       </span>
+                      <br>
+                      <div>
+                        <span v-if="showMotivo[habito.id]">
+                          {{ habito.motivo ?? 'sem motivo cadastrado' }}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -129,6 +135,7 @@
                     <div class="marginVerticalSpacer titleEditInput">
                       <input :disabled="busyHabitosUpdate" name="hora" type="time" v-model="habito.horaEditar">
                       <input :disabled="busyHabitosUpdate" name="descricao" type="text" v-model="habito.descricaoEditar">
+                      <input :disabled="busyHabitosUpdate" name="motivo" type="text" v-model="habito.motivoEditar">
                     </div>
                     <div class="marginVerticalSpacer">
                     </div>
@@ -228,6 +235,7 @@ export default {
       meses: [],
       semana: [],
       habitos: [],
+      showMotivo: [],
       exibirModalCriarHabito: false,
     }
   },
@@ -253,12 +261,17 @@ export default {
       this.exibirModalCriarHabito = true;
     },
 
+    toggleShowMotivoHabito (habito) {
+      this.showMotivo[habito.id] = !this.showMotivo[habito.id];
+    },
+
     /**
      * EDIT FORMS
      */
     toggleEdicaoHabito(habito) {
       if(habito.editMode == undefined) habito.editMode = false;
       if(habito.descricaoEditar == undefined) habito.descricaoEditar = habito.descricao;
+      if(habito.motivoEditar == undefined) habito.motivoEditar = habito.motivo;
       if(habito.horaEditar == undefined) habito.horaEditar = habito.hora;
       habito.prioridadeEditar = habito.prioridade;
       habito.situacaoEditar = habito.situacao;
@@ -267,12 +280,14 @@ export default {
     cancelarEdicaoHabito(habito) {
       this.toggleEdicaoHabito(habito)
       habito.descricaoEditar = habito.descricao;
+      habito.motivoEditar = habito.motivo;
       habito.horaEditar = habito.hora;
     },
     salvarEdicaoHabito(habito) {
       console.log(habito.nomeEditar)
       console.log(habito.anotacoesEditar)
       habito.descricao = habito.descricaoEditar
+      habito.motivo = habito.motivoEditar
       habito.hora = habito.horaEditar
       habito.prioridade = habito.prioridadeEditar
       habito.situacao = habito.situacaoEditar
@@ -326,6 +341,7 @@ export default {
       Request.fetch(requestData)
       .then(([response, data]) => {
         console.log({data});
+        this.fillShowMotivo(data)
         data = this.ordenarHabitos(data)
         data = this.defineRealizadoHoje(data)
         data = this.fillSemanaRealizados(data)
@@ -337,6 +353,13 @@ export default {
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
       });
+    },
+
+    fillShowMotivo(habitos)
+    {
+      for (let i = 0; i < habitos.length; i++) {
+        this.showMotivo[habitos[i].id] = false;
+      }
     },
 
     ordenarHabitos(habitos){
@@ -387,6 +410,7 @@ export default {
       this.busyHabitosUpdate = true;
       let body = {
         'descricao': habito.descricao,
+        'motivo': habito.motivo,
         'hora': habito.hora,
         'prioridade': habito.prioridade,
         'situacao': habito.situacao,

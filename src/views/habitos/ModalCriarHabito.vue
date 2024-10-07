@@ -10,6 +10,9 @@
 
         <label for="descricao">descricao:</label>
         <input name="descricao" :disabled="busy" type="text" placeholder="descricao" v-model="descricao">
+
+        <label for="motivo">motivo:</label>
+        <input name="motivo" :disabled="busy" type="text" placeholder="motivo" v-model="motivo">
         
         <label for="hora">Hora:</label>
         <input name="hora" :disabled="busy" type="time" placeholder="hora" v-model="hora">
@@ -47,6 +50,7 @@ export default {
   data: function () {
     return {
       descricao: '',
+      motivo: '',
       hora: '',
       busy: false,
       needReload: false,
@@ -87,6 +91,7 @@ export default {
       this.busy = true;
       let body = {
         'descricao': this.descricao,
+        'motivo': this.motivo,
         'hora': this.hora
       };
       let requestData = {

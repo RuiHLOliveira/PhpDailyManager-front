@@ -15,6 +15,9 @@
         <label for="tarefa">Tarefa:</label>
         <input name="tarefa" :disabled="busy" type="text" placeholder="tarefa" v-model="tarefa.descricao">
         
+        <label for="motivo">Motivo:</label>
+        <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefaLocal.motivo">
+
         <label for="hora">Hora:</label>
         <input name="hora" :disabled="busy" type="time" placeholder="hora" v-model="hora">
 
@@ -93,7 +96,7 @@ export default {
     criarTarefa() {
       this.busy = true;
       let body = {
-        'descricao': this.tarefa.descricao,
+        'motivo': this.tarefa.motivo,
         'projeto': this.projeto.id,
         'hora': this.hora
       };

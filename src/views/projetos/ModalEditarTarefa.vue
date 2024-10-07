@@ -30,6 +30,15 @@
 
           <div class="flex-wrap">
             <div class="verticalalign-center mr-10">
+              Motivo:
+            </div>
+            <div>
+              <h3>{{ tarefa.motivo }}</h3>
+            </div>
+          </div>
+
+          <div class="flex-wrap">
+            <div class="verticalalign-center mr-10">
               {{ tarefa.situacaoDescritivo }}
             </div>
             <div>
@@ -46,6 +55,9 @@
           <label for="tarefa">Tarefa:</label>
           <input :disabled="busy" name="tarefa" type="text" placeholder="tarefa" v-model="tarefaLocal.descricao">
           
+          <label for="motivo">Motivo:</label>
+          <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefaLocal.motivo">
+
           <label for="hora">Hora:</label>
           <input :disabled="busy" name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
         </section>
@@ -140,6 +152,7 @@ export default {
       this.busy = true;
       let body = {
         'descricao': this.tarefaLocal.descricao,
+        'motivo': this.tarefaLocal.motivo,
         'hora': this.tarefaLocal.hora,
       };
       let requestData = {
