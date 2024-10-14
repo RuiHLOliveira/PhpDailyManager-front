@@ -27,6 +27,12 @@
               <InlineLoader :busy="busyExportProjetosTxt"></InlineLoader>
             </button>
           </div>
+          <div class="mt-10">
+            <button type="button" class="btn" :disabled="busyExportSqlBkp == 1"  @click="exportSqlBkp()">
+              Baixar Sql
+              <InlineLoader :busy="busyExportSqlBkp"></InlineLoader>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -72,12 +78,38 @@ export default {
       busyExportProjetos: false,
       // busyExportProjetos: true,
       busyExportProjetosTxt: false,
+      busyExportSqlBkp: false,
       // busyExportProjetosTxt: true,
       busyImportFile: false,
       fileToImport: null,
     };
   },
   methods: {
+    exportSqlBkp() {
+      this.busyExportSqlBkp = true;
+      let requestData = {
+        'url': config.serverUrl + "/backup/exportSqlBkpInsert",
+        'headers': new Headers({'Content-Type': 'application/json', 'Accept': 'application/json'}),
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        console.log(data);
+        const SQL = data.arquivoSql
+        const blob = new Blob([SQL], { type: 'text/plain' })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(blob)
+        let date = new Date();
+        date = date.toISOString().substr(0, 19);
+        date = date.replaceAll( ':','.');
+        link.download = date + '.phpdailymanager.bkp.sql'
+        link.click()
+        URL.revokeObjectURL(link.href)
+        this.busyExportSqlBkp = false;
+      }).catch((error) => {
+        this.busyExportSqlBkp = false;
+        console.error(error);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) //this.notify(error);
+      });
+    },
     exportProjetos() {
       this.busyExportProjetos = true;
       let requestData = {
