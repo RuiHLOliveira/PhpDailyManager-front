@@ -8,34 +8,29 @@ section.header {
   }
 }
 
+.projetoListFlex{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+@media only screen and (min-width: 800px) {
+  .projetoListFlex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
 .projeto {
-  justify-content: space-between;
-  .col1 {
-    border: 1px solid rgb(197, 197, 197);
-    width: 72%;
-    display: inline-block;
-  }
-  .col2 {
-    text-align: center;
-    border: 1px solid rgb(197, 197, 197);
-    width: 10%;
-    min-width: 100px;
-    display: inline-block;
-  }
-  .col3 {
-    text-align: center;
-    border: 1px solid rgb(197, 197, 197);
-    width: 10%;
-    min-width: 100px;
-    display: inline-block;
-  }
-  .col4 {
-    text-align: center;
-    border: 1px solid rgb(197, 197, 197);
-    width: 8%;
-    min-width: 8%;
-    max-width: 8%;
-    display: inline-block;
+  height: 95%;
+  border: 1px solid #acacac;
+}
+
+@media only screen and (min-width: 800px) {
+  .projeto {
+    width: 280px;
+    height: 95%;
+    border: 1px solid #acacac;
   }
 }
 
@@ -105,7 +100,7 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="containerFullWidth">
+    <div class="container divBgBlur">
 
       <!-- HEADER -->
       <section class="divBgBlur my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
@@ -151,20 +146,16 @@ section.projetoShow {
               <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Filtrar</button>
             </div>
           </div>
+
           <!-- FOR EACH PROJETOS -->
-          <div class="divBgBlur mt-10 pt-5" v-if="projetos != [] && !busyProjetosLoad && !busyProjetosDelete">
+          <div class="divBgBlur mt-10 pt-5 projetoListFlex" v-if="projetos != [] && !busyProjetosLoad && !busyProjetosDelete">
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto p-10 my-10 ml-5 mr-15">
-                
-                <!-- PROJETO NOME -->
-                <span class="col1 py-10 px-10">
-                  {{ projeto.nome }}
-                </span>
+              <div class="projeto p-10 m-5">
 
                 <!-- TAGS -->
-                <span class="col2 py-10">
+                <span class="">
                   <!-- SITUACAO -->
                   <button type="button" class="btn btn-sm btnPrioridade"
                     :class="{
@@ -178,7 +169,7 @@ section.projetoShow {
                   </button>
                 </span>
 
-                <span class="col3 py-10">
+                <span class="">
                   <!-- PRIORIDADE -->
                   <button type="button" class="btn btn-sm btnPrioridade"
                     :class="{
@@ -193,10 +184,15 @@ section.projetoShow {
                   </button>
                 </span>
                 
-                <!-- PRIORIDADE -->
-                <span class="col4 py-10">
+                <!-- PROJETO NOME -->
+                <div class="">
+                  {{ projeto.nome }}
+                </div>
+                
+                <!-- VISUALIZAR -->
+                <span class="">
                   <button type="button" class="btn btn-sm btnPrioridade" @click="toggleShowProjeto(projeto)">
-                    Visualizar
+                    ->
                   </button>
                 </span>
 
