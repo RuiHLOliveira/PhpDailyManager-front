@@ -15,6 +15,33 @@ h1.titulo {
     border-radius: 5px;
 }
 
+.prioridade {
+  color: rgb(19, 19, 19);
+  padding: 2px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+.p1, button.p1 {
+  background-color: red;
+  color: rgb(255, 255, 255);
+}
+.p2, button.p2{
+  background-color: orangered;
+  color: rgb(255, 255, 255);
+}
+.p3, button.p3{
+  background-color: orange;
+  color: rgb(19, 19, 19);
+}
+.p4, button.p4{
+  background-color: yellow;
+  color: rgb(19, 19, 19);
+}
+.p5, button.p5{
+  background-color: green;
+  color: rgb(255, 255, 255);
+}
+
 </style>
 
 <template>
@@ -43,28 +70,35 @@ h1.titulo {
               <div class=""> <!-- TEXTO -->
                 <div class="flex-wrap">
                   <div class="ycenter mt-5">
-                    <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
-                    <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
-                  </div>
-                  <div class="ycenter mt-5">
                     <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
                     <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
                     <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                   </div>
-                  <!-- <span class="mr-10">
-                    {{ tarefa.descricao }}
-                  </span> -->
-                  <div class="ycenter">
-                    <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
+                  <div class="ycenter mt-5">
+                    <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
+                    <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
                   </div>
+                  <div class="ycenter mt-5" v-if="tarefa.prioridade != null">
+                    <span :class="{
+                      'prioridade p1' : tarefa.prioridade == 1,
+                      'prioridade p2' : tarefa.prioridade == 2,
+                      'prioridade p3' : tarefa.prioridade == 3,
+                      'prioridade p4' : tarefa.prioridade == 4,
+                      'prioridade p5' : tarefa.prioridade == 5
+                    }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : '-' }}</span>
+                  </div>
+                  <!-- <div class="ycenter">
+                    <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
+                  </div> -->
+                </div>
+                <div class="mr-5 mt-10">
+                  <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
+                </div>
+                <div class="mr-10 mt-10">
+                  <span>{{ tarefa.descricao }} <button type="button" class="btn btn-sm" @click="toggleShowMotivoTarefa(tarefa)">?</button></span>
                 </div>
                 <div>
-                  <span class="mr-10">
-                    {{ tarefa.descricao }} <button type="button" class="btn btn-sm" @click="toggleShowMotivoTarefa(tarefa)">?</button>
-                  </span>
-                </div>
-                <div>
-                  <span class="mr-10" v-if="showMotivo[tarefa.id]">
+                  <span class="mr-10" v-if="showMotivo[tarefa.id]" style="color: #333333">
                     {{ tarefa.motivo ?? 'sem motivo cadastrado' }}
                   </span>
                 </div>
@@ -78,16 +112,47 @@ h1.titulo {
                   @click="toggleEdicaoTarefa(tarefa)">
                   Editar1
                 </button> -->
-                <button v-if="!tarefa.editMode" class="btn btn-sm btn_tarefa_concluida" type="button" 
-                  @click="toggleModalEditarTarefa(tarefa)">
-                  Editar
+                <button v-if="tarefa.showMenuPrioridades" class="btn p1 mr-10" type="button"
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="updatePrioridade(tarefa, 1)">P1
                 </button>
-                <button v-if="tarefa.editMode" class="btn mx-5 my-5 btn-sm" type="button"
+                <button v-if="tarefa.showMenuPrioridades" class="btn p2 mr-10" type="button"
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="updatePrioridade(tarefa, 2)">P2
+                </button>
+                <button v-if="tarefa.showMenuPrioridades" class="btn p3 mr-10" type="button"
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="updatePrioridade(tarefa, 3)">P3
+                </button>
+                <button v-if="tarefa.showMenuPrioridades" class="btn p4 mr-10" type="button"
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="updatePrioridade(tarefa, 4)">P4
+                </button>
+                <button v-if="tarefa.showMenuPrioridades" class="btn p5 mr-10" type="button"
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="updatePrioridade(tarefa, 5)">P5
+                </button>
+                <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida mr-10" type="button" 
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="togglePrioridadesTarefa(tarefa)">
+                    <i class="fi fi-sr-priority-importance"></i>
+                </button>
+                <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida mr-10" type="button" 
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="toggleMeuDiaTarefa(tarefa)">
+                    <i class="fi fi-sr-brightness"></i>
+                </button>
+                <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida" type="button" 
+                  :disabled="tarefa.busyTarefasUpdate"
+                  @click="toggleModalEditarTarefa(tarefa)">
+                    <i class="fi fi-rr-edit"></i>
+                </button>
+                <button v-if="tarefa.editMode" class="btn mx-5 my-5" type="button"
                     :disabled="tarefa.busyTarefasUpdate"
                     @click="cancelarEdicaoTarefa(tarefa)">
                     Cancelar
                 </button>
-                <button v-if="tarefa.editMode" class="btn mx-5 my-5 btn-sm" type="button"
+                <button v-if="tarefa.editMode" class="btn mx-5 my-5" type="button"
                     :disabled="tarefa.busyTarefasUpdate"
                     @click="salvarEdicaoTarefa(tarefa)">
                     Salvar
@@ -208,6 +273,67 @@ export default {
     //   this.filtroPrioridade = novaPrioridade;
     // },
 
+    togglePrioridadesTarefa(tarefa)
+    {
+      tarefa.showMenuPrioridades = !tarefa.showMenuPrioridades
+    },
+
+    updatePrioridade(tarefa, prioridade)
+    {
+      tarefa.busyTarefasUpdate = true;
+      let body = {
+        'descricao': tarefa.descricao,
+        'motivo': tarefa.motivo,
+        'prioridade': prioridade,
+        'hora': tarefa.hora,
+      };
+      let requestData = {
+        'url': config.serverUrl + '/tarefas/' + tarefa.id + '/prioridade',
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'PUT',
+        'data' : body
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        this.$refs.notifier.notify('Prioridade editada!')
+        tarefa.busyTarefasUpdate = false;
+        tarefa.prioridade = prioridade
+      }).catch((error) => {
+        console.error(error);
+        tarefa.busyTarefasUpdate = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+
+    toggleMeuDiaTarefa(tarefa){
+      tarefa.busyTarefasUpdate = true;
+      let finalUrl = '';
+      if(!tarefa.meuDia){
+        finalUrl = '/meu-dia'
+      } else {
+        finalUrl = '/remover-meu-dia'
+      }
+      let requestData = {
+        'url': config.serverUrl + '/tarefas/' + tarefa.id + finalUrl,
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'POST',
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        if(!tarefa.meuDia){
+          this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia');
+        } else {
+          this.$refs.notifier.notify('Tarefa removida do Meu Dia');
+        }
+        tarefa.meuDia = data.meuDia
+        tarefa.meuDiaObj = data.meuDiaObj
+        tarefa.busyTarefasUpdate = false;
+        this.guardarTarefaAtualizada(tarefa)
+      }).catch((error) => {
+        console.error(error);
+        tarefa.busyTarefasUpdate = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+    
     toggleShowMotivoTarefa (tarefa) {
       this.showMotivo[tarefa.id] = !this.showMotivo[tarefa.id];
     },
@@ -246,74 +372,6 @@ export default {
       console.log(tarefa);
       this.updateTarefa(tarefa);
     },
-    // toggleEditarSituacao(projeto, novaSituacao){
-    //   projeto.situacaoEditar = novaSituacao;
-    // },
-    // toggleEditarPrioridade(projeto, novaPrioridade){
-    //   projeto.prioridadeEditar = novaPrioridade;
-    // },
-
-
-
-    // excluirProjeto(projeto) {
-    //   // ask for confirmation
-    //   if(!confirm("Deseja apagar o projeto?")){
-    //     return;
-    //   }
-    //   console.log(projeto.id);
-    //   this.busyProjetosDelete = true;
-    //   let requestData = {
-    //     'url': `${config.serverUrl}/projetos/${projeto.id}`,
-    //     'headers': new Headers({'Content-Type': 'application/json'}),
-    //     'method' : 'DELETE',
-    //   };
-    //   return Request.fetch(requestData).then(([response, data]) => {
-    //     this.busyProjetosDelete = false;
-    //     this.$refs.notifier.notify('Projeto excluído!')
-    //     this.toggleEdicaoProjeto(projeto)
-    //     this.buscaProjetos();
-    //   }).catch((error) => {
-    //     console.error(error);
-    //     this.busyProjetosDelete = false;
-    //     this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
-    //   });
-    // },
-
-    /**
-     * FUNCOES FETCH API
-     */
-    // buscaProjetos () {
-    //   this.busyProjetosLoad = true;
-    //   let params = {};
-    //   params['loadTarefas'] = this.carregarPreviamenteAsTarefas;
-    //   if(this.filtroPrioridade != null){
-    //     params['prioridade'] = this.filtroPrioridade;
-    //   }
-    //   if(this.filtroSituacao != null){
-    //     params['situacao'] = this.filtroSituacao;
-    //   }
-    //   params['orderBy'] = 'dataPrazo,desc';
-    //   params = QueryStringConverter.toQueryString(params, true);
-    //   let requestData = {
-    //     'url': `${config.serverUrl}/projetos${params}`,
-    //   };
-    //   Request.fetch(requestData)
-    //   .then(([response, data]) => {
-    //     console.log({data});
-    //     this.projetos = data
-    //     if(this.carregarPreviamenteAsTarefas) {
-    //       for (let i = 0; i < this.projetos.length; i++) {
-    //         this.toggleShowTarefas(this.projetos[i])
-    //       }
-    //     }
-    //     this.busyProjetosLoad = false;
-    //   })
-    //   .catch((error) => {
-    //     this.busyProjetosLoad = false;
-    //     this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
-    //     console.error(error);
-    //   });
-    // },
 
     updateTarefa(tarefa) {
       console.log(tarefa.id);
@@ -425,6 +483,7 @@ export default {
         tarefas[i].meuDiaHoje = false;
         tarefas[i].editMode = false;
         tarefas[i].busyTarefasUpdate = false;
+        tarefas[i].showMenuPrioridades = false
       }
       return tarefas;
     },

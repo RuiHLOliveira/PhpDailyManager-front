@@ -61,27 +61,42 @@
           <label for="hora">Hora:</label>
           <input :disabled="busy" name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
         </section>
-          
-        <section class="my-15 flex-justify-space-between">
-          <div>
-            <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-            <button :disabled="busy" class="btn btn-wider" @click="editarTarefa()">Salvar</button>
-          </div>
-          <div v-if="tarefaLocal.situacao == 0">
-            <button :disabled="busy" class="btn btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
-            <button :disabled="busy" class="btn btn-wider" @click="concluirTarefa()">Concluir</button>
-          </div>
-        </section>
 
-        <section class="my-15 flex-justify-space-between">
+        <div class="mt-15">
+          <h3 class="mb-5">Salvar?</h3>
+          <section class="my-15 flex-justify-space-between">
+            <div>
+              <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
+              <button :disabled="busy" class="btn btn-wider" @click="editarTarefa()">Salvar</button>
+            </div>
+          </section>
+        </div>
+
+        
+        <div class="mt-15" v-if="tarefaLocal.situacao == 0">
+          <h3 class="mb-5">Concluir?</h3>
+          <section class="my-15 flex-justify-space-between">
+            <div>
+              <button :disabled="busy" class="btn btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
+              <button :disabled="busy" class="btn btn-wider" @click="concluirTarefa()">Concluir</button>
+            </div>
+          </section>
+        </div>
+
+        
+        <div class="mt-15" v-if="tarefaLocal.situacao == 0">
+          <h3 class="mb-5">Meu Dia</h3>
           <div v-if="!tarefa.meuDia">
             <button :disabled="busy" class="btn btn-wider" @click="adicionarAoMeuDiaTarefa()">Meu Dia</button>
           </div>
           <div v-if="tarefa.meuDia">
             <button :disabled="busy" class="btn btn-wider" @click="removerMeuDiaTarefa()">Remover Do Dia</button>
           </div>
-        </section>
-        
+          <!-- <div v-if="tarefa.meuDia">
+            <button :disabled="busy" class="btn btn-wider" @click="recolocarMeuDiaTarefa()">Recolocar no Dia</button>
+          </div> -->
+        </div>
+
         <InlineLoader :busy="busy"></InlineLoader>
 
       </div>
