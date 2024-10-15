@@ -16,7 +16,7 @@
         <input name="tarefa" :disabled="busy" type="text" placeholder="tarefa" v-model="tarefa.descricao">
         
         <label for="motivo">Motivo:</label>
-        <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefaLocal.motivo">
+        <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefa.motivo">
 
         <label for="hora">Hora:</label>
         <input name="hora" :disabled="busy" type="time" placeholder="hora" v-model="hora">
