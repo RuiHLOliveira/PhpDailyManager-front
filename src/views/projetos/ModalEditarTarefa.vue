@@ -92,9 +92,9 @@
           <div v-if="tarefa.meuDia">
             <button :disabled="busy" class="btn btn-wider" @click="removerMeuDiaTarefa()">Remover Do Dia</button>
           </div>
-          <!-- <div v-if="tarefa.meuDia">
+          <div v-if="tarefa.meuDia">
             <button :disabled="busy" class="btn btn-wider" @click="recolocarMeuDiaTarefa()">Recolocar no Dia</button>
-          </div> -->
+          </div>
         </div>
 
         <InlineLoader :busy="busy"></InlineLoader>

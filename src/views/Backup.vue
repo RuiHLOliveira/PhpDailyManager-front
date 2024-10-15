@@ -1,7 +1,4 @@
 <style>
-.divBgBlur {
-  background-color: #ffffff77;
-}
 </style>
 
 <template>

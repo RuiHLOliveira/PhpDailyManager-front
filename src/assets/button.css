@@ -146,7 +146,7 @@ button.btn-sm {
 a.btnPrioridade,
 button.btnPrioridade {
     display: inline;
-    margin-right: 5px;
+    /* border: 1px solid #8d8d8d; */
 }
 
 a.selected,
@@ -156,59 +156,102 @@ button.selected {
 
 a.prioridadeUrgente,
 button.prioridadeUrgente,
-a.prioridadeUrgente:hover,
-button.prioridadeUrgente:hover {
-    background-color: rgb(109, 0, 0);
-}
 a.prioridadeAlta,
 button.prioridadeAlta,
-a.prioridadeAlta:hover,
-button.prioridadeAlta:hover {
-    background-color: rgb(255, 21, 21);
-}
 a.prioridadeMedia,
 button.prioridadeMedia,
-a.prioridadeMedia:hover,
-button.prioridadeMedia:hover {
-    background-color: rgb(255, 95, 21);
-}
 a.prioridadeBaixa,
 button.prioridadeBaixa,
-a.prioridadeBaixa:hover,
-button.prioridadeBaixa:hover {
-    background-color: rgb(255, 173, 21);
-}
 a.prioridadeBaixissima,
 button.prioridadeBaixissima,
+a.situacaoPendente,
+button.situacaoPendente,
+a.situacaoAguardandoResposta,
+button.situacaoAguardandoResposta,
+a.situacaoPausado,
+button.situacaoPausado,
+a.situacaoConcluido,
+button.situacaoConcluido {
+    width:      90px;
+    max-width:  90px;
+    min-width:  90px;
+}
+
+
+a.prioridadeUrgente,
+button.prioridadeUrgente {
+    background-color: rgb(109, 0, 0);
+}
+a.prioridadeUrgente:hover,
+button.prioridadeUrgente:hover {
+    background-color: rgb(80, 6, 6);
+}
+a.prioridadeAlta,
+button.prioridadeAlta {
+    background-color: rgb(255, 21, 21);
+}
+a.prioridadeAlta:hover,
+button.prioridadeAlta:hover {
+    background-color: rgb(218, 19, 19);
+}
+a.prioridadeMedia,
+button.prioridadeMedia {
+    background-color: rgb(255, 95, 21);
+}
+a.prioridadeMedia:hover,
+button.prioridadeMedia:hover {
+    background-color: rgb(214, 80, 18);
+}
+a.prioridadeBaixa,
+button.prioridadeBaixa {
+    background-color: rgb(255, 173, 21);
+    color: #444444;
+}
+a.prioridadeBaixa:hover,
+button.prioridadeBaixa:hover {
+    background-color: rgb(224, 153, 19);
+}
+a.prioridadeBaixissima,
+button.prioridadeBaixissima {
+    background-color: rgb(234, 238, 0);
+    color: #444444;
+}
 a.prioridadeBaixissima:hover,
 button.prioridadeBaixissima:hover {
-    color: #444444;
-    background-color: rgb(234, 238, 0);
+    background-color: rgb(183, 185, 13);
 }
 
 a.situacaoPendente,
-button.situacaoPendente,
-a.situacaoPendente:hover,
-button.situacaoPendente:hover {
+button.situacaoPendente {
     background-color: #20c920;
 }
+a.situacaoPendente:hover,
+button.situacaoPendente:hover {
+    background-color: #1cac1c;
+}
 a.situacaoAguardandoResposta,
-button.situacaoAguardandoResposta,
+button.situacaoAguardandoResposta {
+    background-color: #0099ff;
+}
 a.situacaoAguardandoResposta:hover,
 button.situacaoAguardandoResposta:hover {
     background-color: #0099ff;
 }
 a.situacaoPausado,
-button.situacaoPausado,
+button.situacaoPausado {
+    background-color: #575757;
+}
 a.situacaoPausado:hover,
 button.situacaoPausado:hover {
     background-color: #757575;
 }
 a.situacaoConcluido,
-button.situacaoConcluido,
-a.situacaoConcluido:hover,
-button.situacaoConcluido:hover {
+button.situacaoConcluido {
+    background-color: #d8d8d8;
     color: #444444;
     text-decoration: line-through;
-    background-color: #d8d8d8;
+}
+a.situacaoConcluido:hover,
+button.situacaoConcluido:hover {
+    background-color: #b1b1b1;
 }

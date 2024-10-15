@@ -12,27 +12,27 @@
         <input name="nome" type="text" placeholder="nome" v-model="nome">
 
         <div class="marginVerticalSpacer">
-          <button type="button" class="btn btn-sm btnPrioridade prioridadeUrgente"
+          <button type="button" class="btn btn-sm btnPrioridade mr-5 prioridadeUrgente"
             :class="{selected : prioridade == 1}"
             @click="togglePrioridade(1)">
             1-Urgente
           </button>
-          <button type="button" class="btn btn-sm btnPrioridade prioridadeAlta"
+          <button type="button" class="btn btn-sm btnPrioridade mr-5 prioridadeAlta"
             :class="{selected : prioridade == 2}"
             @click="togglePrioridade(2)">
             2-Alta
           </button>
-          <button type="button" class="btn btn-sm btnPrioridade prioridadeMedia"
+          <button type="button" class="btn btn-sm btnPrioridade mr-5 prioridadeMedia"
             :class="{selected : prioridade == 3}"
             @click="togglePrioridade(3)">
             3-Media
           </button>
-          <button type="button" class="btn btn-sm btnPrioridade prioridadeBaixa"
+          <button type="button" class="btn btn-sm btnPrioridade mr-5 prioridadeBaixa"
             :class="{selected : prioridade == 4}"
             @click="togglePrioridade(4)">
             4-Baixa
           </button>
-          <button type="button" class="btn btn-sm btnPrioridade prioridadeBaixissima"
+          <button type="button" class="btn btn-sm btnPrioridade mr-5 prioridadeBaixissima"
             :class="{selected : prioridade == 5}"
             @click="togglePrioridade(5)">
             5-Baixissima

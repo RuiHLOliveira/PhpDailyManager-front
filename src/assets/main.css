@@ -3,6 +3,7 @@
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-rounded/css/uicons-regular-rounded.css');
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-straight/css/uicons-regular-straight.css');
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-rounded/css/uicons-solid-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-straight/css/uicons-solid-straight.css');
 
 @import url('./margins-paddings.css');
 @import url('./flexbox.css');
@@ -31,6 +32,22 @@ body {
 
 .mainPageDiv {
     flex-grow: 1;
+}
+
+
+.divBgBlur {
+    background-color: #ffffff77;
+}
+
+.divBgWhite {
+    background-color: #ffffff;
+}
+.divBgOffWhite {
+    background-color: #eeeeee;
+}
+.borderGray {
+    border: 1px solid #8d8d8d;
+    border-radius: 5px;
 }
 
 .menuButton {
