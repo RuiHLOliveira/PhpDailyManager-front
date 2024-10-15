@@ -1,13 +1,5 @@
 <style>
 
-h1.titulo {
-
-}
-.tarefa {
-  /* border-bottom: 2px solid rgb(194, 194, 194); */
-  border-radius: 5px;
-  background-color: #ffffff77;
-}
 .projetoNaTarefa {
     font-size: 0.8rem;
     background-color: rgb(109, 109, 109);
@@ -46,9 +38,9 @@ h1.titulo {
 
 <template>
   <div>
-    <div class="container divBgBlur">
+    <div class="container divBgWhite">
       
-      <section class="divBgBlur my-10 p-10">
+      <section class="divBgOffWhite borderGray my-10 p-10">
         <h1 class="titulo">Tarefas</h1>
       </section>
 
@@ -63,11 +55,13 @@ h1.titulo {
       <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete">
         <div v-for="tarefa in tarefas" :key="tarefa.id">
 
-          <div class="tarefa mb-10 py-10 px-10" >
+          <div class="divBgOffWhite borderGray mb-10 py-10 px-10" >
 
-            <div class="flex justify-spacebetween"> <!-- LINHA SUPERIOR -->
+            <!-- LINHA SUPERIOR -->
+            <div :class="{'flex justify-spacebetween' : !isSmallScreen, 'flex-column' : isSmallScreen}">
 
-              <div class=""> <!-- TEXTO -->
+              <div>
+                <!-- LINHA 1 -->
                 <div class="flex-wrap">
                   <div class="ycenter mt-5">
                     <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
@@ -78,7 +72,7 @@ h1.titulo {
                     <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
                     <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
                   </div>
-                  <div class="ycenter mt-5" v-if="tarefa.prioridade != null">
+                  <div class="ycenter mt-5 mr-10" v-if="tarefa.prioridade != null">
                     <span :class="{
                       'prioridade p1' : tarefa.prioridade == 1,
                       'prioridade p2' : tarefa.prioridade == 2,
@@ -87,51 +81,26 @@ h1.titulo {
                       'prioridade p5' : tarefa.prioridade == 5
                     }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : '-' }}</span>
                   </div>
-                  <!-- <div class="ycenter">
-                    <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
-                  </div> -->
+                  <div class="ycenter mt-5 mr-10">
+                    <span class="projetoNaTarefa p-5">{{ tarefa.projeto.nome }}</span>
+                  </div>
                 </div>
-                <div class="mr-5 mt-10">
-                  <span class="projetoNaTarefa p-5 mr-10">{{ tarefa.projeto.nome }}</span>
-                </div>
-                <div class="mr-10 mt-10">
-                  <span>{{ tarefa.descricao }} <button type="button" class="btn btn-sm" @click="toggleShowMotivoTarefa(tarefa)">?</button></span>
-                </div>
-                <div>
-                  <span class="mr-10" v-if="showMotivo[tarefa.id]" style="color: #333333">
+                <!-- LINHA 2 -->
+                <div class="my-5 mr-10 mt-10 p-5">
+                  <div>
+                    {{ tarefa.descricao }}
+                    <button type="button" class="btn btn-sm"
+                      @click="toggleShowMotivoTarefa(tarefa)">?
+                    </button>
+                  </div>
+                  <div class="my-5 mr-10 p-5 borderGray" v-if="showMotivo[tarefa.id]" style="color: #333333">
                     {{ tarefa.motivo ?? 'sem motivo cadastrado' }}
-                  </span>
-                </div>
-
-                <div v-if="tarefa.editMode" class="m-10">
-                    <input :disabled="tarefa.busyTarefasUpdate" name="descricao" type="text" v-model="tarefa.descricaoEditar">
+                  </div>
                 </div>
               </div>
-              <div> <!-- BUTTONS -->
-                <!-- <button v-if="!tarefa.editMode" class="btn btn-sm btn_tarefa_concluida" type="button" 
-                  @click="toggleEdicaoTarefa(tarefa)">
-                  Editar1
-                </button> -->
-                <button v-if="tarefa.showMenuPrioridades" class="btn p1 mr-10" type="button"
-                  :disabled="tarefa.busyTarefasUpdate"
-                  @click="updatePrioridade(tarefa, 1)">P1
-                </button>
-                <button v-if="tarefa.showMenuPrioridades" class="btn p2 mr-10" type="button"
-                  :disabled="tarefa.busyTarefasUpdate"
-                  @click="updatePrioridade(tarefa, 2)">P2
-                </button>
-                <button v-if="tarefa.showMenuPrioridades" class="btn p3 mr-10" type="button"
-                  :disabled="tarefa.busyTarefasUpdate"
-                  @click="updatePrioridade(tarefa, 3)">P3
-                </button>
-                <button v-if="tarefa.showMenuPrioridades" class="btn p4 mr-10" type="button"
-                  :disabled="tarefa.busyTarefasUpdate"
-                  @click="updatePrioridade(tarefa, 4)">P4
-                </button>
-                <button v-if="tarefa.showMenuPrioridades" class="btn p5 mr-10" type="button"
-                  :disabled="tarefa.busyTarefasUpdate"
-                  @click="updatePrioridade(tarefa, 5)">P5
-                </button>
+
+              <!-- BUTTONS -->
+              <div class="pt-10" style="min-width: 220px;" :class="{'borderTopGray' : isSmallScreen, 'textAlignRight': !isSmallScreen}">
                 <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida mr-10" type="button" 
                   :disabled="tarefa.busyTarefasUpdate"
                   @click="togglePrioridadesTarefa(tarefa)">
@@ -147,21 +116,31 @@ h1.titulo {
                   @click="toggleModalEditarTarefa(tarefa)">
                     <i class="fi fi-rr-edit"></i>
                 </button>
-                <button v-if="tarefa.editMode" class="btn mx-5 my-5" type="button"
+
+                <div class="mt-15" v-if="tarefa.showMenuPrioridades" :class="{'textAlignRight': !isSmallScreen}">
+                  <button v-if="tarefa.showMenuPrioridades" class="btn p1 mr-10" type="button"
                     :disabled="tarefa.busyTarefasUpdate"
-                    @click="cancelarEdicaoTarefa(tarefa)">
-                    Cancelar
-                </button>
-                <button v-if="tarefa.editMode" class="btn mx-5 my-5" type="button"
+                    @click="updatePrioridade(tarefa, 1)">P1
+                  </button>
+                  <button v-if="tarefa.showMenuPrioridades" class="btn p2 mr-10" type="button"
                     :disabled="tarefa.busyTarefasUpdate"
-                    @click="salvarEdicaoTarefa(tarefa)">
-                    Salvar
-                </button>
-                <!-- <button v-if="projeto.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button"
-                    @click="excluirProjeto(projeto)">
-                    Excluir
-                </button> -->
+                    @click="updatePrioridade(tarefa, 2)">P2
+                  </button>
+                  <button v-if="tarefa.showMenuPrioridades" class="btn p3 mr-10" type="button"
+                    :disabled="tarefa.busyTarefasUpdate"
+                    @click="updatePrioridade(tarefa, 3)">P3
+                  </button>
+                  <button v-if="tarefa.showMenuPrioridades" class="btn p4 mr-10" type="button"
+                    :disabled="tarefa.busyTarefasUpdate"
+                    @click="updatePrioridade(tarefa, 4)">P4
+                  </button>
+                  <button v-if="tarefa.showMenuPrioridades" class="btn p5" type="button"
+                    :disabled="tarefa.busyTarefasUpdate"
+                    @click="updatePrioridade(tarefa, 5)">P5
+                  </button>
+                </div>
               </div>
+              
             </div>
             
             <div> <!-- LINHA INFERIOR -->
@@ -232,10 +211,24 @@ export default {
       filtroSituacao: null,
       nextProgramedListingAmount: 0,
       showMotivo: [],
+      windowWidth: 0,
+      windowHeight: 0,
     }
+  },
+  computed: {
+    isSmallScreen() {
+      console.log(this.windowWidth);
+      console.log(this.windowWidth < 800);
+      return this.windowWidth < 800
+    },
   },
   methods: {
     
+    getDimensions() {
+      this.windowWidth = document.documentElement.clientWidth;
+      this.windowHeight = document.documentElement.clientHeight;
+    },
+
     /** 
      * FUNCOES HELPER IMPORTADAS
     */
@@ -493,6 +486,13 @@ export default {
     configuracoes(a, b) {
       // do something
     }
+  },
+  mounted() {
+    window.addEventListener('resize', this.getDimensions);
+    this.getDimensions()
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.getDimensions);
   },
   created () {
     this.loadTarefas();
