@@ -42,6 +42,9 @@
       
       <section class="divBgOffWhite borderGray my-10 p-10">
         <h1 class="titulo">Tarefas</h1>
+        <button type="button" class="btn btn-sm"
+          @click="toggleShowMotivoTodasTarefas()">Motivos
+        </button>
       </section>
 
       <!-- LOADER -->
@@ -89,13 +92,15 @@
                 <div class="my-5 mr-10 mt-10 p-5">
                   <div>
                     {{ tarefa.descricao }}
-                    <button type="button" class="btn btn-sm"
-                      @click="toggleShowMotivoTarefa(tarefa)">?
-                    </button>
                   </div>
-                  <div class="my-5 mr-10 p-5 borderGray" v-if="showMotivo[tarefa.id]" style="color: #333333">
-                    {{ tarefa.motivo ?? 'sem motivo cadastrado' }}
-                  </div>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-sm btn-clear"
+                    @click="toggleShowMotivoTarefa(tarefa)">Motivo
+                  </button>
+                  <span class="ml-5 mr-5 p-5" v-if="showMotivo[tarefa.id]" style="font-style: italic; color: #333333">
+                    "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
+                  </span>
                 </div>
               </div>
 
@@ -327,6 +332,12 @@ export default {
       });
     },
     
+    toggleShowMotivoTodasTarefas () {
+      for (let i = 0; i < this.tarefas.length; i++) {
+        this.showMotivo[this.tarefas[i].id] = !this.showMotivo[this.tarefas[i].id];
+      }
+    },
+
     toggleShowMotivoTarefa (tarefa) {
       this.showMotivo[tarefa.id] = !this.showMotivo[tarefa.id];
     },

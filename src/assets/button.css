@@ -90,11 +90,13 @@ button.btn-red {
 /* CLEAR BUTTON */
 a.btn-clear,
 button.btn-clear {
-    background-color: #00000000;
+    border: 1px solid #969696;
+    background-color: #c2c2c2;
+    color: black;
 }
 a.btn-clear:hover,
 button.btn-clear:hover {
-    background-color: #00000055;
+    background-color: #c2c2c255;
 }
 
 /* CIRCLE BUTTON */
