@@ -339,7 +339,7 @@ section.projetoShow {
                 </div>
                 <div v-if="projetoExibir.tarefas != []">
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
-                    <div class="linhaTarefa linhaTarefa-round">
+                    <div class="borderGray p-5 mb-5">
                       <div class="flex-wrap">
                         <div>
                           <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>

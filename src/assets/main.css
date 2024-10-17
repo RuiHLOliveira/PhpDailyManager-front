@@ -151,6 +151,15 @@ section.sectionBorder {
 .textCenter {
     text-align: center;
 }
+.textAlignCenter {
+    text-align: center;
+}
+.textAlignLeft {
+    text-align: left;
+}
+.textAlignRight {
+    text-align: right;
+}
 
 .diaBox {
     display:inline-block;

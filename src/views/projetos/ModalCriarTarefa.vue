@@ -13,10 +13,10 @@
         </h3>
 
         <label for="tarefa">Tarefa:</label>
-        <input name="tarefa" :disabled="busy" type="text" placeholder="tarefa" v-model="tarefa.descricao">
+        <input name="tarefa" :disabled="busy" type="text" placeholder="tarefa" v-model="descricao">
         
         <label for="motivo">Motivo:</label>
-        <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefa.motivo">
+        <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="motivo">
 
         <label for="hora">Hora:</label>
         <input name="hora" :disabled="busy" type="time" placeholder="hora" v-model="hora">
@@ -49,6 +49,8 @@ export default {
       tarefa: {},
       busy: false,
       needReload: false,
+      descricao: '',
+      motivo: '',
       hora: '',
       configuracoes: [],
       exibeProjetoSemana: false,
@@ -96,9 +98,10 @@ export default {
     criarTarefa() {
       this.busy = true;
       let body = {
-        'motivo': this.tarefa.motivo,
+        'descricao': this.descricao,
+        'motivo': this.motivo,
+        'hora': this.hora,
         'projeto': this.projeto.id,
-        'hora': this.hora
       };
 
       let requestData = {
