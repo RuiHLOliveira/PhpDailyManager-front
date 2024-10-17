@@ -1,28 +1,4 @@
 
-/* default color ?? */
-:root {
-    /* antigos */
-    --default-button-color: #2677a6;
-    --disabled-button-color: #bdbdbd;
-    --situacao1-button-color: #26a67b;
-    --default-button-color-background: #20648b;
-    --situacao1-button-color-background: #1c7c73;
-
-    /* novos */
-    --default-button-color: #26a67b;
-    --default-hover-button-color:#109060;
-    --blue-button-color: #2677a6;
-    --blue-hover-button-color:#106090;
-    --situacao1-button-color: #235041;
-    --situacao2-button-color: #b93838;
-    --default-button-color-background: #26a67b;
-    --default-hover-button-color-background: #109060;
-    --situacao1-button-color-background: #235041;
-    --situacao2-button-color-background: #b93838;
-
-    --red-button-color: #b93838;
-}
-
 /* DEFAULT BUTTON */
 a.btn,
 button.btn {
@@ -90,13 +66,13 @@ button.btn-red {
 /* CLEAR BUTTON */
 a.btn-clear,
 button.btn-clear {
-    border: 1px solid #969696;
-    background-color: #c2c2c2;
+    border: 1px solid var(--gray-button-border);
+    background-color: var(--gray-button-color);
     color: black;
 }
 a.btn-clear:hover,
 button.btn-clear:hover {
-    background-color: #c2c2c255;
+    background-color: var(--gray-button-color-hover);
 }
 
 /* CIRCLE BUTTON */

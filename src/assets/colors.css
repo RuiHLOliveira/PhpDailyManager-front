@@ -1,0 +1,34 @@
+
+/* default color ?? */
+:root {
+    /* antigos */
+    /* --default-button-color: #2677a6;
+    --disabled-button-color: #bdbdbd;
+    --situacao1-button-color: #26a67b;
+    --default-button-color-background: #20648b;
+    --situacao1-button-color-background: #1c7c73; */
+
+    /* novos */
+    --default-button-color: #26a67b;
+    --default-hover-button-color:#109060;
+    --default-button-color-background: #26a67b;
+    --default-hover-button-color-background: #109060;
+
+    --blue-button-color: #2677a6;
+    --blue-hover-button-color:#106090;
+
+    --situacao1-button-color: #235041;
+    --situacao1-button-color-background: #235041;
+
+    --situacao2-button-color: #b93838;
+    --situacao2-button-color-background: #b93838;
+
+    --gray-button-color: #c2c2c2;
+    --gray-button-border: #969696;
+    --gray-button-color-hover: #c2c2c255;
+    
+    --red-button-color: #b93838;
+
+    --offWhite: #eeeeee;
+    --gray1: #b9b9b9;
+}

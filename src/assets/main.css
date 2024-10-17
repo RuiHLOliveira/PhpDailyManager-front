@@ -5,6 +5,7 @@
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-rounded/css/uicons-solid-rounded.css');
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-straight/css/uicons-solid-straight.css');
 
+@import url('./colors.css');
 @import url('./margins-paddings.css');
 @import url('./flexbox.css');
 @import url('./button.css');
@@ -39,12 +40,11 @@ body {
 .divBgBlur {
     background-color: #ffffff77;
 }
-
 .divBgWhite {
     background-color: #ffffff;
 }
 .divBgOffWhite {
-    background-color: #eeeeee;
+    background-color: var(--offWhite);
 }
 
 .menuButton {

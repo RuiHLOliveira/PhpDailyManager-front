@@ -2,8 +2,8 @@
 
 .projetoNaTarefa {
     font-size: 0.8rem;
-    background-color: rgb(109, 109, 109);
-    color: white;
+    border: 1px solid var(--gray-button-border);
+    background-color: var(--gray-button-color);
     border-radius: 5px;
 }
 
@@ -13,6 +13,7 @@
   border-radius: 5px;
   font-size: 0.8rem;
 }
+
 .p1, button.p1 {
   background-color: red;
   color: rgb(255, 255, 255);

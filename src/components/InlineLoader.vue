@@ -19,6 +19,7 @@
   width: 120px;
   height: 40px;
   background: #f1f1f1;
+  border: 1px solid var(--gray-button-border);
   /* border: 1px solid; */
   /* border-color: #f1f1f1; */
   /* display: inline-block; */
@@ -32,6 +33,7 @@
   display: inline-block;
   vertical-align: middle;
   border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid #42b42b; /* Blue */
   border-top: 3px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 25px;
