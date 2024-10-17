@@ -13,13 +13,13 @@
   flex-direction: column;
   flex-wrap: wrap;
 }
-@media only screen and (min-width: 800px) {
+/* @media only screen and (min-width: 800px) {
   .habitosList {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
-}
+} */
 
 .cardBoxHabito {
   border: 1px solid #bbbbbb;
@@ -31,14 +31,14 @@
   flex-shrink: 0;
 }
 
-@media only screen and (min-width: 800px) {
+/* @media only screen and (min-width: 800px) {
   .cardBoxHabito {
     flex:1;
     max-height: 87svh;
     overflow-y: scroll;
     min-width: 350px;
   }
-}
+} */
 
 
 .titleEditInput {
@@ -51,14 +51,19 @@
   height: 15px;
 }
 .daySquare {
+  font-size: 0.8rem;
   display: inline-block;
   border: 1px solid #757575;
   border-radius: 1px;
   text-align: center;
-  min-width: 20px;
-  max-width: 20px;
-  min-height: 20px;
-  max-height: 20px;
+  /* min-width: 20px; */
+  /* max-width: 20px; */
+  /* min-height: 20px; */
+  /* max-height: 20px; */
+  min-width: 16px;
+  max-width: 16px;
+  min-height: 16px;
+  max-height: 16px;
   margin: 1px;
 }
 .daySquareGreen {
@@ -106,27 +111,46 @@
           <div v-if="habitos != [] && !busyHabitosLoad" class="habitosList"> <!-- lista de habitos -->
             <div v-for="habito in habitos" :key="habito.id">
 
-              <div class="cardBoxHabito p-10 m-5">
+              <div class="cardBoxHabito p-5 mb-5">
 
                 <!-- LINE 1 -->
                 <div class="flex-wrap justify-spacebetween alignitens-center"> 
 
                   <!-- common -->
-                  <div class="flexGrow1 flex-column alignitens-start" v-if="!habito.editMode"> 
-                    <div>
-                      <span>
-                        <button class="btn btn-checkbox mx-5" type="button" @click="concluirHabito(habito)">
-                          {{ habito.realizadoHoje ? '✅' : '🔲' }}
-                        </button>
-                        {{ habito.hora }} - {{ habito.descricao }} <button type="button" class="btn btn-sm" @click="toggleShowMotivoHabito(habito)">?</button>
-                      </span>
-                      <br>
+                  <div class="flexGrow1 flex-wrap alignitens-start" v-if="!habito.editMode">
+
+                    <div class="pr-15">
+                      <button class="btn btn-checkbox mx-5" type="button" @click="concluirHabito(habito)">
+                        {{ habito.realizadoHoje ? '✅' : '🔲' }}
+                      </button>
+                    </div>
+
+                    <div class="pr-15">
+                      <!-- corpo 3 - quadrinhos-->
+                      <div class="flex-wrap">
+                        <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
+                          <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
+                            {{ dia.weekDayFirstLetter }}
+                          </div>
+                          <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
+                            {{ dia.dia }}
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="pr-15">
                       <div>
-                        <span v-if="showMotivo[habito.id]">
+                        {{ habito.hora }} - {{ habito.descricao }}
+                      </div>
+                      <div>
+                        <button type="button" class="btn btn-sm" @click="toggleShowMotivoHabito(habito)">Motivo</button>
+                        <span class="my-5 p-5 italicDarkGray" v-if="showMotivo[habito.id]">
                           {{ habito.motivo ?? 'sem motivo cadastrado' }}
                         </span>
                       </div>
                     </div>
+
                   </div>
 
                   <!-- edicao -->
@@ -154,32 +178,7 @@
                 </div>
 
                 <!-- LINE 2 -->
-                <div class="mt-15 mb-10">
-                  <!-- corpo 1 - concluir -->
-                  <!-- <div class="bodyBoxDiv">
-                    <button class="btn mx-5 my-10 btn-sm" type="button" @click="concluirHabito(habito)">Concluir agora!</button>
-                  </div> -->
-
-                  <!-- corpo 2 - data hora -->
-                  <!-- <div class="bodyBoxDiv">
-                    <div v-for="habitoRealizado in habito.habitoRealizados" :key="habitoRealizado.id">
-                      {{ habitoRealizado.realizadoEm }}
-                    </div>
-                  </div> -->
-
-                  <!-- corpo 3 - quadrinhos-->
-                  <div class="flex-wrap">
-                    <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
-                      <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
-                        {{ dia.weekDayFirstLetter }}
-                      </div>
-                      <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
-                        {{ dia.dia }}
-                      </div>
-                    </span>
-                  </div>
-                  
-                </div>
+                <!-- <div class="mt-15 mb-10"></div> -->
                 <!-- fim body -->
 
               </div>

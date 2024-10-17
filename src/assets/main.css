@@ -47,6 +47,12 @@ body {
     background-color: var(--offWhite);
 }
 
+.italicDarkGray{
+    font-style: italic;
+    color: var(--darkGray);
+}
+
+
 .menuButton {
     position: fixed;
     top: 0;

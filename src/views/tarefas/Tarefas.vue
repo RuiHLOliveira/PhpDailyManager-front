@@ -99,7 +99,7 @@
                   <button type="button" class="btn btn-sm btn-clear"
                     @click="toggleShowMotivoTarefa(tarefa)">Motivo
                   </button>
-                  <span class="ml-5 mr-5 p-5" v-if="showMotivo[tarefa.id]" style="font-style: italic; color: #333333">
+                  <span class="ml-5 mr-5 p-5 italicDarkGray" v-if="showMotivo[tarefa.id]" >
                     "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
                   </span>
                 </div>
