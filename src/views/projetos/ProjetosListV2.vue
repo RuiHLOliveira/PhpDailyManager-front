@@ -168,6 +168,12 @@ section.projetoShow {
 
                 <!-- TAGS -->
                 <div class="py-5 px-10 flex alignitens-center">
+                  <!-- fixado -->
+                  <button type="button" disabled="true"
+                    v-if="!projetoExibir.editMode && projeto.fixado"
+                    class="btn btn-sm btn-clear mr-10 my-5 btn">
+                    <i class="fi fi-ss-thumbtack"></i>
+                  </button>
                   <!-- SITUACAO -->
                   <button type="button" class="mr-10 btn btn-sm btnPrioridade"
                     :class="{
@@ -220,13 +226,16 @@ section.projetoShow {
 
           <div class="mb-10 flex justify-spacebetween">
             <div>
-              <button v-if="!projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">Voltar</button>
-              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="cancelarEdicaoProjeto(projetoExibir)">Cancelar</button>
-              <button v-if="!projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="toggleEdicaoProjeto(projetoExibir)">Editar</button>
+              <button v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">Voltar</button>
+              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="toggleFixarProjeto(projetoExibir)">
+                {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
+              </button>
+              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="toggleEdicaoProjeto(projetoExibir)">Editar</button>
+              <button v-if="projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="cancelarEdicaoProjeto(projetoExibir)">Cancelar</button>
             </div>
             <div>
-              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn" type="button" @click="salvarEdicaoProjeto(projetoExibir)">Salvar</button>
-              <button v-if="projetoExibir.editMode" class="btn mx-5 my-5 btn btn-red" type="button" @click="excluirProjeto(projetoExibir)">Excluir</button>
+              <button v-if="projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="salvarEdicaoProjeto(projetoExibir)">Salvar</button>
+              <button v-if="projetoExibir.editMode" class="btn mx-10 my-5 btn btn-red" type="button" @click="excluirProjeto(projetoExibir)">Excluir</button>
             </div>
           </div>
 
@@ -253,6 +262,8 @@ section.projetoShow {
 
               <div class="mb-15">
                 <div v-if="!projetoExibir.editMode" class="">
+                  <!-- FIXADO -->
+                  <!-- SITUACAO -->
                   <button type="button" class="btn btn-sm btnPrioridade mr-5"
                     :class="{
                       situacaoFixedWidth : configs.situacaoFixedWidth == true,
@@ -263,6 +274,7 @@ section.projetoShow {
                     }">
                     {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
                   </button>
+                  <!-- PRIORIDADE -->
                   <button type="button" class="btn btn-sm btnPrioridade mr-5"
                     :class="{
                       prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
@@ -273,6 +285,11 @@ section.projetoShow {
                       prioridadeBaixissima : projetoExibir.prioridade == 5,
                     }">
                     {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
+                  </button>
+                  <button type="button" disabled="true"
+                    v-if="!projetoExibir.editMode && projetoExibir.fixado"
+                    class="btn btn-sm btn-clear mr-10 my-5 btn">
+                    <i class="fi fi-ss-thumbtack"></i>
                   </button>
                 </div>
 
@@ -593,6 +610,28 @@ export default {
       projeto.prioridadeEditar = projeto.prioridade;
       projeto.situacaoEditar = projeto.situacao;
       projeto.editMode = !projeto.editMode
+    },
+    toggleFixarProjeto(projeto) {
+      // ask for confirmation
+      this.busyProjetosDelete = true;
+      let requestData = {
+        'url': `${config.serverUrl}/projetos/${projeto.id}/fixar-desafixar`,
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'POST',
+      };
+      return Request.fetch(requestData).then(([response, data]) => {
+        this.busyProjetosDelete = false;
+        if(projeto.fixado == false) {
+          this.$refs.notifier.notify('Projeto fixado!')
+        } else {
+          this.$refs.notifier.notify('Projeto desafixado!')
+        }
+        projeto.fixado = !projeto.fixado
+      }).catch((error) => {
+        console.error(error);
+        this.busyProjetosDelete = false;
+        this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
+      });
     },
     cancelarEdicaoProjeto(projeto) {
       this.toggleEdicaoProjeto(projeto)
