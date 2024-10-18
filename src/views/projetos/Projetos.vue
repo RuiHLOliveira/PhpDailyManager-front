@@ -101,8 +101,8 @@ section.projetoShow {
               <select class="fullSelect"  v-model="selectedSituacao" name="situacao" id="situacao">
                 <option value="0">Todos</option>
                 <option value="1">Pendente</option>
-                <option value="2">Aguardando Resposta</option>
-                <option value="3">Pausado Indefinidamente</option>
+                <option value="2">Espera</option>
+                <option value="3">Suspenso</option>
                 <option value="4">Concluído</option>
               </select>
               <!-- PRIORIDADE -->
@@ -231,12 +231,12 @@ section.projetoShow {
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoAguardandoResposta"
                       :class="{selected : projetoExibir.situacaoEditar == 2}"
                       @click="toggleEditarSituacao(projetoExibir, 2)">
-                      1-Aguardando Resposta
+                      1-Espera
                     </button>
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoPausado"
                       :class="{selected : projetoExibir.situacaoEditar == 3}"
                       @click="toggleEditarSituacao(projetoExibir, 3)">
-                      2-Pausado Indefinidamente
+                      2-Suspenso
                     </button>
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoConcluido"
                       :class="{selected : projetoExibir.situacaoEditar == 4}"
