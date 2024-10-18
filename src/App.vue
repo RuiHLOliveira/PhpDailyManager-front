@@ -15,15 +15,30 @@
           <span class="leftNavText my-15">Olá, usuario!</span>
           <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
           <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inbox"><i class="fi fi-rs-inbox-in"></i> Inbox</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetos"><i class="fi fi-rs-journal-alt"></i> Projetos</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetosListV2"><i class="fi fi-rs-journal-alt"></i> Projetos 2</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetosListV3"><i class="fi fi-rs-journal-alt"></i> Projetos 3</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/tarefas"><i class="fi fi-rs-list-check"></i> Tarefas</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker"><i class="fi fi-rs-brightness"></i> Habit Tracker</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/backup"><i class="fi fi-rs-disk"></i> Backup</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/invitations"><i class="fi fi-rs-file-user"></i> Convites</router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/configuracoes"><i class="fi fi-rs-gears"></i> Configurações</router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/primeiraPagina">
+              <i class="fi fi-sr-circle-1"></i> Primeira Página
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inbox">
+              <i class="fi fi-rs-inbox-in"></i> Inbox
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/projetosListV2">
+              <i class="fi fi-rs-journal-alt"></i> Projetos
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/tarefas">
+              <i class="fi fi-rs-list-check"></i> Tarefas
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker">
+              <i class="fi fi-rs-brightness"></i> Habit Tracker
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/backup">
+              <i class="fi fi-rs-disk"></i> Backup
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/invitations">
+              <i class="fi fi-rs-file-user"></i> Convites
+          </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/configuracoes">
+              <i class="fi fi-rs-gears"></i> Configurações
+          </router-link>
           <span class="menuItem" v-if="loggedIn" @click="logout()"><i class="fi fi-rs-sign-out-alt"></i> Logout</span>
         </nav>
 
@@ -97,7 +112,7 @@ export default {
     
     redirectAfterLogin(){
       this.updateLoggedIn()
-      this.$router.push({ path: '/habitTracker' })
+      this.$router.push({ path: '/primeiraPagina' })
     },
 
     logout() {
