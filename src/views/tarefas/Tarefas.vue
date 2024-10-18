@@ -15,11 +15,11 @@
 }
 
 .p1, button.p1 {
-  background-color: red;
+  background-color: rgb(146, 0, 0);
   color: rgb(255, 255, 255);
 }
 .p2, button.p2{
-  background-color: orangered;
+  background-color: red;
   color: rgb(255, 255, 255);
 }
 .p3, button.p3{
