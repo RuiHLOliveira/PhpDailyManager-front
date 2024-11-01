@@ -245,7 +245,7 @@ section.projetoShow {
             :center="true">
           </InlineLoader>
 
-          <div class="flex-wrap">
+          <div class="flex-column">
             <!-- COL 1 DADOS E TAREFAS -->
             <div class="mr-5">
               <div class="mb-15">
@@ -348,15 +348,20 @@ section.projetoShow {
 
               <!-- TAREFAS -->
               <div class="mb-15">
-                <div class="mb-5">
-                  <span class="projetoShowLabel">Tarefas: </span>
+                <div class="mb-15 flex-wrap">
+                  <span class="projetoShowLabel mr-15">Tarefas: </span>
+                  <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
+                  <button class="btn btn-sm mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Pendentes</button>
+                  <button class="btn btn-sm mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar</button>
+                  <button type="button" class="btn btn-sm btn-clear" v-if="projetoExibir.tarefas.length > 0 && collapsarTarefas">
+                    ...
+                  </button>
                 </div>
-                <div class="mb-5">
-                  <button class="btn btn-sm" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
-                </div>
-                <div v-if="projetoExibir.tarefas != []">
-                  <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
-                    <div class="borderGray p-5 mb-5">
+
+                <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas">
+                  <!-- CADA TAREFA -->
+                  <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
+                    <div class="flex-wrap justify-spacebetween borderGray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       <div class="flex-wrap">
                         <div>
                           <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
@@ -398,7 +403,7 @@ section.projetoShow {
                 </div>
                 <div v-if="projetoExibir.editMode" class="mb-5">
                   <textarea
-                    rows="20"
+                    id="projetoExibirAnotacoesEditarTextarea"
                     class="textarea"
                     name="anotacoes"
                     placeholder="anotacoes"
@@ -488,7 +493,8 @@ export default {
       filtroSituacao: null,
       nextProgramedListingAmount: 0,
       filtroNomeProjeto: '',
-
+      exibirTarefasConcluidas: false,
+      collapsarTarefas: false,
       projetoExibir: [],
       selectedSituacao: 0,
       selectedPrioridade: 0,
@@ -576,6 +582,17 @@ export default {
       // }
     },
 
+    
+    toggleCollapsarTarefas()
+    {
+      this.collapsarTarefas = !this.collapsarTarefas;
+    },
+    
+    toggleExibirTarefasConcluidas()
+    {
+      this.exibirTarefasConcluidas = !this.exibirTarefasConcluidas;
+    },
+
     toggleShowTarefas(projeto) {
       projeto.showTarefas = !projeto.showTarefas
       if(projeto.tarefas == null) this.loadTarefas(projeto)
@@ -610,6 +627,19 @@ export default {
       projeto.prioridadeEditar = projeto.prioridade;
       projeto.situacaoEditar = projeto.situacao;
       projeto.editMode = !projeto.editMode
+      if(projeto.editMode == true){
+        // configuração para autosize
+        setTimeout(() => {
+          let element = document.getElementById('projetoExibirAnotacoesEditarTextarea');
+          if(element != null) {
+            console.log('event added');
+            element.addEventListener('input', function(e){
+              this.style.height = this.scrollHeight + 3 + 'px';
+            })
+            element.style.height = element.scrollHeight + 3 + 'px';
+          }
+        }, 1);
+      }
     },
     toggleFixarProjeto(projeto) {
       // ask for confirmation
@@ -703,6 +733,7 @@ export default {
         console.log({data});
         data = this.projetosFillAdditionalProps(data)
         data = this.projetosTarefasFillAdditionalProps(data)
+        data = this.projetosTarefasOrganizar(data)
         this.projetos = data
         this.projetoBackup = this.projetos
         this.busyProjetosLoad = false;
@@ -724,6 +755,24 @@ export default {
             projetos[i].tarefas[j].meuDiaHoje = true;
           }
         }
+      }
+      return projetos;
+    },
+
+    projetosTarefasOrganizar(projetos){
+      let dateHoje = new Date();
+      for (let i = 0; i < projetos.length; i++) {
+        let tarefasPendentes = [];
+        let tarefasConcluidas = [];
+        for (let j = 0; j < projetos[i].tarefas.length; j++) {
+          if(projetos[i].tarefas[j].situacao == 1 || projetos[i].tarefas[j].situacao == 2){
+            tarefasConcluidas.push(projetos[i].tarefas[j])
+          } else {
+            tarefasPendentes.push(projetos[i].tarefas[j])
+          }
+        }
+        tarefasPendentes.push(...tarefasConcluidas);
+        projetos[i].tarefas = tarefasPendentes
       }
       return projetos;
     },
