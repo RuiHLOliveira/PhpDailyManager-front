@@ -119,14 +119,17 @@
                   <!-- common -->
                   <div class="flexGrow1 flex-wrap alignitens-start" v-if="!habito.editMode">
 
+                    <!-- BOTAO CHECK -->
                     <div class="pr-15">
-                      <button class="btn btn-checkbox mx-5" type="button" @click="concluirHabito(habito)">
+                      <button class="btn btn-checkbox mx-5" type="button"
+                        @click="concluirHabito(habito)"
+                        :disabled="habito.busyHabitosConcluir">
                         {{ habito.realizadoHoje ? '✅' : '🔲' }}
                       </button>
                     </div>
 
+                    <!-- QUADRINHOS -->
                     <div class="pr-15">
-                      <!-- corpo 3 - quadrinhos-->
                       <div class="flex-wrap">
                         <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
                           <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
@@ -139,6 +142,7 @@
                       </div>
                     </div>
 
+                    <!-- TITULO E MOTIVO -->
                     <div class="pr-15">
                       <div>
                         {{ habito.hora }} - {{ habito.descricao }}
@@ -156,9 +160,9 @@
                   <!-- edicao -->
                   <div class="flexGrow1 flex-column alignitens-start" v-if="habito.editMode"> 
                     <div class="marginVerticalSpacer titleEditInput">
-                      <input :disabled="busyHabitosUpdate" name="hora" type="time" v-model="habito.horaEditar">
-                      <input :disabled="busyHabitosUpdate" name="descricao" type="text" v-model="habito.descricaoEditar">
-                      <input :disabled="busyHabitosUpdate" name="motivo" type="text" v-model="habito.motivoEditar">
+                      <input :disabled="busyHabitosUpdate || habito.busyHabitosConcluir" name="hora" type="time" v-model="habito.horaEditar">
+                      <input :disabled="busyHabitosUpdate || habito.busyHabitosConcluir" name="descricao" type="text" v-model="habito.descricaoEditar">
+                      <input :disabled="busyHabitosUpdate || habito.busyHabitosConcluir" name="motivo" type="text" v-model="habito.motivoEditar">
                     </div>
                     <div class="marginVerticalSpacer">
                     </div>
@@ -166,7 +170,11 @@
 
                   <!-- right buttons -->
                   <div class="flex-column"> 
-                    <button v-if="!habito.editMode" class="btn btn-sm" type="button" @click="toggleEdicaoHabito(habito)">Editar</button>
+                    <button v-if="!habito.editMode" class="btn btn-sm" type="button"
+                      :disabled="habito.busyHabitosConcluir"
+                      @click="toggleEdicaoHabito(habito)">
+                      Editar
+                    </button>
                     <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
                     <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">
                       Salvar
@@ -178,7 +186,13 @@
                 </div>
 
                 <!-- LINE 2 -->
-                <!-- <div class="mt-15 mb-10"></div> -->
+                <div class="mt-15 mb-10">
+                    <InlineLoader
+                      :textoAguarde="true"
+                      :busy="habito.busyHabitosConcluir"
+                      :center="true">
+                    </InlineLoader>
+                </div>
                 <!-- fim body -->
 
               </div>
@@ -228,7 +242,6 @@ export default {
       // busyHabitosLoad: false,
       busyHabitosLoad: false,
       busyHabitosUpdate: false,
-      busyHabitosConcluir: true,
       // dataPrazo: '',
       meses: [],
       semana: [],
@@ -341,6 +354,7 @@ export default {
         console.log({data});
         this.fillShowMotivo(data)
         data = this.ordenarHabitos(data)
+        data = this.defineCamposExtras(data)
         data = this.defineRealizadoHoje(data)
         data = this.fillSemanaRealizados(data)
         this.habitos = data
@@ -365,6 +379,14 @@ export default {
         return a.hora > b.hora
       })
       return habitos
+    },
+
+    
+    defineCamposExtras(habitos){
+      for (let i = 0; i < habitos.length; i++) {
+        habitos[i].busyHabitosConcluir = false;
+      }
+      return habitos;
     },
 
     defineRealizadoHoje(habitos){
@@ -437,7 +459,7 @@ export default {
     concluirHabito(habito) {
       if(habito.realizadoHoje == true) return;
       console.log(habito.id);
-      this.busyHabitosConcluir = true;
+      habito.busyHabitosConcluir = true;
       let body = {};
 
       let requestData = {
@@ -447,13 +469,13 @@ export default {
         'data' : body
       };
       return Request.fetch(requestData).then(([response, data]) => {
-        this.busyHabitosConcluir = false;
+        habito.busyHabitosConcluir = false;
         this.$refs.notifier.notify('Habito concluído!')
         // this.toggleEdicaoHabito(habito)
         this.buscaHabitos();
       }).catch((error) => {
         console.error(error);
-        this.busyHabitosConcluir = false;
+        habito.busyHabitosConcluir = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
       });
     },
