@@ -124,12 +124,12 @@ section.projetoShow {
       <div>
 
           <!-- FILTER -->
-          <div class="mt-10 p-5 divBgOffWhite borderGray flex-wrap">
+          <div class="mt-10 p-5 divBgOffWhite borderGray flex-wrap" v-if="projetoExibir.id == null">
             <div class="mr-15">
               <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
             </div>
             <!-- SITUACAO -->
-            <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao">
+            <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
               <option value="0">Todos</option>
               <option value="1">Pendente</option>
               <option value="2">Espera</option>
@@ -137,7 +137,7 @@ section.projetoShow {
               <option value="4">Concluído</option>
             </select>
             <!-- PRIORIDADE -->
-            <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade">
+            <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
               <option value="0">Todos</option>
               <option value="1">Urgente</option>
               <option value="2">Alta</option>
@@ -147,7 +147,7 @@ section.projetoShow {
             </select>
             <!-- BUTTON -->
             <div class="mr-15">
-              <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Filtrar</button>
+              <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
             </div>
           </div>
 
@@ -723,7 +723,7 @@ export default {
       if(this.selectedSituacao != null && this.selectedSituacao > 0){
         params['situacao'] = this.selectedSituacao;
       }
-      params['orderBy'] = 'dataPrazo,desc'
+      params['orderBy'] = 'nome,asc'
       params = QueryStringConverter.toQueryString(params, true);
       let requestData = {
         'url': `${config.serverUrl}/projetos${params}`,
@@ -841,20 +841,51 @@ export default {
 
     filtraListaProjeto()
     {
+      // guarda o backup se não existir
       if(this.projetoBackup.length == 0){
         this.projetoBackup = this.projetos;
       }
-      this.projetos = this.projetoBackup;
-      var arrayfilter = [];
+      // recupera o backup para listar de forma completa
+      // this.projetos = this.projetoBackup;
+      let listaProjetos = this.projetoBackup;
 
-      //aplica filtragem por texto
-      for (let i = 0; i < this.projetos.length; i++) {
-        if(this.projetos[i].nome.toLowerCase().includes(this.filtroNomeProjeto.toLowerCase())){
-          arrayfilter.push(this.projetos[i])
+      let arrayfilter = [];
+      let nomeProjetoFiltro = this.filtroNomeProjeto.toLowerCase();
+      let situacaoFiltro = this.selectedSituacao != 0 ? this.selectedSituacao : null;
+      let prioridadeFiltro = this.selectedPrioridade != 0 ? this.selectedPrioridade : null;
+      
+      // ************************ filtro por situação
+      if(situacaoFiltro != null){
+        arrayfilter = [];
+        for (let i = 0; i < listaProjetos.length; i++) {
+          if(listaProjetos[i].situacao == situacaoFiltro){
+            arrayfilter.push(listaProjetos[i])
+          }
         }
+        listaProjetos = arrayfilter;
       }
+      // ************************ filtro por prioridade
+      if(prioridadeFiltro != null){
+        arrayfilter = [];
+        for (let i = 0; i < listaProjetos.length; i++) {
+          if(listaProjetos[i].prioridade == prioridadeFiltro){
+            arrayfilter.push(listaProjetos[i])
+          }
+        }
+        listaProjetos = arrayfilter;
+      }
+      // ************************ filtro por texto
+      if(nomeProjetoFiltro != null){
+        arrayfilter = [];
+        for (let i = 0; i < listaProjetos.length; i++) {
+          if(listaProjetos[i].nome.toLowerCase().includes(nomeProjetoFiltro)){
+            arrayfilter.push(listaProjetos[i])
+          }
+        }
+        listaProjetos = arrayfilter;
+      }
+      // ************************ atribuição final
       this.projetos = arrayfilter
-
     },
 
     getDimensions() {
