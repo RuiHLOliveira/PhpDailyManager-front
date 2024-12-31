@@ -310,7 +310,7 @@ export default {
     loadListaCategorias()
     {
       this.busyLoadCategorias = true;
-      CategoriaApi.loadListaCategorias().then(([response, data]) => {
+      CategoriaApi.loadListaCategorias(['categoria,asc']).then(([response, data]) => {
         console.log('lista categorias', data)
         this.listaCategorias = data
         this.busyLoadCategorias = false;
@@ -328,7 +328,7 @@ export default {
     }
   },
   created () {
-    this.loadListaCategorias();
+    this.loadListaCategorias(['categoria,asc']);
     this.loadInboxItemCategoria(null);
   },
 }

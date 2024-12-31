@@ -23,12 +23,12 @@ a.link:visited {
     <div class="modal">
 
       <section>
-        <h1>InboxItem - Dados</h1>
+        <h1>InboxItem - Edição</h1>
 
-        <div class="modalInboxItem p-10">
-          <div class="mt-5">
+        <div class="modalInboxItem p-10 mt-10">
+          <!-- <div class="mt-5">
             <span>{{ inboxItemLocal.nome }}</span>
-          </div>
+          </div> -->
           
           <div class="mt-5">
             <span v-html="inboxItemLocal.linkTag"></span>
@@ -41,26 +41,38 @@ a.link:visited {
         </div>
 
         <div>
-          <h1>Edição</h1>
+          <!-- <h1>Edição</h1> -->
 
           <div class="mt-15">
-            <label for="nome">nome:</label>
+            <label for="nome">Nome:</label>
             <input :disabled="busyEditarItem" name="nome" type="text" placeholder="nome" v-model="inboxItemLocal.nome">
           </div>
 
           <div class="mt-15">
-            <label for="link">link:</label>
+            <label for="link">Link:</label>
             <input :disabled="busyEditarItem" name="link" type="text" placeholder="link" v-model="inboxItemLocal.link">
           </div>
           
-          <div class="mt-15">
-            <label for="categoria">categoria:</label>
-            <button type="button" class=" ml-5 btn btn-sm" @click="toggleCriarCategoria()">Criar</button>
+          <div class="mt-15 pt-10">
+            <div>
+              <label for="categoria">Categoria:</label>
+            </div>
+            
+            <button type="button" class="mb-10 btn btn-clear btn-sm" @click="toggleCriarCategoria()">
+              <span v-if="showCriarCategoria">
+                <i class="fi fi-rr-up" ></i> Selecionar Categoria
+              </span>
+              <span v-if="!showCriarCategoria">
+                <i class="fi fi-rr-down" ></i> Criar Nova Categoria
+              </span>
+            </button>
 
-            <div v-if="showCriarCategoria" class="modalInboxItem my-10 p-10">
+            <div v-if="showCriarCategoria" class="modalInboxItem mb-10 p-10">
               <label for="nome">Nova categoria:</label>
               <input :disabled="busyCriarCategoria" name="nome" type="text" placeholder="nome" v-model="novaCategoria">
-              <button :disabled="busyCriarCategoria" type="button" class="my-5 btn btn-sm" @click="criarCategoria()">Criar Categoria</button>
+              <button :disabled="busyCriarCategoria" type="button" class="my-5 btn btn-clear btn-sm" @click="criarCategoria()">
+                <i class="fi fi-rr-check-circle"></i> Criar Categoria
+              </button>
               
               <InlineLoader
                 :textoAguarde="true"
@@ -69,23 +81,36 @@ a.link:visited {
               </InlineLoader>
             </div>
 
-            <select class="fullSelect" v-model="inboxItemLocal.categoriaItem" name="categoria" id="situacao">
-              <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id" :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
+            <select v-if="inboxItemLocal.categoriaItem != null && !showCriarCategoria"
+              class="mb-10 fullSelect" name="categoria" id="situacao"
+              v-model="inboxItemLocal.categoriaItem.id">
+              <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id"
+                :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
             </select>
+
           </div>
 
           <div class="mt-15">
-            <label for="acao">acao:</label>
-            <textarea class="textarea textareaHeight150" name="anotacoes" placeholder="anotacoes" :disabled="busyEditarItem" v-model="inboxItemLocal.acao"></textarea>
+            <label for="acao">Ação:</label>
+            <textarea class="textarea textareaHeight150" name="anotacoes" placeholder="Ação" :disabled="busyEditarItem" v-model="inboxItemLocal.acao"></textarea>
           </div>
 
         </div>
       </section>
-        
-      <section class="flex-justify-space-between">
+
+      <section class="flex-justify-space-between mt-30 pt-30">
         <div>
-          <button :disabled="busyEditarItem" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-          <button :disabled="busyEditarItem" class="btn btn-wider" @click="editarInboxItem()">Salvar</button>
+          <button :disabled="busyEditarItem" class="mr-10 btn btn-clear iconBig" @click="fecharModal()">
+            <i class="fi fi-br-left" ></i> Fechar
+          </button>
+          <button :disabled="busyEditarItem" class="mr-10 btn btn-clear iconBig" @click="editarInboxItem()">
+            <i class="fi fi-br-disk"></i> Salvar
+          </button>
+        </div>
+        <div>
+          <button :disabled="busyEditarItem" class="btn btn-clear iconBig" @click="excluirInboxItem()">
+            <i class="fi fi-br-trash"></i> Excluir
+          </button>
         </div>
       </section>
       
@@ -117,7 +142,7 @@ export default {
   },
   data: function () {
     return {
-      inboxItemLocal: [],
+      inboxItemLocal: {},
       busyEditarItem: false,
       busyCriarCategoria: false,
       needReload: false,
@@ -206,6 +231,23 @@ export default {
       });
     },
 
+    excluirInboxItem() {
+      this.busyEditarItem = true;
+      let requestData = {
+        'url': config.serverUrl + '/inboxItems/' + this.inboxItem.id,
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'DELETE',
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        this.$refs.notifier.notify('InboxItem excluida!')
+        this.busyEditarItem = false;
+      }).catch((error) => {
+        console.error(error);
+        this.busyEditarItem = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+
     criarCategoria () {
       this.busyCriarCategoria = true;
       CategoriaApi.criarCategoria(this.novaCategoria)
@@ -215,7 +257,7 @@ export default {
         this.busyCriarCategoria = false;
         this.novaCategoria = ''
         this.toggleCriarCategoria();
-        this.loadListaCategorias()
+        this.loadListaCategorias(['categoria,asc'])
       }).catch((error) => {
         this.busyCriarCategoria = false;
         console.error(error)
@@ -226,7 +268,7 @@ export default {
     loadListaCategorias()
     {
       this.busyEditarItem = true;
-      CategoriaApi.loadListaCategorias().then(([response, data]) => {
+      CategoriaApi.loadListaCategorias(['categoria,asc']).then(([response, data]) => {
         console.log('lista categorias', data)
         this.listaCategorias = data
         this.busyEditarItem = false;
@@ -251,10 +293,14 @@ export default {
     },
     inboxItem(newProp, oldProp) {
       this.inboxItemLocal = deepCopy.deepCopy(newProp);
+      if(this.inboxItemLocal.categoriaItem == null) {
+        this.inboxItemLocal.categoriaItem = {id: null}
+      }
+      console.log(this.inboxItemLocal);
     }
   },
   created () {
-    this.loadListaCategorias();
+    this.loadListaCategorias(['categoria,asc']);
     this.loadListaOrigens();
     // this.buscaConfiguracoes();
   },

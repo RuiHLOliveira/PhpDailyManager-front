@@ -11,7 +11,7 @@ textarea.textarea {
     font-size: 1rem;
     font-weight: normal;
     color: #3d3d3d;
-    border: 1px solid #b8b8b8;
+    border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
     border-radius: 3px;
@@ -37,7 +37,7 @@ input[type=date]
     color: #3d3d3d;
     border: 0px;
 
-    border: 1px solid #b8b8b8;
+    border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
     border-radius: 3px;
@@ -85,7 +85,7 @@ select.fullSelect {
     color: #181818;
     border: 0px;
 
-    border: 1px solid #b8b8b8;
+    border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
     border-radius: 3px;
@@ -111,7 +111,7 @@ select.smallSelect {
     color: #181818;
     border: 0px;
 
-    border: 1px solid #b8b8b8;
+    border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
     border-radius: 3px;

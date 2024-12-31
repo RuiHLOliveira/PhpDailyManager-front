@@ -15,12 +15,17 @@ export default {
     };
     return Request.fetch(requestData);
   },
-  loadListaCategorias() {
+  loadListaCategorias(orderBy = []) {
+    let url = config.serverUrl + '/categoriaItems';
+    if(orderBy.length > 0){
+        url += '?orderBy='+orderBy[0]
+    }
     let requestData = {
-      'url': config.serverUrl + '/categoriaItems',
+      'url': url,
       'headers': new Headers({ 'Content-Type': 'application/json' }),
       'method': 'GET',
     };
     return Request.fetch(requestData);
   },
+
 }

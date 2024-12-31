@@ -1,4 +1,13 @@
 
+.fi {
+    position: relative;
+    top: 1px;
+}
+.iconBig > .fi{
+    font-size: 1.1rem;
+    position: relative;
+    top: 2px;
+}
 /* DEFAULT BUTTON */
 a.btn,
 button.btn {
@@ -66,13 +75,13 @@ button.btn-red {
 /* CLEAR BUTTON */
 a.btn-clear,
 button.btn-clear {
-    border: 1px solid var(--gray-button-border);
-    background-color: var(--gray-button-color);
-    color: black;
+    border: 1px solid #575757;
+    background-color: #00000000;
+    color: #313131;
 }
 a.btn-clear:hover,
 button.btn-clear:hover {
-    background-color: var(--gray-button-color-hover);
+    background-color: #00000010;
 }
 
 /* CIRCLE BUTTON */
