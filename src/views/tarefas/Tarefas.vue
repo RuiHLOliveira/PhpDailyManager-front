@@ -42,9 +42,14 @@
     <div class="container divBgWhite">
       
       <section class="divBgOffWhite borderGray my-10 p-10">
-        <h1 class="titulo">Tarefas</h1>
+        <div class="flex">
+          <h1 class="titulo">Tarefas</h1>
+        </div>
         <button type="button" class="btn btn-sm"
           @click="toggleShowMotivoTodasTarefas()">Motivos
+        </button>
+        <button type="button" class="ml-10 btn btn-sm"
+          @click="toggleModalCriarTarefa()">Criar Tarefa
         </button>
       </section>
 
@@ -163,7 +168,7 @@
       
     <ModalCriarTarefa
       v-model:exibirModal="exibirModalCriarTarefa"
-      :projeto="projetoModalNovaTarefa"
+      :projeto="null"
       @reloadListaProjetosHabitTracker="loadTarefas()">
     </ModalCriarTarefa>
     
@@ -209,7 +214,6 @@ export default {
       tarefas: [],
       exibirModalCriarTarefa: false,
       exibirModalEditarTarefa: false,
-      projetoModalNovaTarefa: [],
       tarefaModalEditarTarefa: [],
       projetoModalEditarTarefa: [],
       carregarPreviamenteAsTarefas: true,
@@ -255,8 +259,7 @@ export default {
     // toggleModalCriarProjeto () {
     //   this.exibirModalCriarProjeto = true;
     // },
-    toggleModalCriarTarefa (projeto) {
-      this.projetoModalNovaTarefa = projeto
+    toggleModalCriarTarefa () {
       this.exibirModalCriarTarefa = true;
     },
     toggleModalEditarTarefa (tarefa) {
