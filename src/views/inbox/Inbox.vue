@@ -277,7 +277,7 @@ export default {
       if(categoria == null) categoria = '0'
       const params = {
         'categoriaItem': categoria,
-        'orderBy': 'nome,asc'
+        'orderBy': 'created_at,desc'
       };
       let requestData = {
         'url': `${config.serverUrl}/inboxItems${QueryStringConverter.toQueryString(params, true)}`,
