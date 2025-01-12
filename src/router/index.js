@@ -6,6 +6,7 @@ import Inbox from '../views/inbox/Inbox.vue'
 import PrimeiraPagina from '../views/PrimeiraPagina.vue'
 import ProjetosListV2 from '../views/projetos/ProjetosListV2.vue'
 import Tarefas from '../views/tarefas/Tarefas.vue'
+import Realizacoes from '../views/tarefas/Realizacoes.vue'
 import Habitos from '../views/habitos/Habitos.vue'
 import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
@@ -44,6 +45,12 @@ const router = createRouter({
       path: '/tarefas',
       name: 'Tarefas',
       component: Tarefas,
+      props: true
+    },
+    {
+      path: '/realizacoes',
+      name: 'Realizacoes',
+      component: Realizacoes,
       props: true
     },
     {
