@@ -42,6 +42,12 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/projetosListV2/projeto/:idProjeto',
+      name: 'Projeto',
+      component: ProjetosListV2,
+      props: true
+    },
+    {
       path: '/tarefas',
       name: 'Tarefas',
       component: Tarefas,

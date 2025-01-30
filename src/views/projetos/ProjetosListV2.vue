@@ -199,10 +199,13 @@ section.projetoShow {
                     {{ projeto.prioridade }}-{{ projeto.prioridadeDescritivo }}
                   </button>
                   
-                  <!-- PRIORIDADE -->
+                  <!-- COLUNA 3 -->
                   <button type="button" class="mr-10 btn btn-sm" @click="toggleShowProjeto(projeto)">
-                    <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                    ...
                   </button>
+                  <router-link class="mr-10 btn btn-sm" :to='getProjetoUrl(projeto)'>
+                    <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                  </router-link>
                 </div>
 
               </div>
@@ -226,7 +229,9 @@ section.projetoShow {
 
           <div class="mb-10 flex justify-spacebetween">
             <div>
-              <button v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">Voltar</button>
+              <button v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">...</button>
+              <router-link v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" to='/projetosListV2'>Voltar</router-link>
+
               <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="toggleFixarProjeto(projetoExibir)">
                 {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
               </button>
@@ -524,6 +529,28 @@ export default {
     newDatetimeTz(dateString){return DateTime.newDatetimeTz(dateString);},
     isSameYMD(date1, date2){return DateTime.isSameYMD(date1, date2);},
 
+    getProjetoUrl(projeto) {
+      let url = '/projetosListV2/projeto/'+projeto.id;
+      return url;
+    },
+
+    showProjetoFromQueryIdProjeto() {
+      if(this.$route.params.idProjeto != undefined && this.$route.params.idProjeto != null && this.$route.params.idProjeto != '') {
+        const projeto = this.findProjeto(this.$route.params.idProjeto)
+        this.toggleShowProjeto(projeto);
+      } else {
+        this.hideProjeto(this.projetoExibir)
+      }
+    },
+
+    findProjeto(idProjeto){
+      for (let i = 0; i < this.projetos.length; i++) {
+        if(this.projetos[i].id == idProjeto){
+          return this.projetos[i];
+        }
+      }
+    },
+
     /**
      * FUNCOES TOGGLE
      */
@@ -713,7 +740,7 @@ export default {
     /**
      * FUNCOES FETCH API
      */
-    buscaProjetos () {
+    buscaProjetos (primeiraExecucao = false) {
       this.busyProjetosLoad = true;
       let params = {};
       params['loadTarefas'] = this.carregarPreviamenteAsTarefas;
@@ -737,6 +764,7 @@ export default {
         this.projetos = data
         this.projetoBackup = this.projetos
         this.busyProjetosLoad = false;
+        if(primeiraExecucao) this.showProjetoFromQueryIdProjeto();
       })
       .catch((error) => {
         this.busyProjetosLoad = false;
@@ -898,6 +926,9 @@ export default {
     configuracoes(a, b) {
       // do something
     },
+    $route (to, from){
+      this.showProjetoFromQueryIdProjeto();
+    }
   },
   mounted() {
     window.addEventListener('resize', this.getDimensions);
@@ -907,7 +938,7 @@ export default {
     window.removeEventListener('resize', this.getDimensions);
   },
   created () {
-    this.buscaProjetos();
+    this.buscaProjetos(true);
   },
 }
 </script>
