@@ -127,9 +127,6 @@
                     </div>
                   </div>
                   <div>
-                    <button type="button" class="btn btn-sm btn-clear"
-                      @click="toggleShowMotivoTarefa(tarefa)">Motivo
-                    </button>
                     <span class="ml-5 mr-5 p-5 italicDarkGray" v-if="showMotivo[tarefa.id]" >
                       "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
                     </span>
@@ -414,10 +411,6 @@ export default {
       for (let i = 0; i < this.tarefas.length; i++) {
         this.showMotivo[this.tarefas[i].id] = !this.showMotivo[this.tarefas[i].id];
       }
-    },
-
-    toggleShowMotivoTarefa (tarefa) {
-      this.showMotivo[tarefa.id] = !this.showMotivo[tarefa.id];
     },
 
     guardarTarefaAtualizada(tarefaAtualizada)
