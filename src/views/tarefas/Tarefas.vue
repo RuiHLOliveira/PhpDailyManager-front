@@ -41,7 +41,7 @@
   <div>
     <div class="container divBgWhite">
       
-      <section class="divBgOffWhite borderGray my-10 p-10" style="height: 11vh">
+      <section class="divBgOffWhite borderGray my-10 p-10 pb-15" style="min-height: 11vh">
         <div class="flex">
           <h1 class="titulo">Tarefas</h1>
           <div class="mt-5">
@@ -79,7 +79,7 @@
 
 
       <!-- LISTA TAREFAS -->
-      <div class="pt-10 px-10" style="height: 80vh; overflow-y: scroll; border: 2px solid #a0a0a0;">
+      <div class="pt-10 px-10" style="max-height: 82vh; overflow-y: scroll; border-top: 2px solid #a0a0a0;">
         <!-- LOADER -->
         <InlineLoader
           :textoAguarde="true"
