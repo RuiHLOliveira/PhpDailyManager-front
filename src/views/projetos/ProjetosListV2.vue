@@ -268,29 +268,29 @@ section.projetoShow {
               <div class="mb-15">
                 <div v-if="!projetoExibir.editMode" class="">
                   <!-- FIXADO -->
-                  <!-- SITUACAO -->
-                  <button type="button" class="btn btn-sm btnPrioridade mr-5"
-                    :class="{
-                      situacaoFixedWidth : configs.situacaoFixedWidth == true,
-                      situacaoPendente : projetoExibir.situacao == 1,
-                      situacaoAguardandoResposta : projetoExibir.situacao == 2,
-                      situacaoPausado : projetoExibir.situacao == 3,
-                      situacaoConcluido : projetoExibir.situacao == 4,
-                    }">
-                    {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
-                  </button>
-                  <!-- PRIORIDADE -->
-                  <button type="button" class="btn btn-sm btnPrioridade mr-5"
-                    :class="{
-                      prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
-                      prioridadeUrgente : projetoExibir.prioridade == 1,
-                      prioridadeAlta : projetoExibir.prioridade == 2,
-                      prioridadeMedia : projetoExibir.prioridade == 3,
-                      prioridadeBaixa : projetoExibir.prioridade == 4,
-                      prioridadeBaixissima : projetoExibir.prioridade == 5,
-                    }">
-                    {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
-                  </button>
+                    <!-- SITUACAO -->
+                    <button type="button" class="btn btn-sm btnPrioridade mr-5"
+                      :class="{
+                        situacaoFixedWidth : configs.situacaoFixedWidth == true,
+                        situacaoPendente : projetoExibir.situacao == 1,
+                        situacaoAguardandoResposta : projetoExibir.situacao == 2,
+                        situacaoPausado : projetoExibir.situacao == 3,
+                        situacaoConcluido : projetoExibir.situacao == 4,
+                      }">
+                      {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
+                    </button>
+                    <!-- PRIORIDADE -->
+                    <button type="button" class="btn btn-sm btnPrioridade mr-5"
+                      :class="{
+                        prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
+                        prioridadeUrgente : projetoExibir.prioridade == 1,
+                        prioridadeAlta : projetoExibir.prioridade == 2,
+                        prioridadeMedia : projetoExibir.prioridade == 3,
+                        prioridadeBaixa : projetoExibir.prioridade == 4,
+                        prioridadeBaixissima : projetoExibir.prioridade == 5,
+                      }">
+                      {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
+                    </button>
                   <button type="button" disabled="true"
                     v-if="!projetoExibir.editMode && projetoExibir.fixado"
                     class="btn btn-sm btn-clear mr-10 my-5 btn">
@@ -298,8 +298,9 @@ section.projetoShow {
                   </button>
                 </div>
 
-                <div v-if="projetoExibir.editMode">
-                  <div class="marginVerticalSpacer">
+                <div v-if="projetoExibir.editMode" :class="{ 'flex' : isSmallScreen, 'flex-column' : !isSmallScreen}">
+
+                  <div class="marginVerticalSpacer" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoPendente"
                       :class="{selected : projetoExibir.situacaoEditar == 1}"
                       @click="toggleEditarSituacao(projetoExibir, 1)">
@@ -321,7 +322,9 @@ section.projetoShow {
                       3-Concluído
                     </button>
                   </div>
-                  <div class="marginVerticalSpacer">
+                  
+
+                  <div class="marginVerticalSpacer" :class="{ 'flex' : !isSmallScreen, 'flex-column ml-10' : isSmallScreen}">
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeUrgente"
                       :class="{selected : projetoExibir.prioridadeEditar == 1}"
                       @click="toggleEditarPrioridade(projetoExibir, 1)">
@@ -348,6 +351,7 @@ section.projetoShow {
                       5-Baixissima
                     </button>
                   </div>
+
                 </div>
               </div>
 
@@ -397,7 +401,7 @@ section.projetoShow {
                 </div>
               </div>
             </div>
-            <div style="min-width: 500px; flex-grow: 2;">
+            <div style="flex-grow: 2;">
               <!-- ANOTAÇÕES -->
               <div class="mb-15">
                 <div class="mb-5">
