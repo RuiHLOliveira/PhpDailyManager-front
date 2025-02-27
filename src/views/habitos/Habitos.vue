@@ -121,10 +121,18 @@
 
                     <!-- BOTAO CHECK -->
                     <div class="pr-15">
-                      <button class="btn btn-checkbox mx-5" type="button"
-                        @click="concluirHabito(habito)"
+                      <button class="btn btn-checkbox mx-5"  style="font-size: 1.5rem;" 
+                        type="button" @click="concluirHabito(habito)"
                         :disabled="habito.busyHabitosConcluir">
-                        {{ habito.realizadoHoje ? '✅' : '🔲' }}
+
+
+                        <i class="fi fi-bs-checkbox" style="color: green;"
+                          v-if="habito.realizadoHoje"
+                        ></i>
+
+                        <i class="fi fi-bs-square" style="color: #444444;"
+                          v-if="!habito.realizadoHoje"
+                        ></i>
                       </button>
                     </div>
 
@@ -143,12 +151,12 @@
                     </div>
 
                     <!-- TITULO E MOTIVO -->
-                    <div class="pr-15">
+                    <div class="pr-15" style="max-width: 550px;">
                       <div>
-                        {{ habito.hora }} - {{ habito.descricao }}
+                        <span>{{ habito.hora }}</span>
+                        <br><span style="font-weight: bold;">{{ habito.descricao }}</span>
                       </div>
                       <div>
-                        <button type="button" class="btn btn-sm" @click="toggleShowMotivoHabito(habito)">Motivo</button>
                         <span class="my-5 p-5 italicDarkGray" v-if="showMotivo[habito.id]">
                           {{ habito.motivo ?? 'sem motivo cadastrado' }}
                         </span>
@@ -169,12 +177,21 @@
                   </div>
 
                   <!-- right buttons -->
-                  <div class="flex-column"> 
-                    <button v-if="!habito.editMode" class="btn btn-sm" type="button"
+                   
+                  <div class="flex-nowrap" v-if="!habito.editMode" style="min-width: 60px;"> 
+                    <button class="btn btn-clear btn-sm mr-10" type="button"
+                      @click="toggleShowMotivoHabito(habito)">
+                      <i class="fi fi-rr-search"></i>
+                    </button>
+                    <button class="btn btn-clear btn-sm" type="button"
                       :disabled="habito.busyHabitosConcluir"
                       @click="toggleEdicaoHabito(habito)">
-                      Editar
+                       <i class="fi fi-rs-edit"></i>
                     </button>
+                  </div>
+
+                  <div class="flex-column" v-if="habito.editMode"> 
+
                     <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
                     <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">
                       Salvar
