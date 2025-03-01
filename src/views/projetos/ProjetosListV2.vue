@@ -410,15 +410,15 @@ section.projetoShow {
                     <div class="flex-wrap justify-spacebetween borderGray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       <div class="flex-wrap">
                         <div>
-                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
-                        </div>
-                        <div>
-                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
-                        </div>
-                        <div>
                           <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
                           <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
                           <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+                        </div>
+                        <div>
+                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
+                        </div>
+                        <div>
+                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
                         </div>
                         <div>
                           {{ tarefa.hora != null ? `[${tarefa.hora}]` : '' }}

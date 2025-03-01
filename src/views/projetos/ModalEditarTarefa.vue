@@ -37,15 +37,21 @@
             </div>
           </div>
 
-          <div class="flex-wrap">
+          <div class="flex-column mt-10">
             <div class="verticalalign-center mr-10">
-              {{ tarefa.situacaoDescritivo }}
+              Situação: {{ tarefa.situacaoDescritivo }}
             </div>
             <div>
-              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-star"></i></span>
-              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-star"></i></span>
+              Prioridade: 
+              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje">
+                <i class="fi fi-sr-parking"></i>
+              </span>
+              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje">
+                <i class="fi fi-rr-parking"></i>
+              </span>
             </div>
             <div>
+              Finalizada: 
               <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
               <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
               <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
