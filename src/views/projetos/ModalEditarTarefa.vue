@@ -8,9 +8,9 @@
       <div class="modal">
 
         <section>
-          <h1>Editar Tarefa</h1>
+          <h1 class="textCenter mb-10">Editar Tarefa</h1>
 
-          <div class="flex-wrap">
+          <div class="flex-wrap my-10 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Projeto:
             </div>
@@ -19,7 +19,7 @@
             </div>
           </div>
 
-          <div class="flex-wrap">
+          <div class="flex-wrap mb-10 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Tarefa:
             </div>
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="flex-wrap">
+          <div class="flex-wrap mb-10 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Motivo:
             </div>
@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <div class="flex-column mt-10">
+          <div class="flex-column mt-10 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Situação: {{ tarefa.situacaoDescritivo }}
             </div>
@@ -68,40 +68,40 @@
           <input :disabled="busy" name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
         </section>
 
-        <div class="mt-15">
-          <h3 class="mb-5">Salvar?</h3>
-          <section class="my-15 flex-justify-space-between">
-            <div>
-              <button :disabled="busy" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-              <button :disabled="busy" class="btn btn-wider" @click="editarTarefa()">Salvar</button>
-            </div>
-          </section>
-        </div>
-
-        
         <div class="mt-15" v-if="tarefaLocal.situacao == 0">
-          <h3 class="mb-5">Concluir?</h3>
-          <section class="my-15 flex-justify-space-between">
-            <div>
-              <button :disabled="busy" class="btn btn-wider btn-red" @click="falheiTarefa()">Falhar</button>
-              <button :disabled="busy" class="btn btn-wider" @click="concluirTarefa()">Concluir</button>
-            </div>
-          </section>
-        </div>
-
-        
-        <div class="mt-15" v-if="tarefaLocal.situacao == 0">
-          <h3 class="mb-5">Meu Dia</h3>
+          <h2 class="mb-5">Prioridade</h2>
           <div v-if="!tarefa.meuDia">
-            <button :disabled="busy" class="btn btn-wider" @click="adicionarAoMeuDiaTarefa()">Meu Dia</button>
+            <button :disabled="busy" class="btn btn-clear iconBig" @click="adicionarAoMeuDiaTarefa()">
+              <i class="fi fi-sr-parking"></i> Definir como Prioridade
+            </button>
           </div>
           <div v-if="tarefa.meuDia">
-            <button :disabled="busy" class="btn btn-wider" @click="removerMeuDiaTarefa()">Remover Do Dia</button>
-          </div>
-          <div v-if="tarefa.meuDia">
-            <button :disabled="busy" class="btn btn-wider" @click="recolocarMeuDiaTarefa()">Recolocar no Dia</button>
+            <button :disabled="busy" class="btn btn-clear iconBig mr-10" @click="removerMeuDiaTarefa()">
+              <i class="fi fi-br-parking"></i> Retirar Prioridade
+            </button>
+            <button :disabled="true" class="btn btn-clear iconBig ml-10" @click="recolocarMeuDiaTarefa()">
+              <i class="fi fi-br-parking"></i> Reaplicar Prioridade - pend
+            </button>
           </div>
         </div>
+
+        <br><br>
+
+        <section class="flex-justify-space-between">
+          <div>
+            <button :disabled="busy" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
+              <i class="fi fi-br-left" ></i> Fechar
+            </button>
+            <button :disabled="busy" class="btn btn-clear iconBig ml-10" @click="editarTarefa()">
+              <i class="fi fi-br-disk"></i> Salvar
+            </button>
+          </div>
+          <div v-if="tarefaLocal.situacao == 0">
+            <button :disabled="busy" class="btn btn-clear iconBig" @click="concluirTarefa()">
+              <i class="fi fi-br-checkbox"></i> Concluir
+            </button>
+          </div>
+        </section>
 
         <InlineLoader :busy="busy"></InlineLoader>
 

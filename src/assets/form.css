@@ -6,6 +6,15 @@ label {
     margin-top: 20px;
 }
 
+.inputlikeDiv {
+    color: #3d3d3d;
+    border: 0px;
+
+    border: 1px solid var(--form-border-color);
+    /* border: 2px solid #7da3ce; */
+    padding: 5px;
+    border-radius: 3px;
+}
 
 textarea.textarea {
     font-size: 1rem;

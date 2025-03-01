@@ -6,10 +6,10 @@
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
-        <h1>Nova Tarefa</h1>
-        <h3>
-          {{ projeto?.nome }}
-          , às x:x horas
+        <h1 class="textCenter mb-10">Nova Tarefa</h1>
+        
+        <h3 class="inputlikeDiv mb-10">
+          Projeto: {{ projeto?.nome }}
         </h3>
 
         <label v-if="!projeto" for="projeto">Projeto:</label>
@@ -29,8 +29,15 @@
         <label for="hora">Hora:</label>
         <input name="hora" :disabled="busy || busyProjetosLoad" type="time" placeholder="hora" v-model="hora">
 
-        <button :disabled="busy || busyProjetosLoad" class="btn btn-wider btn-red" @click="fecharModal()">Fechar</button>
-        <button :disabled="busy || busyProjetosLoad" class="btn btn-wider" @click="criarTarefa()">Salvar</button>
+        <br>
+        <div class="mt-10">
+          <button :disabled="busy || busyProjetosLoad" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
+            <i class="fi fi-br-left" ></i> Fechar
+          </button>
+          <button :disabled="busy || busyProjetosLoad" class="btn btn-clear iconBig mr-10" @click="criarTarefa()">
+            <i class="fi fi-br-disk"></i> Salvar
+          </button>
+        </div>
         
         <InlineLoader :busy="busy || busyProjetosLoad"></InlineLoader>
       </div>
