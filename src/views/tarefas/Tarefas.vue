@@ -45,17 +45,26 @@
         <div class="flex">
           <h1 class="titulo">Tarefas</h1>
           <div class="mt-5">
-            <button type="button" class="ml-10 btn btn-sm"
+            <button type="button" class="ml-10 btn btn-sm btn-clear"
               @click="toggleShowMotivoTodasTarefas()">Motivos
             </button>
-            <button type="button" class="ml-10 btn btn-sm"
+            <button type="button" class="ml-10 btn btn-sm btn-clear"
               @click="toggleModalCriarTarefa()">Criar Tarefa
+            </button>
+            <button type="button" class="ml-10 btn btn-sm btn-clear"
+              @click="ordenarPorData()">
+                {{ deveOrdenarPorData ? 'Restaurar ordem' : 'Ordenar por data' }}
+            </button>
+            <button v-if="deveOrdenarPorData" type="button" class="ml-10 btn btn-sm btn-clear"
+              @click="inverterOrdem()">
+                Inverter Ordem
             </button>
           </div>
         </div>
-        <div class="flex mt-10">
+        <div class="flex mt-10" style="align-items: center;">
           <!-- PRIORIDADE -->
-          <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaTarefas()">
+          <span class="mr-5">Filtros:</span>
+          <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
             <option value="0">Todos</option>
             <option value="1">Prioridade 1</option>
             <option value="2">Prioridade 2</option>
@@ -63,17 +72,21 @@
             <option value="4">Prioridade 4</option>
             <option value="5">Prioridade 5</option>
           </select>
-          <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaTarefas()">
+          <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
             <option value="0">Todos</option>
             <option value="1">Pendente</option>
             <option value="2">Completa</option>
             <option value="3">Falha</option>
           </select>
-          <div class="mt-5">
-            <button type="button" class="ml-10 btn btn-sm"
-              @click="filtraListaTarefas()">Filtrar
-            </button>
-          </div>
+          <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
+          <span class="mr-5">até</span>
+          <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
+          <button type="button" class="ml-10 btn btn-sm btn-clear"
+            @click="filtraListaTarefas()">Filtrar
+          </button>
+          <button type="button" class="ml-10 btn btn-sm btn-clear"
+            @click="limparFiltroDatas()">Limpar datas
+          </button>
         </div>
       </section>
 
@@ -90,7 +103,7 @@
         <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete">
           <div v-for="tarefa in tarefas" :key="tarefa.id">
 
-            <div class="divBgOffWhite borderGray mb-10 py-10 px-10" >
+            <div v-if="tarefa.filtroNaoExibe == false" class="divBgOffWhite borderGray mb-10 py-10 px-10" >
 
               <!-- LINHA SUPERIOR -->
               <div :class="{'flex justify-spacebetween' : !isSmallScreen, 'flex-column' : isSmallScreen}">
@@ -121,8 +134,11 @@
                     </div>
                   </div>
                   <!-- LINHA 2 -->
-                  <div class="my-5 mr-10 mt-10 p-5">
+
+                  <div class="mb-5 mr-10 p-5">
                     <div>
+                      {{ tarefa.datahoraFormatted != null ? `[${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}]` : '' }}
+                      {{ ' - ' }}
                       {{ tarefa.descricao }}
                     </div>
                   </div>
@@ -231,6 +247,8 @@ export default {
   inject: ['configuracoes'],
   data: () => {
     return {
+      deveOrdenarPorData: false,
+      ordemCrescente: false,
       busyTarefasLoad: false,
       busyTarefasDelete: false,
       busyTarefasUpdate: false,
@@ -250,7 +268,9 @@ export default {
       windowWidth: 0,
       windowHeight: 0,
       selectedPrioridade: 0,
-      selectedSituacao: 1
+      selectedSituacao: 1,
+      filtroDataInicio: null,
+      filtroDataFim: null,
     }
   },
   computed: {
@@ -296,52 +316,67 @@ export default {
       this.exibirModalEditarTarefa = true;
       this.projetoModalEditarTarefa = tarefa.projeto
     },
-    // toggleFiltroSituacao(novaSituacao){
-    //   this.filtroSituacao = novaSituacao;
-    // },
-    // toggleFiltroPrioridade(novaPrioridade){
-    //   this.filtroPrioridade = novaPrioridade;
-    // },
 
-    filtraListaTarefas()
-    {
-      // guarda o backup se não existir
-      if(this.tarefasBackup.length == 0){
-        this.tarefasBackup = this.tarefas;
-      }
-      // recupera o backup para listar de forma completa
-      let listaTarefas = this.tarefasBackup;
+    limparFiltroDatas(){
+      this.filtroDataInicio = null;
+      this.filtroDataFim = null;
+    },
 
-      let arrayfilter = [];
+    definicaoFiltroDataPadrao(){
+      const oneDayTimestamp = 24 * 60 * 60 * 1000
+      let hoje = new Date()
+      let domingo = new Date(hoje.getTime() - (hoje.getDay() * oneDayTimestamp)); //returns to sunday
+      let sabado = new Date(hoje.getTime() + ( (hoje.getDay() - 2) * oneDayTimestamp));
+      domingo = this.formatDevDate(domingo);
+      sabado = this.formatDevDate(sabado);
+      this.filtroDataInicio = domingo;
+      this.filtroDataFim = sabado;
+    },
+
+    filtraListaTarefas() {
+
+      let listaTarefas = this.tarefas;
+
       let prioridadeFiltro = this.selectedPrioridade != 0 ? this.selectedPrioridade : null;
       let situacaoFiltro = this.selectedSituacao != 0 ? this.selectedSituacao : null;
+      situacaoFiltro = situacaoFiltro - 1;
 
-      // if(prioridadeFiltro == null && this.selectedSituacao == null) {
-      //   this.tarefas = this.tarefasBackup;
-      //   return;
-      // }
-      
-      // ************************ filtro por situação
+      for (let i = 0; i < listaTarefas.length; i++) {
+        listaTarefas[i].filtroNaoExibe = false;
+      }
+
       if(situacaoFiltro != null){
-        arrayfilter = [];
         for (let i = 0; i < listaTarefas.length; i++) {
-          if(listaTarefas[i].situacao == situacaoFiltro-1){
-            arrayfilter.push(listaTarefas[i])
+          if(listaTarefas[i].situacao != situacaoFiltro){
+            listaTarefas[i].filtroNaoExibe = true
           }
+        }
+      }
+      
+      if(prioridadeFiltro != null && prioridadeFiltro != 0){
+        for (let i = 0; i < listaTarefas.length; i++) {
+          if(listaTarefas[i].prioridade !== prioridadeFiltro){
+            listaTarefas[i].filtroNaoExibe = true
+          }
+        }
+      }
 
-        }
-        listaTarefas = arrayfilter;
-      }
-      // ************************ filtro por prioridade
-      if(prioridadeFiltro != null){
-        arrayfilter = [];
+      if(this.filtroDataInicio != null && this.filtroDataInicio != ''
+        && this.filtroDataFim != null && this.filtroDataFim != ''
+      ){
         for (let i = 0; i < listaTarefas.length; i++) {
-          if(listaTarefas[i].prioridade == prioridadeFiltro){
-            arrayfilter.push(listaTarefas[i])
+          if(listaTarefas[i].datahora < this.filtroDataInicio+' 00:00:00'){
+            listaTarefas[i].filtroNaoExibe = true
+          }
+          if(listaTarefas[i].datahora > this.filtroDataFim+' 23:59:59'){
+            listaTarefas[i].filtroNaoExibe = true
+          }
+          if(listaTarefas[i].datahora == null){
+            listaTarefas[i].filtroNaoExibe = true
           }
         }
-        listaTarefas = arrayfilter;
       }
+      
       // ************************ atribuição final
       this.tarefas = listaTarefas
     },
@@ -358,7 +393,7 @@ export default {
         'descricao': tarefa.descricao,
         'motivo': tarefa.motivo,
         'prioridade': prioridade,
-        'hora': tarefa.hora,
+        'datahora': tarefa.datahora,
       };
       let requestData = {
         'url': config.serverUrl + '/tarefas/' + tarefa.id + '/prioridade',
@@ -453,7 +488,7 @@ export default {
       tarefa.busyTarefasUpdate = true;
       let body = {
         'descricao': tarefa.descricao,
-        'hora': tarefa.hora,
+        'datahora': tarefa.datahora,
       };
       let requestData = {
         'url': `${config.serverUrl}/tarefas/${tarefa.id}`,
@@ -503,7 +538,24 @@ export default {
       }
     },
 
-    organizaTarefasMeuDia (tarefas) {
+    inverterOrdem(){
+      this.ordemCrescente = !this.ordemCrescente;
+      this.tarefas = this.organizaTarefasMeuDia(this.tarefas, this.deveOrdenarPorData);
+    },
+
+    ordenarPorData(){
+      this.deveOrdenarPorData = !this.deveOrdenarPorData;
+      if(this.deveOrdenarPorData){
+        //guarda
+        this.tarefasOrganizadas = this.tarefas;
+      } else {
+        //restaura
+        this.tarefas = this.tarefasOrganizadas;
+      }
+      this.tarefas = this.organizaTarefasMeuDia(this.tarefas, this.deveOrdenarPorData);
+    },
+
+    organizaTarefasMeuDia (tarefas, ordenarPorData = false) {
 
       let tarefasMeuDiaHoje = [];
       let tarefasMeuDiaAnteriores = [];
@@ -550,6 +602,30 @@ export default {
       novoArrayTarefas.push(...tarefasMeuDiaAnterioresConcluidas);
       novoArrayTarefas.push(...tarefasComuns);
       novoArrayTarefas.push(...tarefasComunsConcluidas);
+
+      if(ordenarPorData) {
+        let arrayTarefasSemData = [];
+        let arrayTarefasComData = [];
+        for (let i = 0; i < novoArrayTarefas.length; i++) {
+          if(novoArrayTarefas[i].datahora != null && novoArrayTarefas[i].datahora != ''){
+            arrayTarefasComData.push(novoArrayTarefas[i]);
+          } else {
+            arrayTarefasSemData.push(novoArrayTarefas[i]);
+          }
+        }
+        if(this.ordemCrescente) {
+          arrayTarefasComData.sort(function(tarefa1,tarefa2){
+            return new Date(tarefa1.datahora) - new Date(tarefa2.datahora);
+          });
+        } else {
+          arrayTarefasComData.sort(function(tarefa1,tarefa2){
+            return new Date(tarefa2.datahora) - new Date(tarefa1.datahora);
+          });
+        }
+        arrayTarefasComData.push(...arrayTarefasSemData);
+        return arrayTarefasComData;
+      }
+
       return novoArrayTarefas;
     },
 
@@ -560,6 +636,7 @@ export default {
         tarefas[i].editMode = false;
         tarefas[i].busyTarefasUpdate = false;
         tarefas[i].showMenuPrioridades = false
+        tarefas[i].filtroNaoExibe = false
       }
       return tarefas;
     },
@@ -579,6 +656,7 @@ export default {
   },
   created () {
     this.loadTarefas();
+    this.definicaoFiltroDataPadrao();
   },
 }
 </script>

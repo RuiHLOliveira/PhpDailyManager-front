@@ -26,7 +26,10 @@
         <label for="motivo">Motivo:</label>
         <input :disabled="busy || busyProjetosLoad" name="motivo" type="text" placeholder="motivo" v-model="motivo">
 
-        <label for="hora">Hora:</label>
+        <label for="data">data:</label>
+        <input name="data" :disabled="busy || busyProjetosLoad" type="date" placeholder="data" v-model="data">
+
+        <label for="hora">hora:</label>
         <input name="hora" :disabled="busy || busyProjetosLoad" type="time" placeholder="hora" v-model="hora">
 
         <br>
@@ -67,6 +70,7 @@ export default {
       needReload: false,
       descricao: '',
       motivo: '',
+      data: '',
       hora: '',
       configuracoes: [],
       exibeProjetoSemana: false,
@@ -120,8 +124,14 @@ export default {
       let body = {
         'descricao': this.descricao,
         'motivo': this.motivo,
-        'hora': this.hora,
+        'datahora': null,
       };
+      
+      if( this.data != null && this.data != '' && this.hora != null && this.hora != '') {
+        body['datahora'] = this.data + ' ' + this.hora
+      }
+
+      console.log('body', body);
 
       console.log('this.projeto',this.projeto);
       console.log('this.projetoNovaTarefa',this.projetoNovaTarefa);
@@ -228,7 +238,7 @@ export default {
         this.listarProjetos();
       }
     },
-    hora(newProp, oldProp) {
+    datahora(newProp, oldProp) {
       // this.horaLocal = deepCopy.deepCopy(newProp);
     },
   },

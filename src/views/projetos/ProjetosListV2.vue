@@ -421,7 +421,7 @@ section.projetoShow {
                           <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
                         </div>
                         <div>
-                          {{ tarefa.hora != null ? `[${tarefa.hora}]` : '' }}
+                          {{ tarefa.datahoraFormatted != null ? `[${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}]` : '' }}
                         </div>
                         <div>
                           {{ tarefa.descricao }}
@@ -876,6 +876,7 @@ export default {
       .then(([response, data]) => {
         console.log({data});
         data = this.projetosFillAdditionalProps(data)
+        data = this.projetosTarefasDataHora(data)
         data = this.projetosTarefasFillAdditionalProps(data)
         data = this.projetosTarefasOrganizar(data)
         this.projetos = data
@@ -890,6 +891,20 @@ export default {
       });
     },
     
+    projetosTarefasDataHora(projetos){
+      let dateHoje = new Date();
+      for (let i = 0; i < projetos.length; i++) {
+        for (let j = 0; j < projetos[i].tarefas.length; j++) {
+          if(projetos[i].tarefas[j].datahora != null && projetos[i].tarefas[j].datahora != '') {
+            let array = projetos[i].tarefas[j].datahora.split(" ");
+            projetos[i].tarefas[j].data = array[0];
+            projetos[i].tarefas[j].hora = array[1];
+          }
+        }
+      }
+      return projetos;
+    },
+
     projetosTarefasFillAdditionalProps(projetos){
       let dateHoje = new Date();
       for (let i = 0; i < projetos.length; i++) {
@@ -916,6 +931,20 @@ export default {
             tarefasPendentes.push(projetos[i].tarefas[j])
           }
         }
+        
+        tarefasConcluidas.sort(function(tarefa1,tarefa2){
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(tarefa1.datahora) - new Date(tarefa2.datahora);
+        });
+        
+        tarefasPendentes.sort(function(tarefa1,tarefa2){
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(tarefa1.datahora) - new Date(tarefa2.datahora);
+        });
+
+        // finalização
         tarefasPendentes.push(...tarefasConcluidas);
         projetos[i].tarefas = tarefasPendentes
       }
@@ -967,7 +996,7 @@ export default {
 
     loadTarefas(projeto){
       this.busyTarefasLoad = true;
-      const params = {'orderBy': 'hora,asc', 'projeto': projeto.id};
+      const params = {'orderBy': 'datahora,desc', 'projeto': projeto.id};
       let requestData = {
         'url': `${config.serverUrl}/tarefas${QueryStringConverter.toQueryString(params, true)}`,
       };

@@ -10,7 +10,7 @@
         <section>
           <h1 class="textCenter mb-10">Editar Tarefa</h1>
 
-          <div class="flex-wrap my-10 inputlikeDiv">
+          <div class="flex-wrap my-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Projeto:
             </div>
@@ -19,7 +19,7 @@
             </div>
           </div>
 
-          <div class="flex-wrap mb-10 inputlikeDiv">
+          <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Tarefa:
             </div>
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="flex-wrap mb-10 inputlikeDiv">
+          <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Motivo:
             </div>
@@ -37,11 +37,18 @@
             </div>
           </div>
 
-          <div class="flex-column mt-10 inputlikeDiv">
+          
+          <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
-              Situação: {{ tarefa.situacaoDescritivo }}
+              Data e Hora:
             </div>
             <div>
+              <h3>{{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '' }}</h3>
+            </div>
+          </div>
+
+          <div class="flex-wrap mb-10">
+            <div class="inputlikeDiv">
               Prioridade: 
               <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje">
                 <i class="fi fi-sr-parking"></i>
@@ -50,22 +57,35 @@
                 <i class="fi fi-rr-parking"></i>
               </span>
             </div>
-            <div>
+            <div class="inputlikeDiv">
               Finalizada: 
               <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
               <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
               <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
             </div>
+            <div class="inputlikeDiv verticalalign-center mr-10">
+              Situação: {{ tarefa.situacaoDescritivo }}
+            </div>
           </div>
           
+          <br>
+
           <label for="tarefa">Tarefa:</label>
           <input :disabled="busy" name="tarefa" type="text" placeholder="tarefa" v-model="tarefaLocal.descricao">
           
           <label for="motivo">Motivo:</label>
           <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefaLocal.motivo">
 
-          <label for="hora">Hora:</label>
-          <input :disabled="busy" name="hora" type="time" placeholder="hora" v-model="tarefaLocal.hora">
+          <label for="data">data:</label>
+          <input name="data" :disabled="busy || busyProjetosLoad" type="date" placeholder="data" v-model="data">
+
+          <label for="hora">hora:</label>
+          <input name="hora" :disabled="busy || busyProjetosLoad" type="time" placeholder="hora" v-model="hora">
+          
+          <button class="btn btn-sm btn-clear" @click="zerarDataHora()">
+            Apagar Data e Hora
+          </button>
+
         </section>
 
         <div class="mt-15" v-if="tarefaLocal.situacao == 0">
@@ -131,7 +151,9 @@ export default {
       busy: false,
       needReload: false,
       configuracoes: [],
-      exibeProjetoSemana: false
+      exibeProjetoSemana: false,
+      data: [],
+      hora: [],
     }
   },
   emits: ['reloadListaProjetosHabitTracker','update:exibirModal','updateTaskEvent'],
@@ -155,6 +177,11 @@ export default {
       this.needReload = needReload;
     },
 
+    zerarDataHora(){
+      this.data = null;
+      this.hora = null;
+    },
+
     fecharModal() {
       this.$emit('update:exibirModal', this.exibirModalLocal)
       console.log('this.needReload',this.needReload);
@@ -174,8 +201,14 @@ export default {
       let body = {
         'descricao': this.tarefaLocal.descricao,
         'motivo': this.tarefaLocal.motivo,
-        'hora': this.tarefaLocal.hora,
+        'datahora': null,
       };
+
+      if( this.data != null && this.data != '' && this.hora != null && this.hora != '') {
+        body['datahora'] = this.data + ' ' + this.hora
+      }
+      console.log('body', body);
+
       let requestData = {
         'url': config.serverUrl + '/tarefas/' + this.tarefa.id,
         'headers': new Headers({'Content-Type': 'application/json'}),
@@ -315,6 +348,13 @@ export default {
     },
     tarefa(newProp, oldProp) {
       this.tarefaLocal = deepCopy.deepCopy(newProp);
+      console.log('this.tarefaLocal.datahora',this.tarefaLocal.datahora);
+      if(this.tarefaLocal.datahora != null && this.tarefaLocal.datahora != '') {
+        let array = this.tarefaLocal.datahora.split(" ");
+        console.log('array', array)
+        this.data = array[0];
+        this.hora = array[1];
+      }
     }
   },
   created () {
