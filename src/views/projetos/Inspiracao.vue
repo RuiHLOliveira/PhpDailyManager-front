@@ -1,12 +1,4 @@
 <style scoped>
-section {
-  /* margin-bottom: 20px; */
-}
-section.header {
-  h1 {
-    margin-right: 10px;
-  }
-}
 
 .projetofoto {
   border: 10px solid #ffddbb;
@@ -16,12 +8,9 @@ section.header {
 }
 
 section.projetoList {
-  flex-basis: 100%; /**mobile */
+  flex-basis: 100%;
   flex-grow: 0;
   flex-shrink: 0;
-  max-height: 100%; /**mobile */
-  max-height: 83svh; /**desktop */
-  overflow-y: scroll;
   div.projeto {
     justify-content: space-between;
     background-color: rgb(228, 228, 228);
@@ -65,20 +54,17 @@ section.projetoList {
 }
 @media only screen and (min-width: 800px) {
   section.projetoList {
-    flex-basis: 300px; /**desktop */
-    max-height: 87svh; /**desktop */
-    overflow-y: scroll;
-    margin-right: 10px;
+    flex-basis: 300px;
   }
 }
 
 
 section.projetoShow {
+  /**mobile */
   border-radius: 5px;
   flex: 1;
   /* height: 90svh; */
-  max-height: 100%; /**mobile */
-  overflow-y: visible;
+  max-height: 100%;
   .projetoShowLabel{
     /* font-style: italic; */
     /* text-decoration: underline; */
@@ -90,8 +76,6 @@ section.projetoShow {
 @media only screen and (min-width: 800px) {
   section.projetoShow {
     flex:1;
-    max-height: 87svh;
-    overflow-y: scroll;
   }
 }
 
@@ -110,19 +94,20 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
 
-      <!-- HEADER -->
-      <section class="divBgOffWhite borderGray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
-        <div class="flex alignitens-center">
-          <h1>OBJETIVOS e FOTOS</h1>
-        </div>
-      </section>
+      
+      <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
+        <!-- HEADER -->
+        <section class="div_bg_offwhite div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
+          <div class="flex alignitens-center">
+            <h1>OBJETIVOS e FOTOS</h1>
+          </div>
+        </section>
 
-      <div>
-
+        <div>
           <!-- FILTER -->
-          <div class="mt-10 p-5 divBgOffWhite borderGray flex-wrap" v-if="projetoExibir.id == null">
+          <div class="mt-10 p-5 div_bg_offwhite div_border_gray flex-wrap" v-if="projetoExibir.id == null">
             <div class="mr-15">
               <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
             </div>
@@ -148,7 +133,10 @@ section.projetoShow {
               <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
             </div>
           </div>
+        </div>
+      </div>
 
+      <div>
         <!-- PROJETO LIST -->
         <section class="projetoList" v-if="projetoExibir.id == null">
 
@@ -159,7 +147,7 @@ section.projetoShow {
 
               <div v-if="projeto.nome.includes('OBJ - ')">
 
-                <div class="projeto divBgOffWhite borderGray my-10 ml-5 mr-15"
+                <div class="projeto div_bg_offwhite div_border_gray my-10 ml-5 mr-15"
                 :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                   <!-- PROJETO NOME -->
                   <span class="py-10 px-10">
@@ -207,7 +195,7 @@ section.projetoShow {
                   <div class="flex-wrap">
                     <!-- CADA PROJETO FOTO -->
                     <div v-for="projetofoto in projeto.projetosfotos" :key="projetofoto?.id" >
-                      <div class="flex-column borderGray ml-5 mr-5 p-5 mb-5" v-if="projetofoto != null">
+                      <div class="flex-column div_border_gray ml-5 mr-5 p-5 mb-5" v-if="projetofoto != null">
                           <div class="mb-10">
                             {{ projetofoto.descricao }}
                             <button class="btn btn-sm btn_tarefa_concluida" type="button" 

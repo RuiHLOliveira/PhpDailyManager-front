@@ -107,10 +107,10 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
 
       <!-- HEADER -->
-      <section class="divBgOffWhite borderGray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
+      <section class="div_bg_offwhite div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
         <div class="flex alignitens-center">
           <h1>Primeira Página</h1>
         </div>
@@ -128,7 +128,7 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto divBgOffWhite borderGray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <div class="projeto div_bg_offwhite div_border_gray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                 
                 <!-- PROJETO NOME -->
                 <span class="py-10 px-10">
@@ -341,7 +341,7 @@ section.projetoShow {
                 </div>
                 <div v-if="projetoExibir.tarefas != []">
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
-                    <div class="borderGray p-5 mb-5">
+                    <div class="div_border_gray p-5 mb-5">
                       <div class="flex-wrap">
                         <div>
                           <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>

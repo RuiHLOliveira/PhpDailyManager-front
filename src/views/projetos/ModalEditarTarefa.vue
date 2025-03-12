@@ -118,7 +118,7 @@
           </div>
           <div v-if="tarefaLocal.situacao == 0">
             <button :disabled="busy" class="btn btn-clear iconBig" @click="concluirTarefa()">
-              <i class="fi fi-br-checkbox"></i> Concluir
+                <i class="fi fi-br-checkbox"></i> Concluir
             </button>
           </div>
         </section>

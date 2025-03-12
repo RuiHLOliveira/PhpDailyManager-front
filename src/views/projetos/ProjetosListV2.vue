@@ -1,12 +1,4 @@
 <style scoped>
-section {
-  /* margin-bottom: 20px; */
-}
-section.header {
-  h1 {
-    margin-right: 10px;
-  }
-}
 
 .projetofoto {
   border: 10px solid #ffddbb;
@@ -16,12 +8,9 @@ section.header {
 }
 
 section.projetoList {
-  flex-basis: 100%; /**mobile */
+  flex-basis: 100%;
   flex-grow: 0;
   flex-shrink: 0;
-  max-height: 100%; /**mobile */
-  max-height: 83svh; /**desktop */
-  overflow-y: scroll;
   div.projeto {
     justify-content: space-between;
     background-color: rgb(228, 228, 228);
@@ -65,20 +54,21 @@ section.projetoList {
 }
 @media only screen and (min-width: 800px) {
   section.projetoList {
-    flex-basis: 300px; /**desktop */
-    max-height: 87svh; /**desktop */
-    overflow-y: scroll;
-    margin-right: 10px;
+    /**desktop */
+    flex-basis: 300px;
+    /* max-height: 87svh; */
+    /* overflow-y: scroll; */
+    /* margin-right: 10px; */
   }
 }
 
 
 section.projetoShow {
+  /**mobile */
   border-radius: 5px;
   flex: 1;
   /* height: 90svh; */
-  max-height: 100%; /**mobile */
-  overflow-y: visible;
+  max-height: 100%; 
   .projetoShowLabel{
     /* font-style: italic; */
     /* text-decoration: underline; */
@@ -90,8 +80,6 @@ section.projetoShow {
 @media only screen and (min-width: 800px) {
   section.projetoShow {
     flex:1;
-    max-height: 87svh;
-    overflow-y: scroll;
   }
 }
 
@@ -110,50 +98,51 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
 
-      <!-- HEADER -->
-      <section class="divBgOffWhite borderGray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
-        <div class="flex alignitens-center">
-          <h1>Projetos</h1>
+      <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
+        <!-- HEADER -->
+        <section class="div_bg_offwhite div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
+          <div class="flex alignitens-center">
+            <h1>Projetos</h1>
+            <div>
+              <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+            </div>
+          </div>
           <div>
-            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+          </div>
+        </section>
+
+        <!-- FILTER -->
+        <div class="mt-10 p-5 div_bg_offwhite div_border_gray flex-wrap" v-if="projetoExibir.id == null">
+          <div class="mr-15">
+            <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
+          </div>
+          <!-- SITUACAO -->
+          <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
+            <option value="0">Todos</option>
+            <option value="1">Pendente</option>
+            <option value="2">Espera</option>
+            <option value="3">Pausado</option>
+            <option value="4">Concluído</option>
+          </select>
+          <!-- PRIORIDADE -->
+          <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
+            <option value="0">Todos</option>
+            <option value="1">Urgente</option>
+            <option value="2">Alta</option>
+            <option value="3">Media</option>
+            <option value="4">Baixa</option>
+            <option value="5">Baixissima</option>
+          </select>
+          <!-- BUTTON -->
+          <div class="mr-15">
+            <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
           </div>
         </div>
-        <div>
-        </div>
-      </section>
+      </div>
 
       <div>
-
-          <!-- FILTER -->
-          <div class="mt-10 p-5 divBgOffWhite borderGray flex-wrap" v-if="projetoExibir.id == null">
-            <div class="mr-15">
-              <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
-            </div>
-            <!-- SITUACAO -->
-            <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
-              <option value="0">Todos</option>
-              <option value="1">Pendente</option>
-              <option value="2">Espera</option>
-              <option value="3">Pausado</option>
-              <option value="4">Concluído</option>
-            </select>
-            <!-- PRIORIDADE -->
-            <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
-              <option value="0">Todos</option>
-              <option value="1">Urgente</option>
-              <option value="2">Alta</option>
-              <option value="3">Media</option>
-              <option value="4">Baixa</option>
-              <option value="5">Baixissima</option>
-            </select>
-            <!-- BUTTON -->
-            <div class="mr-15">
-              <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
-            </div>
-          </div>
-
         <!-- PROJETO LIST -->
         <section class="projetoList" v-if="projetoExibir.id == null">
 
@@ -162,7 +151,7 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto divBgOffWhite borderGray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <div class="projeto div_bg_offwhite div_border_gray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                 
                 <!-- PROJETO NOME -->
                 <span class="py-10 px-10">
@@ -373,7 +362,7 @@ section.projetoShow {
 
                     <!-- CADA PROJETO FOTO -->
                     <div v-for="projetofoto in projetoExibir.projetosfotos" :key="projetofoto.id" >
-                      <div class="flex-column borderGray ml-5 mr-5 p-5 mb-5">
+                      <div class="flex-column div_border_gray ml-5 mr-5 p-5 mb-5">
                           <div class="mb-10">
                             {{ projetofoto.descricao }}
                             <button class="btn btn-sm btn_tarefa_concluida" type="button" 
@@ -407,7 +396,7 @@ section.projetoShow {
                 <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas">
                   <!-- CADA TAREFA -->
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
-                    <div class="flex-wrap justify-spacebetween borderGray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
+                    <div class="flex-wrap justify-spacebetween div_border_gray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       <div class="flex-wrap">
                         <div>
                           <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>

@@ -4,9 +4,9 @@
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
       
-      <section class="divBgOffWhite borderGray my-10 p-10">
+      <section class="div_bg_offwhite div_border_gray my-10 p-10">
         <div class="flex">
           <h1 class="titulo">Realizações</h1>
         </div>
@@ -25,7 +25,7 @@
         <div v-if="tarefas != [] && !busy">
           <div v-for="tarefa in tarefas" :key="tarefa.id">
 
-            <div class="divBgOffWhite borderGray mb-10 py-10 px-10" >
+            <div class="div_bg_offwhite div_border_gray mb-10 py-10 px-10" >
 
               <!-- LINHA SUPERIOR -->
               <div :class="{'flex justify-spacebetween' : !isSmallScreen, 'flex-column' : isSmallScreen}">

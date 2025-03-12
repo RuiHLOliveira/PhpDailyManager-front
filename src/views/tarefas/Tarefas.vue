@@ -1,11 +1,30 @@
 <style>
 
 .projetoNaTarefa {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     border: 1px solid var(--gray-button-border);
-    background-color: var(--gray-button-color);
+    /* background-color: var(--gray-button-color); */
     border-radius: 5px;
 }
+.data_na_tarefa{
+  font-size: 1.2rem;
+  font-family: 'Inconsolata';
+  /* font-weight: bold; */
+  border: 1px solid var(--gray-button-border);
+  /* background-color: var(--gray-button-color); */
+  border-radius: 5px;
+}
+.descricao_tarefa {
+    border: 1px solid var(--gray-button-border);
+    /* background-color: var(--gray-button-color); */
+    border-radius: 5px;
+}
+.motivo_tarefa{
+    /* border-bottom: 1px solid var(--gray-button-border); */
+    border-left: 3px solid var(--gray-button-border);
+    /* background-color: var(--gray-button-color); */
+}
+
 
 .prioridade {
   color: rgb(19, 19, 19);
@@ -39,60 +58,62 @@
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
       
-      <section class="divBgOffWhite borderGray my-10 p-10 pb-15" style="min-height: 11vh">
-        <div class="flex">
-          <h1 class="titulo">Tarefas</h1>
-          <div class="mt-5">
+      <div class="position_sticky div_border_bottom_gray">
+        <section class="div_bg_offwhite div_border_gray my-10 p-10 pb-15" style="min-height: 11vh">
+          <div class="flex">
+            <h1 class="titulo">Tarefas</h1>
+            <div class="mt-5">
+              <button type="button" class="ml-10 btn btn-sm btn-clear"
+                @click="toggleShowMotivoTodasTarefas()">Motivos
+              </button>
+              <button type="button" class="ml-10 btn btn-sm btn-clear"
+                @click="toggleModalCriarTarefa()">Criar Tarefa
+              </button>
+              <button v-if="deveOrdenarPorData" type="button" class="ml-10 btn btn-sm btn-clear"
+                @click="inverterOrdem()">
+                  Inverter Ordem
+              </button>
+              <button type="button" class="ml-10 btn btn-sm btn-clear"
+                @click="ordenarPorData()">
+                  {{ deveOrdenarPorData ? 'Restaurar ordem' : 'Ordenar por data' }}
+              </button>
+            </div>
+          </div>
+          <div class="flex mt-10" style="align-items: center;">
+            <!-- PRIORIDADE -->
+            <span class="mr-5">Filtros:</span>
+            <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
+              <option value="0">Todos</option>
+              <option value="1">Prioridade 1</option>
+              <option value="2">Prioridade 2</option>
+              <option value="3">Prioridade 3</option>
+              <option value="4">Prioridade 4</option>
+              <option value="5">Prioridade 5</option>
+            </select>
+            <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
+              <option value="0">Todos</option>
+              <option value="1">Pendente</option>
+              <option value="2">Completa</option>
+              <option value="3">Falha</option>
+            </select>
+            <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
+            <span class="mr-5">até</span>
+            <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
             <button type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="toggleShowMotivoTodasTarefas()">Motivos
+              @click="filtraListaTarefas()">Filtrar
             </button>
             <button type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="toggleModalCriarTarefa()">Criar Tarefa
-            </button>
-            <button type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="ordenarPorData()">
-                {{ deveOrdenarPorData ? 'Restaurar ordem' : 'Ordenar por data' }}
-            </button>
-            <button v-if="deveOrdenarPorData" type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="inverterOrdem()">
-                Inverter Ordem
+              @click="limparFiltroDatas()">Limpar datas
             </button>
           </div>
-        </div>
-        <div class="flex mt-10" style="align-items: center;">
-          <!-- PRIORIDADE -->
-          <span class="mr-5">Filtros:</span>
-          <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
-            <option value="0">Todos</option>
-            <option value="1">Prioridade 1</option>
-            <option value="2">Prioridade 2</option>
-            <option value="3">Prioridade 3</option>
-            <option value="4">Prioridade 4</option>
-            <option value="5">Prioridade 5</option>
-          </select>
-          <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
-            <option value="0">Todos</option>
-            <option value="1">Pendente</option>
-            <option value="2">Completa</option>
-            <option value="3">Falha</option>
-          </select>
-          <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
-          <span class="mr-5">até</span>
-          <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
-          <button type="button" class="ml-10 btn btn-sm btn-clear"
-            @click="filtraListaTarefas()">Filtrar
-          </button>
-          <button type="button" class="ml-10 btn btn-sm btn-clear"
-            @click="limparFiltroDatas()">Limpar datas
-          </button>
-        </div>
-      </section>
+        </section>
+      </div>
 
 
       <!-- LISTA TAREFAS -->
-      <div class="pt-10 px-10" style="max-height: 82vh; overflow-y: scroll; border-top: 2px solid #a0a0a0;">
+      <div class="pt-10 px-10">
         <!-- LOADER -->
         <InlineLoader
           :textoAguarde="true"
@@ -103,7 +124,7 @@
         <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete">
           <div v-for="tarefa in tarefas" :key="tarefa.id">
 
-            <div v-if="tarefa.filtroNaoExibe == false" class="divBgOffWhite borderGray mb-10 py-10 px-10" >
+            <div v-if="tarefa.filtroNaoExibe == false" class="div_bg_offwhite div_border_gray mb-10 py-10 px-10" >
 
               <!-- LINHA SUPERIOR -->
               <div :class="{'flex justify-spacebetween' : !isSmallScreen, 'flex-column' : isSmallScreen}">
@@ -129,24 +150,32 @@
                         'prioridade p5' : tarefa.prioridade == 5
                       }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : '-' }}</span>
                     </div>
+                  </div>
+
+                  <!-- LINHA 2 -->
+                  <div class="flex-wrap">
+                    <div class="ycenter mt-5 mr-10">
+                      <span class="data_na_tarefa p-5">
+                        {{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '___ __/__/__ __:__' }}
+                      </span>
+                    </div>
                     <div class="ycenter mt-5 mr-10">
                       <span class="projetoNaTarefa p-5">{{ tarefa.projeto.nome }}</span>
                     </div>
                   </div>
-                  <!-- LINHA 2 -->
 
-                  <div class="mb-5 mr-10 p-5">
-                    <div>
-                      {{ tarefa.datahoraFormatted != null ? `[${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}]` : '' }}
-                      {{ ' - ' }}
+                  <div class="mt-10 mb-5 mr-10 p-5 descricao_tarefa">
+                    <span>
                       {{ tarefa.descricao }}
-                    </div>
+                    </span>
                   </div>
-                  <div>
-                    <span class="ml-5 mr-5 p-5 italicDarkGray" v-if="showMotivo[tarefa.id]" >
+
+                  <div class="mt-10">
+                    <span class="mr-5 p-5 pl-10 italicDarkGray motivo_tarefa" v-if="showMotivo[tarefa.id]" >
                       "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
                     </span>
                   </div>
+
                 </div>
 
                 <!-- BUTTONS -->

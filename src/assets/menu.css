@@ -1,0 +1,54 @@
+
+nav.topNav {
+    border-bottom: 1px solid #b8b8b8;
+    position: absolute;
+    min-width: 100svw;
+    background-color: #eeeeee;
+    z-index: 60;
+}
+
+nav.leftNav {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #878787;
+    min-width: 100svw;
+    max-width: 100svw;
+    min-height: 100svh;
+    max-height: 100svh;
+    background-color: var(--default-button-color);
+    background-color: #ffffff;
+    font-size: 1.1rem;
+    .leftNavTitle {
+        padding: 0 10px;
+        text-align: center;
+        font-size: 1.5rem;
+        color: white;
+        color: #000000;
+    }
+    .leftNavText {
+        padding: 0 10px;
+        text-align: center;
+        color: white;
+        color: #000000;
+    }
+    .menuItem {
+        padding: 10px 15px;
+        text-decoration: none;
+        cursor: pointer;
+        color: rgb(255, 255, 255);
+        color: #000000;
+    }
+    .menuItem:hover {
+        background-color:  var(--default-hover-button-color);
+        background-color:  #dbdbdb;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    nav.leftNav {
+        position: fixed;
+        z-index: 10;
+        min-width: 200px;
+        max-width: 200px;
+    }
+}
