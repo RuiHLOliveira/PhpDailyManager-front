@@ -1,98 +1,95 @@
 <style>
 
-.projetoNaTarefa {
-    font-size: 0.8rem;
-    border: 1px solid var(--gray-button-border);
-    background-color: var(--gray-button-color);
-    border-radius: 5px;
-}
-
-.prioridade {
-  color: rgb(19, 19, 19);
-  padding: 2px 10px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-}
-
-.p1, button.p1 {
-  background-color: rgb(146, 0, 0);
-  color: rgb(255, 255, 255);
-}
-.p2, button.p2{
-  background-color: red;
-  color: rgb(255, 255, 255);
-}
-.p3, button.p3{
-  background-color: orange;
-  color: rgb(19, 19, 19);
-}
-.p4, button.p4{
-  background-color: yellow;
-  color: rgb(19, 19, 19);
-}
-.p5, button.p5{
-  background-color: green;
-  color: rgb(255, 255, 255);
+.tarefa {
+  padding: 10px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #919191;
+  border-bottom: 1px solid #646464;
+  border-bottom: 0px solid #d3d3d3;
+  
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #d3d3d3;
 }
 
 </style>
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
       
-      <section class="divBgOffWhite borderGray my-10 p-10 pb-15" style="min-height: 11vh">
-        <div class="flex">
-          <h1 class="titulo">Tarefas</h1>
-          <div class="mt-5">
-            <button type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="toggleShowMotivoTodasTarefas()">Motivos
-            </button>
-            <button type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="toggleModalCriarTarefa()">Criar Tarefa
-            </button>
-            <button type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="ordenarPorData()">
-                {{ deveOrdenarPorData ? 'Restaurar ordem' : 'Ordenar por data' }}
-            </button>
-            <button v-if="deveOrdenarPorData" type="button" class="ml-10 btn btn-sm btn-clear"
-              @click="inverterOrdem()">
-                Inverter Ordem
-            </button>
+      <div class="position_sticky div_border_bottom_gray div_bg_white">
+        <section class="mb-10 p-10 pb-15">
+          <!-- style="min-height: 11vh" -->
+          <div class="flex-wrap">
+            <h1 class="titulo">Tarefas</h1>
+            <div class="mt-5">
+              <button type="button" class="ml-5 btn btn-sm btn-clear"
+                @click="toggleShowMotivoTodasTarefas()">Motivos
+              </button>
+              <button type="button" class="ml-5 btn btn-sm btn-clear"
+                @click="toggleModalCriarTarefa()">Criar
+              </button>
+            </div>
+            <div class="mt-5">
+              <button type="button" class="ml-5 btn btn-sm btn-clear"
+                @click="ordenarPorData()">
+                  {{ deveOrdenarPorData ? 'Restaurar' : 'Ordenar' }}
+              </button>
+              <button v-if="deveOrdenarPorData" type="button" class="ml-5 btn btn-sm btn-clear"
+                @click="inverterOrdem()">
+                  Inverter
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="flex mt-10" style="align-items: center;">
-          <!-- PRIORIDADE -->
-          <span class="mr-5">Filtros:</span>
-          <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
-            <option value="0">Todos</option>
-            <option value="1">Prioridade 1</option>
-            <option value="2">Prioridade 2</option>
-            <option value="3">Prioridade 3</option>
-            <option value="4">Prioridade 4</option>
-            <option value="5">Prioridade 5</option>
-          </select>
-          <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
-            <option value="0">Todos</option>
-            <option value="1">Pendente</option>
-            <option value="2">Completa</option>
-            <option value="3">Falha</option>
-          </select>
-          <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
-          <span class="mr-5">até</span>
-          <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
-          <button type="button" class="ml-10 btn btn-sm btn-clear"
-            @click="filtraListaTarefas()">Filtrar
-          </button>
-          <button type="button" class="ml-10 btn btn-sm btn-clear"
-            @click="limparFiltroDatas()">Limpar datas
-          </button>
-        </div>
-      </section>
+          <div class="flex-column  mt-10">
+
+            <!-- <span class="mr-5">Filtros:</span> -->
+
+            <div class="flex-wrap" style="align-items: center;">
+
+              <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
+                <option value="0">Todos</option>
+                <option value="1">Prioridade 1</option>
+                <option value="2">Prioridade 2</option>
+                <option value="3">Prioridade 3</option>
+                <option value="4">Prioridade 4</option>
+                <option value="5">Prioridade 5</option>
+              </select>
+
+              <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
+                <option value="0">Todos</option>
+                <option value="1">Pendente</option>
+                <option value="2">Completa</option>
+                <option value="3">Falha</option>
+              </select>
+
+              <div class="flex alignitens-center" :class="{ 'mt-10': isSmallScreen, 'ml-10': !isSmallScreen,  }" >
+                <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
+                <span class="mr-5">até</span>
+                <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
+              </div>
+              
+              <div class="flex" :class="{ 'mt-10': isSmallScreen }">
+                <button type="button" class="ml-10 btn btn-sm btn-clear"
+                  @click="filtraListaTarefas()">Filtrar
+                </button>
+                <button type="button" class="ml-10 btn btn-sm btn-clear"
+                  @click="limparFiltroDatas()">Limpar datas
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
 
       <!-- LISTA TAREFAS -->
-      <div class="pt-10 px-10" style="max-height: 82vh; overflow-y: scroll; border-top: 2px solid #a0a0a0;">
+      <div class="pt-10 px-10">
         <!-- LOADER -->
         <InlineLoader
           :textoAguarde="true"
@@ -103,96 +100,116 @@
         <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete">
           <div v-for="tarefa in tarefas" :key="tarefa.id">
 
-            <div v-if="tarefa.filtroNaoExibe == false" class="divBgOffWhite borderGray mb-10 py-10 px-10" >
+            <div v-if="tarefa.filtroNaoExibe == false" class="tarefa shadow-1" >
 
-              <!-- LINHA SUPERIOR -->
-              <div :class="{'flex justify-spacebetween' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <div class="flex-column">
 
-                <div>
+                <div class="" :class="{'flex alignitens-center' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+
                   <!-- LINHA 1 -->
-                  <div class="flex-wrap">
-                    <div class="ycenter mt-5">
+                  <div class="flex-wrap alignitens-center">
+                    <div class="">
                       <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
                       <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
                       <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                     </div>
-                    <div class="ycenter mt-5">
+                    <div class="">
                       <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
                       <span class="mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
                     </div>
-                    <div class="ycenter mt-5 mr-10" v-if="tarefa.prioridade != null">
+                    <div class="ycenter mr-10">
                       <span :class="{
+                        'prioridade semPrioridade' : tarefa.prioridade == null,
                         'prioridade p1' : tarefa.prioridade == 1,
                         'prioridade p2' : tarefa.prioridade == 2,
                         'prioridade p3' : tarefa.prioridade == 3,
                         'prioridade p4' : tarefa.prioridade == 4,
                         'prioridade p5' : tarefa.prioridade == 5
-                      }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : '-' }}</span>
-                    </div>
-                    <div class="ycenter mt-5 mr-10">
-                      <span class="projetoNaTarefa p-5">{{ tarefa.projeto.nome }}</span>
+                      }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : 'Não possui' }}</span>
                     </div>
                   </div>
-                  <!-- LINHA 2 -->
 
-                  <div class="mb-5 mr-10 p-5">
-                    <div>
-                      {{ tarefa.datahoraFormatted != null ? `[${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}]` : '' }}
-                      {{ ' - ' }}
-                      {{ tarefa.descricao }}
+                  <!-- LINHA 1 BUTTONS -->
+                  <div class="" :class="{'flex-column' : isSmallScreen, 'flex alignitens-center': !isSmallScreen}">
+
+                    <div class="flex alignitens-center" :class="{'mt-10' : isSmallScreen, '': !isSmallScreen}">
+
+                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida mr-10" type="button" 
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="toggleModalEditarTarefa(tarefa)">
+                          <i class="fi fi-rr-edit"></i>
+                      </button>
+
+                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="togglePrioridadesTarefa(tarefa)">
+                          <i class="fi fi-sr-priority-importance"></i>
+                      </button>
+
+                      <div class="div_border_gray p-5 ml-10" v-if="tarefa.showMenuPrioridades" :class="{'': !isSmallScreen}">
+                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
+                          :disabled="tarefa.busyTarefasUpdate"
+                          @click="updatePrioridade(tarefa, null)">x
+                        </button>
+                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p1 mr-10" type="button"
+                          :disabled="tarefa.busyTarefasUpdate"
+                          @click="updatePrioridade(tarefa, 1)">P1
+                        </button>
+                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p2 mr-10" type="button"
+                          :disabled="tarefa.busyTarefasUpdate"
+                          @click="updatePrioridade(tarefa, 2)">P2
+                        </button>
+                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p3 mr-10" type="button"
+                          :disabled="tarefa.busyTarefasUpdate"
+                          @click="updatePrioridade(tarefa, 3)">P3
+                        </button>
+                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p4 mr-10" type="button"
+                          :disabled="tarefa.busyTarefasUpdate"
+                          @click="updatePrioridade(tarefa, 4)">P4
+                        </button>
+                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p5" type="button"
+                          :disabled="tarefa.busyTarefasUpdate"
+                          @click="updatePrioridade(tarefa, 5)">P5
+                        </button>
+                      </div>
                     </div>
+                    
+                    <div class="ycenter" :class="{'mt-10' : isSmallScreen, 'ml-10': !isSmallScreen}">
+                      <router-link class="mr-10 btn btn-sm btn-clear projetoNaTarefa p-5" :to='getProjetoUrl(tarefa.projeto)'>
+                        {{ tarefa.projeto.nome }}
+                      </router-link>
+                    </div>
+
                   </div>
-                  <div>
-                    <span class="ml-5 mr-5 p-5 italicDarkGray" v-if="showMotivo[tarefa.id]" >
+                  
+                </div>
+
+                <div>
+
+                  <!-- LINHA 2 -->
+                  <div class="mt-5 p-5">
+                    <span class="data_com_tarefa p-5">
+                      {{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '___ __/__/__ __:__' }}
+                    </span>
+                    <span class="mr-5 ml-5">
+                      <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                    </span>
+                    <span class="font-weight-bold">
+                      {{ tarefa.descricao }}
+                    </span>
+                  </div>
+
+                  <!-- LINHA 2 MOTIVO -->
+                  <div class="mt-5 mb-5" v-if="showMotivo[tarefa.id]">
+                    <span class="mr-5 p-5 pl-10 italicDarkGray motivo_tarefa" >
                       "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
                     </span>
                   </div>
+
                 </div>
 
-                <!-- BUTTONS -->
-                <div class="pt-10" style="min-width: 220px;" :class="{'borderTopGray' : isSmallScreen, 'textAlignRight': !isSmallScreen}">
-                  <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida mr-10" type="button" 
-                    :disabled="tarefa.busyTarefasUpdate"
-                    @click="togglePrioridadesTarefa(tarefa)">
-                      <i class="fi fi-sr-priority-importance"></i>
-                  </button>
-                  <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida mr-10" type="button" 
-                    :disabled="tarefa.busyTarefasUpdate"
-                    @click="toggleMeuDiaTarefa(tarefa)">
-                      <i class="fi fi-sr-brightness"></i>
-                  </button>
-                  <button v-if="!tarefa.editMode" class="btn btn_tarefa_concluida" type="button" 
-                    :disabled="tarefa.busyTarefasUpdate"
-                    @click="toggleModalEditarTarefa(tarefa)">
-                      <i class="fi fi-rr-edit"></i>
-                  </button>
-
-                  <div class="mt-15" v-if="tarefa.showMenuPrioridades" :class="{'textAlignRight': !isSmallScreen}">
-                    <button v-if="tarefa.showMenuPrioridades" class="btn p1 mr-10" type="button"
-                      :disabled="tarefa.busyTarefasUpdate"
-                      @click="updatePrioridade(tarefa, 1)">P1
-                    </button>
-                    <button v-if="tarefa.showMenuPrioridades" class="btn p2 mr-10" type="button"
-                      :disabled="tarefa.busyTarefasUpdate"
-                      @click="updatePrioridade(tarefa, 2)">P2
-                    </button>
-                    <button v-if="tarefa.showMenuPrioridades" class="btn p3 mr-10" type="button"
-                      :disabled="tarefa.busyTarefasUpdate"
-                      @click="updatePrioridade(tarefa, 3)">P3
-                    </button>
-                    <button v-if="tarefa.showMenuPrioridades" class="btn p4 mr-10" type="button"
-                      :disabled="tarefa.busyTarefasUpdate"
-                      @click="updatePrioridade(tarefa, 4)">P4
-                    </button>
-                    <button v-if="tarefa.showMenuPrioridades" class="btn p5" type="button"
-                      :disabled="tarefa.busyTarefasUpdate"
-                      @click="updatePrioridade(tarefa, 5)">P5
-                    </button>
-                  </div>
-                </div>
-                
               </div>
-              
+
               <div> <!-- LINHA INFERIOR -->
                 <InlineLoader
                   :textoAguarde="true"
@@ -209,8 +226,7 @@
       
     <ModalCriarTarefa
       v-model:exibirModal="exibirModalCriarTarefa"
-      :projeto="null"
-      @reloadListaProjetosHabitTracker="loadTarefas()">
+      :projeto="null">
     </ModalCriarTarefa>
     
     <ModalEditarTarefa
@@ -230,6 +246,7 @@
 import DateTime from '@/core/DateTime.js'
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
+import UrlBuilder from '../../core/urlBuilder';
 import QueryStringConverter from '@/core/QueryStringConverter.js'
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
@@ -281,7 +298,12 @@ export default {
     },
   },
   methods: {
-    
+
+    getProjetoUrl(projeto, fullpath = false) {
+      let response = UrlBuilder.getProjetoUrl(projeto, fullpath);
+      return response;
+    },
+
     getDimensions() {
       this.windowWidth = document.documentElement.clientWidth;
       this.windowHeight = document.documentElement.clientHeight;
@@ -322,15 +344,30 @@ export default {
       this.filtroDataFim = null;
     },
 
-    definicaoFiltroDataPadrao(){
-      const oneDayTimestamp = 24 * 60 * 60 * 1000
-      let hoje = new Date()
-      let domingo = new Date(hoje.getTime() - (hoje.getDay() * oneDayTimestamp)); //returns to sunday
-      let sabado = new Date(hoje.getTime() + ( (hoje.getDay() - 2) * oneDayTimestamp));
+    definicaoFiltroDataPadrao(usarDiaAtual = true)
+    {
+      const currentDate = new Date();
+      const currentDay = currentDate.getDay();
+      const daysToSunday = currentDay === 0 ? 0 : currentDay;
+      const daysToSaturday = currentDay === 6 ? 0 : 6 - currentDay;
+
+      let domingo = new Date(currentDate);
+      domingo.setDate(currentDate.getDate() - daysToSunday);
+      let sabado = new Date(currentDate);
+      sabado.setDate(currentDate.getDate() + daysToSaturday);
+
       domingo = this.formatDevDate(domingo);
       sabado = this.formatDevDate(sabado);
-      this.filtroDataInicio = domingo;
-      this.filtroDataFim = sabado;
+      let hoje = this.formatDevDate(currentDate);
+
+      if(usarDiaAtual) {
+        this.filtroDataInicio = hoje;
+        this.filtroDataFim = hoje;
+      } else {
+        this.filtroDataInicio = domingo;
+        this.filtroDataFim = sabado;
+      }
+
     },
 
     filtraListaTarefas() {
@@ -339,13 +376,13 @@ export default {
 
       let prioridadeFiltro = this.selectedPrioridade != 0 ? this.selectedPrioridade : null;
       let situacaoFiltro = this.selectedSituacao != 0 ? this.selectedSituacao : null;
-      situacaoFiltro = situacaoFiltro - 1;
-
+      
       for (let i = 0; i < listaTarefas.length; i++) {
         listaTarefas[i].filtroNaoExibe = false;
       }
 
       if(situacaoFiltro != null){
+        situacaoFiltro = situacaoFiltro - 1;
         for (let i = 0; i < listaTarefas.length; i++) {
           if(listaTarefas[i].situacao != situacaoFiltro){
             listaTarefas[i].filtroNaoExibe = true
@@ -355,7 +392,7 @@ export default {
       
       if(prioridadeFiltro != null && prioridadeFiltro != 0){
         for (let i = 0; i < listaTarefas.length; i++) {
-          if(listaTarefas[i].prioridade !== prioridadeFiltro){
+          if(listaTarefas[i].prioridade != prioridadeFiltro){
             listaTarefas[i].filtroNaoExibe = true
           }
         }
@@ -412,36 +449,6 @@ export default {
       });
     },
 
-    toggleMeuDiaTarefa(tarefa){
-      tarefa.busyTarefasUpdate = true;
-      let finalUrl = '';
-      if(!tarefa.meuDia){
-        finalUrl = '/meu-dia'
-      } else {
-        finalUrl = '/remover-meu-dia'
-      }
-      let requestData = {
-        'url': config.serverUrl + '/tarefas/' + tarefa.id + finalUrl,
-        'headers': new Headers({'Content-Type': 'application/json'}),
-        'method' : 'POST',
-      };
-      Request.fetch(requestData).then(([response, data]) => {
-        if(!tarefa.meuDia){
-          this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia');
-        } else {
-          this.$refs.notifier.notify('Tarefa removida do Meu Dia');
-        }
-        tarefa.meuDia = data.meuDia
-        tarefa.meuDiaObj = data.meuDiaObj
-        tarefa.busyTarefasUpdate = false;
-        this.guardarTarefaAtualizada(tarefa)
-      }).catch((error) => {
-        console.error(error);
-        tarefa.busyTarefasUpdate = false;
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-      });
-    },
-    
     toggleShowMotivoTodasTarefas () {
       for (let i = 0; i < this.tarefas.length; i++) {
         this.showMotivo[this.tarefas[i].id] = !this.showMotivo[this.tarefas[i].id];
@@ -450,18 +457,18 @@ export default {
 
     guardarTarefaAtualizada(tarefaAtualizada)
     {
-      console.log(tarefaAtualizada)
+      console.info("LOG guardando tarefa atualizada", tarefaAtualizada);
       let tarefas = this.tarefas
       for (let i = 0; i < tarefas.length; i++) {
         if(tarefas[i].id == tarefaAtualizada.id){
-          console.log('encontrei! substitui!');
+          console.info("LOG tarefa encontrada, guardando.");
           tarefas[i] = tarefaAtualizada
           break;
         }
       }
-      tarefas = this.tarefasFillDefaults(tarefas)
-      tarefas = this.organizaTarefasMeuDia(tarefas)
+      tarefas = this.ordenarTarefasPorData(tarefas)
       this.tarefas = tarefas;
+      // this.filtraListaTarefas(); // usuário irá filtrar manualmente
     },
 
     /**
@@ -518,7 +525,7 @@ export default {
       .then(([response, data]) => {
         this.fillShowMotivo(data)
         data = this.tarefasFillDefaults(data)
-        data = this.organizaTarefasMeuDia(data)
+        data = this.ordenarTarefasPorData(data)
         console.log(data)
         this.tarefas = data
         this.filtraListaTarefas();
@@ -540,7 +547,7 @@ export default {
 
     inverterOrdem(){
       this.ordemCrescente = !this.ordemCrescente;
-      this.tarefas = this.organizaTarefasMeuDia(this.tarefas, this.deveOrdenarPorData);
+      this.tarefas = this.ordenarTarefasPorData(this.tarefas, this.deveOrdenarPorData);
     },
 
     ordenarPorData(){
@@ -552,60 +559,17 @@ export default {
         //restaura
         this.tarefas = this.tarefasOrganizadas;
       }
-      this.tarefas = this.organizaTarefasMeuDia(this.tarefas, this.deveOrdenarPorData);
+      this.tarefas = this.ordenarTarefasPorData(this.tarefas, this.deveOrdenarPorData);
     },
 
-    organizaTarefasMeuDia (tarefas, ordenarPorData = false) {
-
-      let tarefasMeuDiaHoje = [];
-      let tarefasMeuDiaAnteriores = [];
-      let tarefasComuns = [];
-      let novoArrayTarefas = [];
-      let tarefasMeuDiaHojeConcluidas = [];
-      let tarefasMeuDiaAnterioresConcluidas = [];
-      let tarefasComunsConcluidas = [];
-
-      for (let i = 0; i < tarefas.length; i++) {
-        const element = tarefas[i];
-        if(element.meuDia === null || element.meuDia === false) {
-          if(element.situacao == 1) {
-            tarefasComunsConcluidas.push(element);
-            continue;
-          } else {
-            tarefasComuns.push(element);
-            continue;
-          }
-        }
-        let dateMeuDia = this.newDatetimeTz(element.meuDia);
-        let dateHoje = new Date();
-        let tarefaDeHoje = this.isSameYMD(dateMeuDia, dateHoje);
-        if(tarefaDeHoje){
-          element.meuDiaHoje = true;
-          if(element.situacao == 1){
-            tarefasMeuDiaHojeConcluidas.push(element);
-          } else {
-            tarefasMeuDiaHoje.push(element);
-          }
-          continue;
-        }
-        if(element.situacao == 1){
-          tarefasMeuDiaAnterioresConcluidas.push(element);
-        } else {
-          tarefasMeuDiaAnteriores.push(element);
-        }
-        continue;
-      }
-
-      novoArrayTarefas.push(...tarefasMeuDiaHoje);
-      novoArrayTarefas.push(...tarefasMeuDiaHojeConcluidas);
-      novoArrayTarefas.push(...tarefasMeuDiaAnteriores);
-      novoArrayTarefas.push(...tarefasMeuDiaAnterioresConcluidas);
-      novoArrayTarefas.push(...tarefasComuns);
-      novoArrayTarefas.push(...tarefasComunsConcluidas);
+    ordenarTarefasPorData (tarefas, ordenarPorData = false)
+    {
+      let novoArrayTarefas = tarefas;
 
       if(ordenarPorData) {
         let arrayTarefasSemData = [];
         let arrayTarefasComData = [];
+
         for (let i = 0; i < novoArrayTarefas.length; i++) {
           if(novoArrayTarefas[i].datahora != null && novoArrayTarefas[i].datahora != ''){
             arrayTarefasComData.push(novoArrayTarefas[i]);
@@ -613,6 +577,7 @@ export default {
             arrayTarefasSemData.push(novoArrayTarefas[i]);
           }
         }
+
         if(this.ordemCrescente) {
           arrayTarefasComData.sort(function(tarefa1,tarefa2){
             return new Date(tarefa1.datahora) - new Date(tarefa2.datahora);
@@ -622,6 +587,7 @@ export default {
             return new Date(tarefa2.datahora) - new Date(tarefa1.datahora);
           });
         }
+
         arrayTarefasComData.push(...arrayTarefasSemData);
         return arrayTarefasComData;
       }

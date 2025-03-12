@@ -19,33 +19,33 @@
             </div>
           </div>
 
-          <div class="flex-wrap mb-5 inputlikeDiv">
+          <!-- <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Tarefa:
             </div>
             <div>
               <h3>{{ tarefa.descricao }}</h3>
             </div>
-          </div>
+          </div> -->
 
-          <div class="flex-wrap mb-5 inputlikeDiv">
+          <!-- <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Motivo:
             </div>
             <div>
               <h3>{{ tarefa.motivo }}</h3>
             </div>
-          </div>
+          </div> -->
 
           
-          <div class="flex-wrap mb-5 inputlikeDiv">
+          <!-- <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Data e Hora:
             </div>
             <div>
               <h3>{{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '' }}</h3>
             </div>
-          </div>
+          </div> -->
 
           <div class="flex-wrap mb-10">
             <div class="inputlikeDiv">
@@ -76,17 +76,39 @@
           <label for="motivo">Motivo:</label>
           <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefaLocal.motivo">
 
-          <label for="data">data:</label>
+          <br>
+
+          <label for="data">data: [{{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '' }}]</label>
           <input name="data" :disabled="busy || busyProjetosLoad" type="date" placeholder="data" v-model="data">
 
           <label for="hora">hora:</label>
           <input name="hora" :disabled="busy || busyProjetosLoad" type="time" placeholder="hora" v-model="hora">
+          
+          <br>
           
           <button class="btn btn-sm btn-clear" @click="zerarDataHora()">
             Apagar Data e Hora
           </button>
 
         </section>
+        <br>
+        <section class="flex-justify-space-between">
+          <div>
+            <button :disabled="busy" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
+              <i class="fi fi-br-left" ></i> Fechar
+            </button>
+            <button :disabled="busy" class="btn btn-clear iconBig ml-10" @click="editarTarefa()">
+              <i class="fi fi-br-disk"></i> Salvar
+            </button>
+          </div>
+          <div v-if="tarefaLocal.situacao == 0">
+            <button :disabled="busy" class="btn btn-clear iconBig" @click="concluirTarefa()">
+                <i class="fi fi-br-checkbox"></i> Concluir
+            </button>
+          </div>
+        </section>
+
+        <br>
 
         <div class="mt-15" v-if="tarefaLocal.situacao == 0">
           <h2 class="mb-5">Prioridade</h2>
@@ -104,25 +126,6 @@
             </button>
           </div>
         </div>
-
-        <br><br>
-
-        <section class="flex-justify-space-between">
-          <div>
-            <button :disabled="busy" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
-              <i class="fi fi-br-left" ></i> Fechar
-            </button>
-            <button :disabled="busy" class="btn btn-clear iconBig ml-10" @click="editarTarefa()">
-              <i class="fi fi-br-disk"></i> Salvar
-            </button>
-          </div>
-          <div v-if="tarefaLocal.situacao == 0">
-            <button :disabled="busy" class="btn btn-clear iconBig" @click="concluirTarefa()">
-              <i class="fi fi-br-checkbox"></i> Concluir
-            </button>
-          </div>
-        </section>
-
         <InlineLoader :busy="busy"></InlineLoader>
 
       </div>
@@ -166,6 +169,8 @@ export default {
     /** 
      * FUNCOES HELPER IMPORTADAS
     */
+    formatDevDateTime(dateObject){return DateTime.formatDevDateTime(dateObject);},
+    formatBrDateTime(dateObject){return DateTime.formatBrDateTime(dateObject);},
     formatDevDate(dateObject){return DateTime.formatDevDate(dateObject);},
     formatBrDate(dateObject){return DateTime.formatBrDate(dateObject);},
     getWeekDay(dateObject){return DateTime.getWeekDay(dateObject);},
@@ -173,9 +178,6 @@ export default {
     /**
      * CONTROLES DE TELA
      */
-    resetFields(needReload = false){
-      this.needReload = needReload;
-    },
 
     zerarDataHora(){
       this.data = null;
@@ -188,9 +190,13 @@ export default {
       if(this.needReload == true) {
         console.log('reload');
         this.$emit('reloadListaProjetosHabitTracker', []);
-        this.$emit('updateTaskEvent', this.tarefaLocal)
-        this.resetFields();
+        this.$emit('updateTaskEvent', this.tarefaLocal);
+        this.needReload = false; // reset
       }
+    },
+
+    formHasValidDate(){
+      return ( this.data != null && this.data != '' && this.hora != null && this.hora != '' );
     },
 
     /**
@@ -204,7 +210,7 @@ export default {
         'datahora': null,
       };
 
-      if( this.data != null && this.data != '' && this.hora != null && this.hora != '') {
+      if(this.formHasValidDate()) {
         body['datahora'] = this.data + ' ' + this.hora
       }
       console.log('body', body);
@@ -218,12 +224,25 @@ export default {
       Request.fetch(requestData).then(([response, data]) => {
         this.$refs.notifier.notify('Tarefa editada!')
         this.busy = false;
-        this.resetFields(true);
+        this.needReload = true;
+        this.fillDataHoraPosAtualizacao();
       }).catch((error) => {
         console.error(error);
         this.busy = false;
         this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
       });
+    },
+
+    fillDataHoraPosAtualizacao(){
+      this.tarefaLocal.datahora = null;
+      this.tarefaLocal.datahoraFormatted = null;
+      this.tarefaLocal.datahoraWeekday = null;
+      if(this.formHasValidDate()) {
+        let datetimeObject = new Date(this.data + ' ' + this.hora);
+        this.tarefaLocal.datahora = this.formatDevDateTime(datetimeObject);
+        this.tarefaLocal.datahoraFormatted = this.formatBrDateTime(datetimeObject);
+        this.tarefaLocal.datahoraWeekday = this.getWeekDay(datetimeObject);
+      }
     },
 
     adicionarAoMeuDiaTarefa() {
@@ -236,7 +255,7 @@ export default {
       Request.fetch(requestData).then(([response, data]) => {
         this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
         this.busy = false;
-        this.resetFields(true);
+        this.needReload = true;
         this.tarefaLocal.meuDia = data.meuDia
         this.tarefaLocal.meuDiaObj = data.meuDiaObj
         this.tarefa.meuDia = data.meuDia
@@ -257,7 +276,7 @@ export default {
       Request.fetch(requestData).then(([response, data]) => {
         this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
         this.busy = false;
-        this.resetFields(true);
+        this.needReload = true;
         this.tarefaLocal.meuDia = data.meuDia
         this.tarefaLocal.meuDiaObj = data.meuDiaObj
         this.tarefa.meuDia = data.meuDia
@@ -279,7 +298,7 @@ export default {
       Request.fetch(requestData).then(([response, data]) => {
         this.$refs.notifier.notify('Tarefa alterada para "concluída!"')
         this.busy = false;
-        this.resetFields(true);
+        this.needReload = true;
         this.tarefaLocal.situacao = 1
         this.tarefa.situacao = 1
       }).catch((error) => {
@@ -299,7 +318,7 @@ export default {
       Request.fetch(requestData).then(([response, data]) => {
         this.$refs.notifier.notify('Tarefa alterada para "falhou"')
         this.busy = false;
-        this.resetFields(true);
+        this.needReload = true;
         this.tarefaLocal.situacao = 2
         this.tarefa.situacao = 2
       }).catch((error) => {
@@ -309,38 +328,6 @@ export default {
       });
     },
     
-    /**
-     * CONFIGURACOES
-     */
-    //  buscaConfiguracoes () {
-    //   this.busy = true;
-    //   let requestData = {
-    //     'url': config.serverUrl + '/configuracoes'
-    //   };
-    //   Request.fetch(requestData)
-    //   .then(([response, data]) => {
-    //     let configuracoes = this.organizaESeparaConfiguracoes(data)
-    //     this.configuracoes = configuracoes;
-    //     this.busy = false;
-    //   })
-    //   .catch((error) => {
-    //     this.busy = false;
-    //     this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-    //     console.error(error);
-    //   });
-    // },
-    // organizaESeparaConfiguracoes(lista){
-    //   let novaLista = [];
-    //   for (let i = 0; i < lista.length; i++){
-    //     let conf = lista[i];
-    //     //verificar se a conf existe na lista permitida
-    //     //colocar em lista separada por nome
-    //     novaLista[conf.chave] = conf;
-    //   }
-    //   this.exibeProjetoSemana = novaLista['exibir_projeto_semana_habit_tracker'].valor == '1' ? true : false
-    //   return novaLista
-    // },
-
   },
   watch: {
     exibirModal(newProp, oldProp) {

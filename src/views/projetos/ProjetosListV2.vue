@@ -1,12 +1,4 @@
 <style scoped>
-section {
-  /* margin-bottom: 20px; */
-}
-section.header {
-  h1 {
-    margin-right: 10px;
-  }
-}
 
 .projetofoto {
   border: 10px solid #ffddbb;
@@ -16,12 +8,9 @@ section.header {
 }
 
 section.projetoList {
-  flex-basis: 100%; /**mobile */
+  flex-basis: 100%;
   flex-grow: 0;
   flex-shrink: 0;
-  max-height: 100%; /**mobile */
-  max-height: 83svh; /**desktop */
-  overflow-y: scroll;
   div.projeto {
     justify-content: space-between;
     background-color: rgb(228, 228, 228);
@@ -65,20 +54,21 @@ section.projetoList {
 }
 @media only screen and (min-width: 800px) {
   section.projetoList {
-    flex-basis: 300px; /**desktop */
-    max-height: 87svh; /**desktop */
-    overflow-y: scroll;
-    margin-right: 10px;
+    /**desktop */
+    flex-basis: 300px;
+    /* max-height: 87svh; */
+    /* overflow-y: scroll; */
+    /* margin-right: 10px; */
   }
 }
 
 
 section.projetoShow {
+  /**mobile */
   border-radius: 5px;
   flex: 1;
   /* height: 90svh; */
-  max-height: 100%; /**mobile */
-  overflow-y: visible;
+  max-height: 100%; 
   .projetoShowLabel{
     /* font-style: italic; */
     /* text-decoration: underline; */
@@ -90,8 +80,6 @@ section.projetoShow {
 @media only screen and (min-width: 800px) {
   section.projetoShow {
     flex:1;
-    max-height: 87svh;
-    overflow-y: scroll;
   }
 }
 
@@ -110,50 +98,51 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container divBgWhite">
+    <div class="container div_bg_white">
 
-      <!-- HEADER -->
-      <section class="divBgOffWhite borderGray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
-        <div class="flex alignitens-center">
-          <h1>Projetos</h1>
+      <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
+        <!-- HEADER -->
+        <section class="div_bg_offwhite div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
+          <div class="flex alignitens-center">
+            <h1>Projetos</h1>
+            <div>
+              <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+            </div>
+          </div>
           <div>
-            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+          </div>
+        </section>
+
+        <!-- FILTER -->
+        <div class="mt-10 p-5 div_bg_offwhite div_border_gray flex-wrap" v-if="projetoExibir.id == null">
+          <div class="mr-15">
+            <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
+          </div>
+          <!-- SITUACAO -->
+          <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
+            <option value="0">Todos</option>
+            <option value="1">Pendente</option>
+            <option value="2">Espera</option>
+            <option value="3">Pausado</option>
+            <option value="4">Concluído</option>
+          </select>
+          <!-- PRIORIDADE -->
+          <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
+            <option value="0">Todos</option>
+            <option value="1">Urgente</option>
+            <option value="2">Alta</option>
+            <option value="3">Media</option>
+            <option value="4">Baixa</option>
+            <option value="5">Baixissima</option>
+          </select>
+          <!-- BUTTON -->
+          <div class="mr-15">
+            <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
           </div>
         </div>
-        <div>
-        </div>
-      </section>
+      </div>
 
       <div>
-
-          <!-- FILTER -->
-          <div class="mt-10 p-5 divBgOffWhite borderGray flex-wrap" v-if="projetoExibir.id == null">
-            <div class="mr-15">
-              <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
-            </div>
-            <!-- SITUACAO -->
-            <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
-              <option value="0">Todos</option>
-              <option value="1">Pendente</option>
-              <option value="2">Espera</option>
-              <option value="3">Pausado</option>
-              <option value="4">Concluído</option>
-            </select>
-            <!-- PRIORIDADE -->
-            <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
-              <option value="0">Todos</option>
-              <option value="1">Urgente</option>
-              <option value="2">Alta</option>
-              <option value="3">Media</option>
-              <option value="4">Baixa</option>
-              <option value="5">Baixissima</option>
-            </select>
-            <!-- BUTTON -->
-            <div class="mr-15">
-              <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
-            </div>
-          </div>
-
         <!-- PROJETO LIST -->
         <section class="projetoList" v-if="projetoExibir.id == null">
 
@@ -162,7 +151,7 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto divBgOffWhite borderGray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <div class="projeto div_bg_offwhite div_border_gray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                 
                 <!-- PROJETO NOME -->
                 <span class="py-10 px-10">
@@ -203,9 +192,9 @@ section.projetoShow {
                   </button>
                   
                   <!-- COLUNA 3 -->
-                  <button type="button" class="mr-10 btn btn-sm" @click="toggleShowProjeto(projeto)">
+                  <!-- <button type="button" class="mr-10 btn btn-sm" @click="toggleShowProjeto(projeto)">
                     ...
-                  </button>
+                  </button> -->
                   <router-link class="mr-10 btn btn-sm" :to='getProjetoUrl(projeto)'>
                     <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
                   </router-link>
@@ -232,18 +221,36 @@ section.projetoShow {
 
           <div class="mb-10 flex justify-spacebetween">
             <div>
-              <button v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">...</button>
-              <router-link v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" to='/projetosListV2'>Voltar</router-link>
+              <!-- <button v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">...</button> -->
+              <router-link v-if="!projetoExibir.editMode" class="btn btn-clear mr-10 my-5 btn" to='/projetosListV2'>
+                <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-left"></i> Voltar
+              </router-link>
 
-              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="toggleFixarProjeto(projetoExibir)">
+              <button v-if="!projetoExibir.editMode" class="btn btn-clear mx-10 my-5 btn" type="button" 
+              @click="toggleFixarProjeto(projetoExibir)">
                 {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
               </button>
-              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="toggleEdicaoProjeto(projetoExibir)">Editar</button>
-              <button v-if="projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="cancelarEdicaoProjeto(projetoExibir)">Cancelar</button>
+
+              <button v-if="!projetoExibir.editMode" class="btn btn-clear mx-10 my-5 btn" type="button" 
+              @click="toggleEdicaoProjeto(projetoExibir)">
+                Editar
+              </button>
+              <button v-if="projetoExibir.editMode" class="btn btn-clear mr-10 my-5 btn" type="button" 
+              @click="cancelarEdicaoProjeto(projetoExibir)">
+                Cancelar
+              </button>
             </div>
             <div>
-              <button v-if="projetoExibir.editMode" class="btn mx-10 my-5 btn" type="button" @click="salvarEdicaoProjeto(projetoExibir)">Salvar</button>
-              <button v-if="projetoExibir.editMode" class="btn mx-10 my-5 btn btn-red" type="button" @click="excluirProjeto(projetoExibir)">Excluir</button>
+              <button v-if="projetoExibir.editMode"
+                class="btn mx-10 my-5 btn" type="button" 
+                @click="salvarEdicaoProjeto(projetoExibir)">
+                Salvar
+              </button>
+              <button v-if="projetoExibir.editMode"
+                class="btn mx-10 my-5 btn btn-red" type="button" 
+                @click="excluirProjeto(projetoExibir)">
+                Excluir
+              </button>
             </div>
           </div>
 
@@ -258,7 +265,35 @@ section.projetoShow {
             <div class="mr-5">
               <div class="mb-15">
                 <div class="mb-5">
-                  <span class="projetoShowLabel">Título: </span>
+                  <span class="projetoShowLabel">Projeto: </span>
+                  
+                  <span v-if="!projetoExibir.editMode" class="">
+                    <!-- FIXADO -->
+                      <!-- SITUACAO -->
+                      <button type="button" class="btn btn-sm btnPrioridade mr-5"
+                        :class="{
+                          situacaoFixedWidth : configs.situacaoFixedWidth == true,
+                          situacaoPendente : projetoExibir.situacao == 1,
+                          situacaoAguardandoResposta : projetoExibir.situacao == 2,
+                          situacaoPausado : projetoExibir.situacao == 3,
+                          situacaoConcluido : projetoExibir.situacao == 4,
+                        }">
+                        {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
+                      </button>
+                      <!-- PRIORIDADE -->
+                      <button type="button" class="btn btn-sm btnPrioridade mr-5"
+                        :class="{
+                          prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
+                          prioridadeUrgente : projetoExibir.prioridade == 1,
+                          prioridadeAlta : projetoExibir.prioridade == 2,
+                          prioridadeMedia : projetoExibir.prioridade == 3,
+                          prioridadeBaixa : projetoExibir.prioridade == 4,
+                          prioridadeBaixissima : projetoExibir.prioridade == 5,
+                        }">
+                        {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
+                      </button>
+                  </span>
+
                 </div>
                 <div v-if="!projetoExibir.editMode" class="linhaBox whitespace-pre">
                   {{ projetoExibir.nome }}
@@ -269,37 +304,6 @@ section.projetoShow {
               </div>
 
               <div class="mb-15">
-                <div v-if="!projetoExibir.editMode" class="">
-                  <!-- FIXADO -->
-                    <!-- SITUACAO -->
-                    <button type="button" class="btn btn-sm btnPrioridade mr-5"
-                      :class="{
-                        situacaoFixedWidth : configs.situacaoFixedWidth == true,
-                        situacaoPendente : projetoExibir.situacao == 1,
-                        situacaoAguardandoResposta : projetoExibir.situacao == 2,
-                        situacaoPausado : projetoExibir.situacao == 3,
-                        situacaoConcluido : projetoExibir.situacao == 4,
-                      }">
-                      {{ projetoExibir.situacao }}-{{ projetoExibir.situacaoDescritivo }}
-                    </button>
-                    <!-- PRIORIDADE -->
-                    <button type="button" class="btn btn-sm btnPrioridade mr-5"
-                      :class="{
-                        prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
-                        prioridadeUrgente : projetoExibir.prioridade == 1,
-                        prioridadeAlta : projetoExibir.prioridade == 2,
-                        prioridadeMedia : projetoExibir.prioridade == 3,
-                        prioridadeBaixa : projetoExibir.prioridade == 4,
-                        prioridadeBaixissima : projetoExibir.prioridade == 5,
-                      }">
-                      {{ projetoExibir.prioridade }}-{{ projetoExibir.prioridadeDescritivo }}
-                    </button>
-                  <button type="button" disabled="true"
-                    v-if="!projetoExibir.editMode && projetoExibir.fixado"
-                    class="btn btn-sm btn-clear mr-10 my-5 btn">
-                    <i class="fi fi-ss-thumbtack"></i>
-                  </button>
-                </div>
 
                 <div v-if="projetoExibir.editMode" :class="{ 'flex' : isSmallScreen, 'flex-column' : !isSmallScreen}">
 
@@ -373,10 +377,10 @@ section.projetoShow {
 
                     <!-- CADA PROJETO FOTO -->
                     <div v-for="projetofoto in projetoExibir.projetosfotos" :key="projetofoto.id" >
-                      <div class="flex-column borderGray ml-5 mr-5 p-5 mb-5">
+                      <div class="flex-column div_border_gray ml-5 mr-5 p-5 mb-5">
                           <div class="mb-10">
                             {{ projetofoto.descricao }}
-                            <button class="btn btn-sm btn_tarefa_concluida" type="button" 
+                            <button class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
                               @click="toggleModalEditarProjetofoto(projetofoto,projetoExibir)" >
                               Editar
                             </button> 
@@ -396,9 +400,9 @@ section.projetoShow {
               <div class="mb-15">
                 <div class="mb-15 flex-wrap">
                   <span class="projetoShowLabel mr-15">Tarefas: </span>
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Pendentes</button>
-                  <button class="btn btn-sm mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar</button>
+                  <button class="btn btn-sm btn-clear mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
+                  <button class="btn btn-sm btn-clear mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
+                  <button class="btn btn-sm btn-clear mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar Tarefas</button>
                   <button type="button" class="btn btn-sm btn-clear" v-if="projetoExibir.tarefas.length > 0 && collapsarTarefas">
                     ...
                   </button>
@@ -407,31 +411,101 @@ section.projetoShow {
                 <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas">
                   <!-- CADA TAREFA -->
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
-                    <div class="flex-wrap justify-spacebetween borderGray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
-                      <div class="flex-wrap">
-                        <div>
-                          <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
-                          <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
-                          <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+                    <div class="div_border_gray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
+                      
+                      <div class="flex-column">
+
+                        <div class="" :class="{
+                          'flex-wrap': !isSmallScreen,
+                          'flex-column' : isSmallScreen
+                        }">
+
+                          <div class="flex-wrap">
+                            <div>
+                              <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+                              <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
+                              <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
+                            </div>
+                            <!-- <div>
+                              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
+                            </div>
+                            <div>
+                              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
+                            </div> -->
+                            <div class="ycenter mr-10">
+                              <span :class="{
+                                'prioridade semPrioridade' : tarefa.prioridade == null,
+                                'prioridade p1' : tarefa.prioridade == 1,
+                                'prioridade p2' : tarefa.prioridade == 2,
+                                'prioridade p3' : tarefa.prioridade == 3,
+                                'prioridade p4' : tarefa.prioridade == 4,
+                                'prioridade p5' : tarefa.prioridade == 5
+                              }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : 'Não possui' }}</span>
+                            </div>
+                          </div>
+
+                          <div :class="{'mt-10 mb-10': isSmallScreen}">
+                            
+                            <button class="btn btn-sm btn-clear sbtn_tarefa_concluida" type="button" 
+                              @click="toggleModalEditarTarefa(tarefa,projetoExibir)" >
+                              Editar
+                            </button>
+                            
+                            <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida ml-10 mr-10" type="button" 
+                              :disabled="tarefa.busyTarefasUpdate"
+                              @click="togglePrioridadesTarefa(tarefa)">
+                                <i class="fi fi-sr-priority-importance"></i>
+                            </button>
+
+                            <span v-if="tarefa.showMenuPrioridades">
+                              <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p1 mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate"
+                                @click="updatePrioridade(tarefa, 1)">P1
+                              </button>
+                              <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p2 mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate"
+                                @click="updatePrioridade(tarefa, 2)">P2
+                              </button>
+                              <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p3 mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate"
+                                @click="updatePrioridade(tarefa, 3)">P3
+                              </button>
+                              <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p4 mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate"
+                                @click="updatePrioridade(tarefa, 4)">P4
+                              </button>
+                              <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p5 mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate"
+                                @click="updatePrioridade(tarefa, 5)">P5
+                              </button>
+                              <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate"
+                                @click="updatePrioridade(tarefa, null)">x
+                              </button>
+                            </span>
+
+                          </div>
+
                         </div>
-                        <div>
-                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
+
+                        <div class="">
+                          <div CLASS="mt-10 descricao_tarefa p-5">
+                            <span class="data_com_tarefa">
+                              {{
+                                tarefa.datahoraFormatted != null ?
+                                `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` :
+                                '___ __/__/__ __:__'
+                              }}
+                            </span>
+                            <span class="mr-5 ml-5">
+                              <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                            </span>
+                            <span>
+                              {{ tarefa.descricao }}
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
-                        </div>
-                        <div>
-                          {{ tarefa.datahoraFormatted != null ? `[${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}]` : '' }}
-                        </div>
-                        <div>
-                          {{ tarefa.descricao }}
-                        </div>
-                      </div>
-                      <div>
-                        <button class="btn btn-sm btn_tarefa_concluida" type="button" 
-                          @click="toggleModalEditarTarefa(tarefa,projetoExibir)" >
-                          Editar
-                        </button>
+
                       </div>
                     </div>
                   </div>
@@ -507,6 +581,7 @@ section.projetoShow {
 import DateTime from '@/core/DateTime.js'
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
+import UrlBuilder from '../../core/urlBuilder';
 import QueryStringConverter from '@/core/QueryStringConverter.js'
 import Loader from '@/components/Loader.vue';
 import InlineLoader from '@/components/InlineLoader.vue';
@@ -517,6 +592,7 @@ import ModalEditarTarefa from '@/views/projetos/ModalEditarTarefa.vue';
 import ModalCriarProjetofoto from '@/views/projetos/ModalCriarProjetofoto.vue';
 import ModalEditarProjetofoto from '@/views/projetos/ModalEditarProjetofoto.vue';
 import BackupProjetos from "@/views/projetos/BackupProjetos.vue";
+import TarefasApi from '../../core/apis/TarefasApi';
 
 export default {
   name: 'HabitTracker',
@@ -596,8 +672,11 @@ export default {
     isSameYMD(date1, date2){return DateTime.isSameYMD(date1, date2);},
 
     getProjetoUrl(projeto) {
-      let url = '/projetosListV2/projeto/'+projeto.id;
-      return url;
+      return UrlBuilder.getProjetoUrl(projeto);
+    },
+
+    togglePrioridadesTarefa(tarefa) {
+      tarefa.showMenuPrioridades = !tarefa.showMenuPrioridades
     },
 
     showProjetoFromQueryIdProjeto() {
@@ -914,6 +993,8 @@ export default {
           if(tarefaDeHoje){
             projetos[i].tarefas[j].meuDiaHoje = true;
           }
+          projetos[i].tarefas[j].busyTarefasUpdate = false;
+          projetos[i].tarefas[j].showMenuPrioridades = false
         }
       }
       return projetos;
@@ -1010,6 +1091,20 @@ export default {
         this.busyTarefasLoad = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
         console.error(error);
+      });
+    },
+
+    updatePrioridade(tarefa, prioridade) {
+      tarefa.busyTarefasUpdate = true;
+      TarefasApi.updatePrioridade(tarefa, prioridade)
+      .then(([response, data]) => {
+        this.$refs.notifier.notify('Prioridade editada!')
+        tarefa.busyTarefasUpdate = false;
+        tarefa.prioridade = prioridade
+      }).catch((error) => {
+        console.error(error);
+        tarefa.busyTarefasUpdate = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
       });
     },
     

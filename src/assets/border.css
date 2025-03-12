@@ -1,11 +1,16 @@
-.borderGray {
+.div_border_gray {
     border: 1px solid #8d8d8d;
     border-radius: 5px;
 }
 
-.borderBottomGray {
+.div_border_bottom_gray {
     border-bottom: 1px solid #8d8d8d;
 }
 .borderTopGray {
     border-top: 1px solid #8d8d8d;
+}
+
+.div_border_whitegray {
+    border: 1px solid var(--whitegray);
+    border-radius: 5px;
 }

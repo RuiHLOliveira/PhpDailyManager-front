@@ -49,18 +49,37 @@ export default {
 
     formatDevDate (dateObject){
         let dateString = '';
-        dateString += dateObject.getFullYear() + '-'
-        dateString += this.leadingZeroes(this.add(dateObject.getMonth(), 1)) + '-'
-        // dateString += this.leadingZeroes(this.add(dateObject.getDate(), 1))
-        dateString += this.leadingZeroes(dateObject.getDate())
+        let ano = dateObject.getFullYear();
+        let mes = this.leadingZeroes(this.add(dateObject.getMonth(), 1));
+        let dia = this.leadingZeroes(dateObject.getDate());
+        dateString = `${ano}-${mes}-${dia}`;
+        return dateString
+    },
+
+    formatDevDateTime (dateObject){
+        let dateString = this.formatDevDate(dateObject);
+        let hora = this.leadingZeroes(dateObject.getHours());
+        let minuto = this.leadingZeroes(dateObject.getMinutes());
+        let segundo = this.leadingZeroes(dateObject.getSeconds());
+        dateString = `${dateString} ${hora}:${minuto}:${segundo}`;
         return dateString
     },
     
+    formatBrDateTime (dateObject){
+        let dateString = this.formatBrDate(dateObject);
+        let hora = this.leadingZeroes(dateObject.getHours());
+        let minuto = this.leadingZeroes(dateObject.getMinutes());
+        let segundo = this.leadingZeroes(dateObject.getSeconds());
+        dateString = `${dateString} ${hora}:${minuto}:${segundo}`;
+        return dateString
+    },
+
     formatBrDate (dateObject){
         let dateString = '';
-        dateString += this.leadingZeroes(this.add(dateObject.getDate(), 1)) + '/'
-        dateString += this.leadingZeroes(this.add(dateObject.getMonth(), 1)) + '/'
-        dateString += dateObject.getFullYear()
+        let ano = dateObject.getFullYear();
+        let mes = this.leadingZeroes(this.add(dateObject.getMonth(), 1));
+        let dia = this.leadingZeroes(dateObject.getDate());
+        dateString = `${dia}/${mes}/${ano}`;
         return dateString
     },
 
@@ -77,4 +96,3 @@ export default {
     }
 
 }
-  
