@@ -4,12 +4,14 @@
     <div v-if="appLoaded" >
       
       <div class="menuButton" v-if="isSmallScreen">
-        <button type="button" class="btn btn-circle shadow-2" v-if="loggedIn" @click="toggleMenu()">
+        <button type="button" class="btn shadow-2" v-if="loggedIn" @click="toggleMenu()">
           <i v-if="!showMenu" class="fi fi-rs-burger-menu"></i>
           <i v-if="showMenu" class="fi fi-rs-cross"></i>
         </button>
       </div>
+
       <div class="flex">
+
         <nav class="leftNav shadow-1" v-if="loggedIn && (!isSmallScreen || showMenu)">
           <span class="leftNavTitle my-15">Daily Manager R</span>
           <span class="leftNavText my-15">Olá, usuario!</span>
@@ -48,13 +50,14 @@
           <span class="menuItem" v-if="loggedIn" @click="logout()"><i class="fi fi-rs-sign-out-alt"></i> Logout</span>
         </nav>
 
-        <div class="mainPageDiv background">
-          <div class="background-blur">
+        <div class="mainPageDiv mainBackground">
+          <div :class="{ 'displayNone' : showMenu }">
             <router-view
               @redirectAfterLogin="redirectAfterLogin()"
             />
           </div>
         </div>
+        
       </div>
     </div>
     <Loader :busy="busy"></Loader>
@@ -104,7 +107,11 @@ export default {
   },
   methods: {
     toggleMenu() {
-      this.showMenu = !this.showMenu;
+      if(this.isSmallScreen) {
+        this.showMenu = !this.showMenu;
+      } else {
+        this.showMenu = false;
+      }
     },
 
     getDimensions() {

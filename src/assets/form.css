@@ -36,6 +36,17 @@ textarea.textareaHeight150 {
     height: 150px;
 }
 
+
+input[type=text].normalSizeInput,
+input[type=email].normalSizeInput,
+input[type=time].normalSizeInput,
+input[type=password].normalSizeInput,
+input[type=date].normalSizeInput
+{
+    width: inherit;
+    display: block;
+}
+
 input[type=text],
 input[type=email],
 input[type=time],

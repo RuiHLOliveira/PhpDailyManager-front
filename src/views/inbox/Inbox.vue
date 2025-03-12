@@ -6,12 +6,13 @@ h1.titulo {
 .inboxItem {
   /* border-bottom: 2px solid rgb(194, 194, 194); */
   border-radius: 5px;
-  background-color: #ffffffa9;
+  background-color: #eeeeee;
   min-width: 285px;
   max-width: 285px;
 }
 .inboxItem:hover {
-  background-color: #ffffffdd;
+  background-color: #dddddd;
+  cursor: pointer;
 }
 .additionalTag {
     font-size: 0.8rem;
@@ -32,39 +33,18 @@ a.link:visited {
   <div>
     <div class="container">
       
-      <section class="flex alignitens-center divBgBlur my-10 p-10">
-        <h1 class="titulo">Inbox</h1>
-        <div>
-          <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarInboxItem()">Criar +</button>
-          <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarInboxItemLote()">Criar Lote</button>
-        </div>
-      </section>
-
-      <!-- LOADER -->
-      <InlineLoader
-        :textoAguarde="true"
-        :busy="busyInboxLoad || busyInboxDelete"
-        :center="true">
-      </InlineLoader>
-      
-    <ModalCriarInboxItem
-      v-model:exibirModal="exibirModalCriarInboxItem"
-      @reloadListaInboxItem="loadInboxItem()">
-    </ModalCriarInboxItem>
-    
-    <ModalCriarInboxItemLote
-      v-model:exibirModal="exibirModalCriarInboxItemLote"
-      @reloadListaInboxItem="loadInboxItem()">
-    </ModalCriarInboxItemLote>
-
-    <ModalEditarInboxItem
-      v-model:exibirModal="exibirModalEditarInboxItem"
-      :inboxItem="inboxItemModalEditarInboxItem"
-      @reloadListaInboxItem="loadInboxItem()">
-    </ModalEditarInboxItem>
+      <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
+        <section class="flex alignitens-center div_bg_offwhite div_border_gray my-5 py-5 px-10 flex justify-spacebetween">
+          <h1 class="titulo">Inbox</h1>
+          <div>
+            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarInboxItem()">Criar +</button>
+            <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarInboxItemLote()">Criar Lote</button>
+          </div>
+        </section>
+      </div>
 
       <!-- CATEGORIAS -->
-      <section class="flex-column divBgBlur my-10 p-10">
+      <section class="flex-column my-10 p-10 div_bg_offwhite div_border_gray">
         <div>
           <h3>Categoria: {{ categoriaEscolhida.categoria }}</h3>
         </div>
@@ -78,11 +58,34 @@ a.link:visited {
         </div>
       </section>
 
+      <!-- LOADER -->
+      <InlineLoader
+        :textoAguarde="true"
+        :busy="busyInboxLoad || busyInboxDelete"
+        :center="true">
+      </InlineLoader>
+      
+      <ModalCriarInboxItem
+        v-model:exibirModal="exibirModalCriarInboxItem"
+        @reloadListaInboxItem="loadInboxItem()">
+      </ModalCriarInboxItem>
+      
+      <ModalCriarInboxItemLote
+        v-model:exibirModal="exibirModalCriarInboxItemLote"
+        @reloadListaInboxItem="loadInboxItem()">
+      </ModalCriarInboxItemLote>
+
+      <ModalEditarInboxItem
+        v-model:exibirModal="exibirModalEditarInboxItem"
+        :inboxItem="inboxItemModalEditarInboxItem"
+        @reloadListaInboxItem="loadInboxItem()">
+      </ModalEditarInboxItem>
+
       <!-- LISTA INBOXITEMS -->
       <div class="flex-wrap" v-if="inboxItems != [] && !busyInboxLoad && !busyInboxDelete">
         <div v-for="inboxItem in inboxItems" :key="inboxItem.id">
 
-          <div class="inboxItem mb-10 mx-5 py-10 px-10" @click="toggleModalEditarInboxItem(inboxItem)">
+          <div class="inboxItem div_bg_offwhite div_border_gray mb-10 mx-5 py-10 px-10" @click="toggleModalEditarInboxItem(inboxItem)">
 
             <div class="flex justify-spacebetween"> <!-- LINHA SUPERIOR -->
 

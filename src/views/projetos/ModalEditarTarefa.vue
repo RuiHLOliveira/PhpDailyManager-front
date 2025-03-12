@@ -19,33 +19,33 @@
             </div>
           </div>
 
-          <div class="flex-wrap mb-5 inputlikeDiv">
+          <!-- <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Tarefa:
             </div>
             <div>
               <h3>{{ tarefa.descricao }}</h3>
             </div>
-          </div>
+          </div> -->
 
-          <div class="flex-wrap mb-5 inputlikeDiv">
+          <!-- <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Motivo:
             </div>
             <div>
               <h3>{{ tarefa.motivo }}</h3>
             </div>
-          </div>
+          </div> -->
 
           
-          <div class="flex-wrap mb-5 inputlikeDiv">
+          <!-- <div class="flex-wrap mb-5 inputlikeDiv">
             <div class="verticalalign-center mr-10">
               Data e Hora:
             </div>
             <div>
               <h3>{{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '' }}</h3>
             </div>
-          </div>
+          </div> -->
 
           <div class="flex-wrap mb-10">
             <div class="inputlikeDiv">
@@ -76,17 +76,39 @@
           <label for="motivo">Motivo:</label>
           <input :disabled="busy" name="motivo" type="text" placeholder="motivo" v-model="tarefaLocal.motivo">
 
-          <label for="data">data:</label>
+          <br>
+
+          <label for="data">data: [{{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '' }}]</label>
           <input name="data" :disabled="busy || busyProjetosLoad" type="date" placeholder="data" v-model="data">
 
           <label for="hora">hora:</label>
           <input name="hora" :disabled="busy || busyProjetosLoad" type="time" placeholder="hora" v-model="hora">
+          
+          <br>
           
           <button class="btn btn-sm btn-clear" @click="zerarDataHora()">
             Apagar Data e Hora
           </button>
 
         </section>
+        <br>
+        <section class="flex-justify-space-between">
+          <div>
+            <button :disabled="busy" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
+              <i class="fi fi-br-left" ></i> Fechar
+            </button>
+            <button :disabled="busy" class="btn btn-clear iconBig ml-10" @click="editarTarefa()">
+              <i class="fi fi-br-disk"></i> Salvar
+            </button>
+          </div>
+          <div v-if="tarefaLocal.situacao == 0">
+            <button :disabled="busy" class="btn btn-clear iconBig" @click="concluirTarefa()">
+                <i class="fi fi-br-checkbox"></i> Concluir
+            </button>
+          </div>
+        </section>
+
+        <br>
 
         <div class="mt-15" v-if="tarefaLocal.situacao == 0">
           <h2 class="mb-5">Prioridade</h2>
@@ -104,25 +126,6 @@
             </button>
           </div>
         </div>
-
-        <br><br>
-
-        <section class="flex-justify-space-between">
-          <div>
-            <button :disabled="busy" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
-              <i class="fi fi-br-left" ></i> Fechar
-            </button>
-            <button :disabled="busy" class="btn btn-clear iconBig ml-10" @click="editarTarefa()">
-              <i class="fi fi-br-disk"></i> Salvar
-            </button>
-          </div>
-          <div v-if="tarefaLocal.situacao == 0">
-            <button :disabled="busy" class="btn btn-clear iconBig" @click="concluirTarefa()">
-              <i class="fi fi-br-checkbox"></i> Concluir
-            </button>
-          </div>
-        </section>
-
         <InlineLoader :busy="busy"></InlineLoader>
 
       </div>
