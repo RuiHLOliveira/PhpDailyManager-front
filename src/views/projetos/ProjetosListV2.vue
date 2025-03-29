@@ -515,18 +515,21 @@ section.projetoShow {
             <div style="flex-grow: 2;">
               <!-- ANOTAÇÕES -->
               <div class="mb-15">
-                <div class="mb-5">
+                <div class="mb-10">
                   <span class="projetoShowLabel">Anotações: </span>
+                  <span v-if="timeoutIDUpdateProjeto != null" class="p-5 px-5 div_border_gray">Pendente...</span>
+                  <span v-if="timeoutIDUpdateProjeto == null" class="p-5 px-5 div_border_gray">Salvo</span>
                 </div>
                 <div v-if="!projetoExibir.editMode" class="whitespace-pre mb-5 linhaBox">
                   {{ projetoExibir.anotacoes }}
                 </div>
-                <div v-if="projetoExibir.editMode" class="mb-5">
+                <div v-if="projetoExibir.editMode" class="mb-30 pb-30">
                   <textarea
                     id="projetoExibirAnotacoesEditarTextarea"
                     class="textarea"
                     name="anotacoes"
                     placeholder="anotacoes"
+                    @keydown="registrarDebounceUpdateProjeto(projetoExibir)"
                     v-model="projetoExibir.anotacoesEditar">
                   </textarea>
                 </div>
@@ -648,6 +651,8 @@ export default {
       
       windowWidth: 0,
       windowHeight: 0,
+
+      timeoutIDUpdateProjeto: null,
     }
   },
   computed: {
@@ -673,6 +678,21 @@ export default {
 
     getProjetoUrl(projeto) {
       return UrlBuilder.getProjetoUrl(projeto);
+    },
+
+    registrarDebounceUpdateProjeto(projetoEditar){
+      const tempo = 3;
+      if(this.timeoutIDUpdateProjeto != null){
+        window.clearTimeout(this.timeoutIDUpdateProjeto);
+        // console.log('timeout cancelado!');
+      }
+      this.timeoutIDUpdateProjeto = window.setTimeout(() => {
+        const sairDaEdicao = false;
+        this.salvarEdicaoProjeto(projetoEditar, sairDaEdicao)
+        console.info('salvar o projeto!', projetoEditar);
+        this.timeoutIDUpdateProjeto = null;
+        console.info('timeout removido!');
+      }, tempo * 1000);
     },
 
     togglePrioridadesTarefa(tarefa) {
@@ -856,7 +876,7 @@ export default {
           if(element != null) {
             console.log('event added');
             element.addEventListener('input', function(e){
-              this.style.height = this.scrollHeight + 3 + 'px';
+              this.style.height = this.scrollHeight + 1 + 'px';
             })
             element.style.height = element.scrollHeight + 3 + 'px';
           }
@@ -890,7 +910,8 @@ export default {
       projeto.nomeEditar = projeto.nome;
       projeto.anotacoesEditar = projeto.anotacoes;
     },
-    salvarEdicaoProjeto(projeto) {
+
+    salvarEdicaoProjeto(projeto, sairDaEdicao = true) {
       console.log(projeto.nomeEditar)
       console.log(projeto.anotacoesEditar)
       projeto.nome = projeto.nomeEditar
@@ -898,8 +919,9 @@ export default {
       projeto.prioridade = projeto.prioridadeEditar
       projeto.situacao = projeto.situacaoEditar
       console.log(projeto);
-      this.updateProjeto(projeto);
+      this.updateProjeto(projeto, sairDaEdicao);
     },
+
     toggleEditarSituacao(projeto, novaSituacao){
       projeto.situacaoEditar = novaSituacao;
     },
@@ -1045,7 +1067,7 @@ export default {
       return projetos;
     },
 
-    updateProjeto(projeto) {
+    updateProjeto(projeto, sairDaEdicao = true) {
       console.log(projeto.id);
       this.busyProjetosUpdate = true;
       let body = {
@@ -1066,7 +1088,7 @@ export default {
         this.busyProjetosUpdate = false;
         // this.resetFields(true)
         this.$refs.notifier.notify('Projeto salvo!')
-        this.toggleEdicaoProjeto(projeto)
+        if(sairDaEdicao) this.toggleEdicaoProjeto(projeto)
         // this.buscaProjetos(); // nao atualiza a lista para não atrapalhar o fluxo
       }).catch((error) => {
         console.error(error);
@@ -1184,6 +1206,9 @@ export default {
   watch: {
     configuracoes(a, b) {
       // do something
+    },
+    'projetoExibir.anotacoesEditar'(a, b) {
+      //this.registrarDebounceUpdateProjeto();
     },
     $route (to, from){
       this.showProjetoFromQueryIdProjeto();

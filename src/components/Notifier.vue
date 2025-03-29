@@ -1,54 +1,8 @@
-<template>
-  <div>
-    <div v-if="showNotify" :class="{ modalNotifyContainer : modalMode == true }">
-      <div :class="{ modalNotify : modalMode == true, 'modalNotify-error' : error == true }">
-        {{message}}
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  data: function () {
-    return {
-      modalMode: true,
-      message: '',
-      showNotify: false,
-      error: false
-    }
-  },
-  // emits: ['update:showNotify'],
-  props: {
-    // showNotify: Boolean,
-    // message: String
-  },
-  methods:{
-    notify(message, error = false){
-      this.message = message
-      this.error = error
-      this.showNotify = true
-      setTimeout(() => {
-        this.showNotify = false
-      }, 3000);
-    },
-  },
-  watch: {
-    // showNotify (newValue, oldValue) {
-    //   if(newValue === true) {
-    //     setTimeout(() => {
-    //       this.$emit('update:showNotify', false)
-    //       console.log('emitted');
-    //     }, 3000);
-    //   }
-    // }
-  },
-}
-</script>
 
 <style>
 .modalNotifyContainer {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
   top: 0;
   right: 0;
   /* width: 50vw; */
@@ -82,3 +36,54 @@ export default {
 }
 
 </style>
+
+<template>
+  <div>
+    <div v-if="showNotify || debugShow" class="fix" :class="{ modalNotifyContainer : modalMode == true }">
+      <div :class="{ modalNotify : modalMode == true, 'modalNotify-error' : error == true }">
+        {{ !debugShow ? message : debugMessage }}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data: function () {
+    return {
+      debugShow: false,
+      modalMode: true,
+      debugMessage: 'Mensagem de debugging',
+      message: '',
+      showNotify: false,
+      error: false
+    }
+  },
+  // emits: ['update:showNotify'],
+  props: {
+    // showNotify: Boolean,
+    // message: String
+  },
+  methods:{
+    notify(message, error = false){
+      this.message = message
+      this.error = error
+      this.showNotify = true
+      setTimeout(() => {
+        this.showNotify = false
+      }, 3000);
+    },
+  },
+  watch: {
+    // showNotify (newValue, oldValue) {
+    //   if(newValue === true) {
+    //     setTimeout(() => {
+    //       this.$emit('update:showNotify', false)
+    //       console.log('emitted');
+    //     }, 3000);
+    //   }
+    // }
+  },
+}
+</script>
+
