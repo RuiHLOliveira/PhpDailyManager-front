@@ -8,6 +8,15 @@
     font-size: 1.2rem;
     font-family: 'Inconsolata';
 }
+.data_com_tarefa_button_gray {
+    font-size: 1.2rem;
+    font-family: 'Inconsolata';
+    padding: 5px;
+    /* novo estilo */
+    border: 1px solid #eeeeee;
+    background-color: #eeeeee;
+    color: black;
+}
 
 .data_na_tarefa{
   font-size: 1.2rem;

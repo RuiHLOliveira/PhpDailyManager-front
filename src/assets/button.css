@@ -84,6 +84,18 @@ button.btn-clear:hover {
     background-color: #00000010;
 }
 
+/* CLEAR BUTTON */
+a.btn-gray,
+button.btn-gray {
+    border: 1px solid #eeeeee;
+    background-color: #eeeeee;
+    color: black;
+}
+a.btn-gray:hover,
+button.btn-gray:hover {
+    background-color: #dddddd;
+}
+
 /* CIRCLE BUTTON */
 a.btn-circle,
 button.btn-circle {

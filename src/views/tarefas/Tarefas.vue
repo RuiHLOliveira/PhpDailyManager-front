@@ -134,19 +134,19 @@
 
                     <div class="flex alignitens-center" :class="{'mt-10' : isSmallScreen, '': !isSmallScreen}">
 
-                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida mr-10" type="button" 
+                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-gray btn_tarefa_concluida mr-10" type="button" 
                         :disabled="tarefa.busyTarefasUpdate"
                         @click="toggleModalEditarTarefa(tarefa)">
-                          <i class="fi fi-rr-edit"></i>
+                          <i class="fi fi-rr-edit"></i> Editar
                       </button>
 
-                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
+                      <button v-if="!tarefa.editMode" class="my-10 btn btn-sm btn-gray btn_tarefa_concluida" type="button" 
                         :disabled="tarefa.busyTarefasUpdate"
                         @click="togglePrioridadesTarefa(tarefa)">
-                          <i class="fi fi-sr-priority-importance"></i>
+                          <i class="fi fi-sr-priority-importance"></i> Prioridade
                       </button>
 
-                      <div class="div_border_gray p-5 ml-10" v-if="tarefa.showMenuPrioridades" :class="{'': !isSmallScreen}">
+                      <div class="div_border_gray px-5 py-5 ml-10" v-if="tarefa.showMenuPrioridades" :class="{'': !isSmallScreen}">
                         <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
                           :disabled="tarefa.busyTarefasUpdate"
                           @click="updatePrioridade(tarefa, null)">x
@@ -175,7 +175,7 @@
                     </div>
                     
                     <div class="ycenter" :class="{'mt-10' : isSmallScreen, 'ml-10': !isSmallScreen}">
-                      <router-link class="mr-10 btn btn-sm btn-clear projetoNaTarefa p-5" :to='getProjetoUrl(tarefa.projeto)'>
+                      <router-link class="mr-10 btn btn-sm btn-gray projetoNaTarefa p-5" :to='getProjetoUrl(tarefa.projeto)'>
                         {{ tarefa.projeto.nome }}
                       </router-link>
                     </div>
@@ -188,13 +188,16 @@
 
                   <!-- LINHA 2 -->
                   <div class="mt-5 p-5">
-                    <span class="data_com_tarefa p-5">
+                    <span class="data_com_tarefa">
                       {{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '___ __/__/__ __:__' }}
                     </span>
-                    <span class="mr-5 ml-5">
+                    <!-- <span class="mr-5 ml-5">
                       <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                    </span> -->
+                    <span class="mr-5 ml-5">
+                      -
                     </span>
-                    <span class="font-weight-bold">
+                    <span class="">
                       {{ tarefa.descricao }}
                     </span>
                   </div>

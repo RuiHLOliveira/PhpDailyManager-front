@@ -7,25 +7,35 @@
 .p1, button.p1 {
     background-color: rgb(146, 0, 0);
     color: rgb(255, 255, 255);
+    font-size: 0.8rem;
 }
 .p2, button.p2{
     background-color: red;
     color: rgb(255, 255, 255);
+    font-size: 0.8rem;
 }
 .p3, button.p3{
     background-color: orange;
     color: rgb(19, 19, 19);
+    font-size: 0.8rem;
 }
 .p4, button.p4{
     background-color: yellow;
     color: rgb(19, 19, 19);
+    font-size: 0.8rem;
 }
 .p5, button.p5{
     background-color: green;
     color: rgb(255, 255, 255);
+    font-size: 0.8rem;
 }
 .semPrioridade, button.semPrioridade {
     border: 1px solid #888888;
     color: rgb(19, 19, 19);
     background-color: rgb(255, 255, 255);
+    font-size: 0.8rem;
+    /* novo estilo */
+    border: 1px solid #eeeeee;
+    background-color: #eeeeee;
+    color: black;
 }
