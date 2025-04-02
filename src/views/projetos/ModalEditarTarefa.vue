@@ -90,6 +90,10 @@
             Apagar Data e Hora
           </button>
 
+          <button class="btn btn-sm btn-clear" @click="reagendarDiaSeguinte()">
+            Reagendar para dia seguinte
+          </button>
+
         </section>
         <br>
         <section class="flex-justify-space-between">
@@ -110,7 +114,7 @@
 
         <br>
 
-        <div class="mt-15" v-if="tarefaLocal.situacao == 0">
+        <!-- <div class="mt-15" v-if="tarefaLocal.situacao == 0">
           <h2 class="mb-5">Prioridade</h2>
           <div v-if="!tarefa.meuDia">
             <button :disabled="busy" class="btn btn-clear iconBig" @click="adicionarAoMeuDiaTarefa()">
@@ -125,7 +129,7 @@
               <i class="fi fi-br-parking"></i> Reaplicar Prioridade - pend
             </button>
           </div>
-        </div>
+        </div> -->
         <InlineLoader :busy="busy"></InlineLoader>
 
       </div>
@@ -245,48 +249,48 @@ export default {
       }
     },
 
-    adicionarAoMeuDiaTarefa() {
-      this.busy = true;
-      let requestData = {
-        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/meu-dia',
-        'headers': new Headers({'Content-Type': 'application/json'}),
-        'method' : 'POST',
-      };
-      Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
-        this.busy = false;
-        this.needReload = true;
-        this.tarefaLocal.meuDia = data.meuDia
-        this.tarefaLocal.meuDiaObj = data.meuDiaObj
-        this.tarefa.meuDia = data.meuDia
-        this.tarefa.meuDiaObj = data.meuDiaObj
-      }).catch((error) => {
-        console.error(error);
-        this.busy = false;
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-      });
-    },
-    removerMeuDiaTarefa() {
-      this.busy = true;
-      let requestData = {
-        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/remover-meu-dia',
-        'headers': new Headers({'Content-Type': 'application/json'}),
-        'method' : 'POST',
-      };
-      Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
-        this.busy = false;
-        this.needReload = true;
-        this.tarefaLocal.meuDia = data.meuDia
-        this.tarefaLocal.meuDiaObj = data.meuDiaObj
-        this.tarefa.meuDia = data.meuDia
-        this.tarefa.meuDiaObj = data.meuDiaObj
-      }).catch((error) => {
-        console.error(error);
-        this.busy = false;
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-      });
-    },
+    // adicionarAoMeuDiaTarefa() {
+    //   this.busy = true;
+    //   let requestData = {
+    //     'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/meu-dia',
+    //     'headers': new Headers({'Content-Type': 'application/json'}),
+    //     'method' : 'POST',
+    //   };
+    //   Request.fetch(requestData).then(([response, data]) => {
+    //     this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
+    //     this.busy = false;
+    //     this.needReload = true;
+    //     this.tarefaLocal.meuDia = data.meuDia
+    //     this.tarefaLocal.meuDiaObj = data.meuDiaObj
+    //     this.tarefa.meuDia = data.meuDia
+    //     this.tarefa.meuDiaObj = data.meuDiaObj
+    //   }).catch((error) => {
+    //     console.error(error);
+    //     this.busy = false;
+    //     this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+    //   });
+    // },
+    // removerMeuDiaTarefa() {
+    //   this.busy = true;
+    //   let requestData = {
+    //     'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/remover-meu-dia',
+    //     'headers': new Headers({'Content-Type': 'application/json'}),
+    //     'method' : 'POST',
+    //   };
+    //   Request.fetch(requestData).then(([response, data]) => {
+    //     this.$refs.notifier.notify('Tarefa adicionada ao Meu Dia')
+    //     this.busy = false;
+    //     this.needReload = true;
+    //     this.tarefaLocal.meuDia = data.meuDia
+    //     this.tarefaLocal.meuDiaObj = data.meuDiaObj
+    //     this.tarefa.meuDia = data.meuDia
+    //     this.tarefa.meuDiaObj = data.meuDiaObj
+    //   }).catch((error) => {
+    //     console.error(error);
+    //     this.busy = false;
+    //     this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+    //   });
+    // },
 
     concluirTarefa() {
       this.busy = true;
@@ -308,33 +312,33 @@ export default {
       });
     },
 
-    falheiTarefa(){
+    reagendarDiaSeguinte() {
       this.busy = true;
       let requestData = {
-        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/falhar',
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/reagendar-dia-seguinte',
         'headers': new Headers({'Content-Type': 'application/json'}),
         'method' : 'POST',
       };
       Request.fetch(requestData).then(([response, data]) => {
-        this.$refs.notifier.notify('Tarefa alterada para "falhou"')
+        console.info('dados retornados', data);
+        this.$refs.notifier.notify('Tarefa reagendada para dia seguinte')
         this.busy = false;
         this.needReload = true;
-        this.tarefaLocal.situacao = 2
-        this.tarefa.situacao = 2
+        this.tarefaLocal.datahora = data.datahora;
+        this.tarefa.datahora = data.datahora;
+        this.processaDataHoraParaForm();
+        this.fillDataHoraPosAtualizacao();
+        // this.tarefaLocal.situacao = 2
+        // this.tarefa.situacao = 2
       }).catch((error) => {
         console.error(error);
         this.busy = false;
         this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
       });
     },
-    
-  },
-  watch: {
-    exibirModal(newProp, oldProp) {
-      // this.exibirModalLocal = newProp;
-    },
-    tarefa(newProp, oldProp) {
-      this.tarefaLocal = deepCopy.deepCopy(newProp);
+
+    processaDataHoraParaForm()
+    {
       console.log('this.tarefaLocal.datahora',this.tarefaLocal.datahora);
       if(this.tarefaLocal.datahora != null && this.tarefaLocal.datahora != '') {
         let array = this.tarefaLocal.datahora.split(" ");
@@ -342,6 +346,16 @@ export default {
         this.data = array[0];
         this.hora = array[1];
       }
+    },
+
+  },
+  watch: {
+    exibirModal(newProp, oldProp) {
+      // this.exibirModalLocal = newProp;
+    },
+    tarefa(newProp, oldProp) {
+      this.tarefaLocal = deepCopy.deepCopy(newProp);
+      this.processaDataHoraParaForm();
     }
   },
   created () {
