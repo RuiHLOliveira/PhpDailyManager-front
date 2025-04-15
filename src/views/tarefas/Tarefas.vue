@@ -236,7 +236,8 @@
       v-model:exibirModal="exibirModalEditarTarefa"
       :tarefa="tarefaModalEditarTarefa"
       :projeto="projetoModalEditarTarefa"
-      @updateTaskEvent="guardarTarefaAtualizada">
+      @updateTaskEvent="guardarTarefaAtualizada"
+      @deletedTaskEvent="removeTarefaExcluida">
     </ModalEditarTarefa>
 
     <Notifier ref="notifier"></Notifier>
@@ -472,6 +473,21 @@ export default {
       tarefas = this.ordenarTarefasPorData(tarefas)
       this.tarefas = tarefas;
       // this.filtraListaTarefas(); // usuário irá filtrar manualmente
+    },
+
+    removeTarefaExcluida(tarefaExcluida)
+    {
+      let tarefas = this.tarefas
+
+      const indice = tarefas.findIndex(tarefa => tarefa.id === tarefaExcluida.id);
+      console.log('id para remover encontrado: ', indice);
+      // Se o elemento foi encontrado (índice não é -1)
+      if (indice !== -1) {
+        console.log('removido');
+        tarefas.splice(indice, 1);
+      }
+      tarefas = this.ordenarTarefasPorData(tarefas)
+      this.tarefas = tarefas;
     },
 
     /**

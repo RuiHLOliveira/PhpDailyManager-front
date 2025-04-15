@@ -66,6 +66,11 @@
             <div class="inputlikeDiv verticalalign-center mr-10">
               Situação: {{ tarefa.situacaoDescritivo }}
             </div>
+            <div class="verticalalign-center">
+              <button :disabled="busy" class="btn btn-sm btn-clear iconBig" @click="excluirTarefa()">
+                  <i class="fi fi-br-trash"></i> Excluir
+              </button>
+            </div>
           </div>
           
           <br>
@@ -110,6 +115,7 @@
                 <i class="fi fi-br-checkbox"></i> Concluir
             </button>
           </div>
+
         </section>
 
         <br>
@@ -157,6 +163,7 @@ export default {
       tarefaLocal: [],
       busy: false,
       needReload: false,
+      tarefaExcluida: false,
       configuracoes: [],
       exibeProjetoSemana: false,
       data: [],
@@ -197,6 +204,11 @@ export default {
         this.$emit('updateTaskEvent', this.tarefaLocal);
         this.needReload = false; // reset
       }
+      if(this.tarefaExcluida == true) {
+        console.info('tarefa excluida, recarregar');
+        this.$emit('deletedTaskEvent', this.tarefaLocal);
+        this.tarefaExcluida = false
+      }
     },
 
     formHasValidDate(){
@@ -230,6 +242,29 @@ export default {
         this.busy = false;
         this.needReload = true;
         this.fillDataHoraPosAtualizacao();
+      }).catch((error) => {
+        console.error(error);
+        this.busy = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+
+    excluirTarefa() {
+      // ask for confirmation
+      if(!confirm("Deseja apagar a tarefa?")){
+        return;
+      }
+      this.busy = true;
+      let requestData = {
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id,
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'DELETE',
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        this.$refs.notifier.notify('Tarefa excluída!')
+        this.busy = false;
+        this.needReload = true;
+        this.tarefaExcluida = true;
       }).catch((error) => {
         console.error(error);
         this.busy = false;

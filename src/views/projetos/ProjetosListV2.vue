@@ -561,7 +561,8 @@ section.projetoShow {
       v-model:exibirModal="exibirModalEditarTarefa"
       :tarefa="tarefaModalEditarTarefa"
       :projeto="projetoModalEditarTarefa"
-      @updateTaskEvent="guardarTarefaAtualizada">
+      @updateTaskEvent="guardarTarefaAtualizada"
+      @deletedTaskEvent="removeTarefaExcluida">
     </ModalEditarTarefa>
 
     <ModalCriarProjetofoto
@@ -791,6 +792,26 @@ export default {
       //     }
       //   }
       // }
+    },
+
+    
+    removeTarefaExcluida(tarefaExcluida)
+    {
+      for (let i = 0; i < this.projetos.length; i++) {
+        if(this.projetos[i].id == tarefaExcluida.projeto){
+          let tarefas = this.projetos[i].tarefas
+
+          const indice = tarefas.findIndex(tarefa => tarefa.id === tarefaExcluida.id);
+          console.log('id para remover encontrado: ', indice);
+          // Se o elemento foi encontrado (índice não é -1)
+          if (indice !== -1) {
+            console.log('removido');
+            tarefas.splice(indice, 1);
+          }
+
+          this.projetos[i].tarefas = tarefas;
+        }
+      }
     },
 
     guardarProjetofotoAtualizado(projetofotoAtualizado){
