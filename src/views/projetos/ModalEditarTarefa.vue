@@ -50,10 +50,10 @@
           <div class="flex-wrap mb-10">
             <div class="inputlikeDiv">
               Prioridade: 
-              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje">
+              <span class="verticalalign-center mr-10 iconBig" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje">
                 <i class="fi fi-sr-parking"></i>
               </span>
-              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje">
+              <span class="verticalalign-center mr-10 iconBig" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje">
                 <i class="fi fi-rr-parking"></i>
               </span>
             </div>

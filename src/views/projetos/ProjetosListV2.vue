@@ -94,6 +94,13 @@ section.projetoShow {
   border: 1px solid rgb(88, 88, 88);
 }
 
+.clickableTarefa {
+  cursor: pointer;
+}
+.clickableTarefa:hover {
+  background-color: #d3d3d3;
+}
+
 </style>
 
 <template>
@@ -403,6 +410,10 @@ section.projetoShow {
                   <button class="btn btn-sm btn-clear mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
                   <button class="btn btn-sm btn-clear mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
                   <button class="btn btn-sm btn-clear mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar Tarefas</button>
+                  <button class="btn btn-sm btn-clear mr-5" type="button" @click="toggleShowBulkActionTarefa()" v-if="projetoExibir.tarefas.length > 0">
+                    {{ !showBulkActionTarefa ? 'Selecionar' : 'Esconder seleção' }}
+                  </button>
+                  <button class="btn btn-sm btn-clear mr-5" type="button" @click="deleteTarefasBulk(projetoExibir)" v-if="showBulkActionTarefa && projetoExibir.tarefas.length > 0">Apagar</button>
                   <button type="button" class="btn btn-sm btn-clear" v-if="projetoExibir.tarefas.length > 0 && collapsarTarefas">
                     ...
                   </button>
@@ -411,7 +422,10 @@ section.projetoShow {
                 <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas">
                   <!-- CADA TAREFA -->
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
-                    <div class="div_border_gray p-5 mb-5" v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
+                    <div class="div_border_gray p-5 mb-5"
+                      :class="{ 'div_bg_gray' : tarefa.selected, 'clickableTarefa' : showBulkActionTarefa }"
+                      @click="toggleTarefaSelected(tarefa)"
+                      v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       
                       <div class="flex-column">
 
@@ -422,16 +436,17 @@ section.projetoShow {
 
                           <div class="flex-wrap">
                             <div>
-                              <span class="verticalalign-center mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
-                              <span class="verticalalign-center mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
-                              <span class="verticalalign-center mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
-                            </div>
-                            <!-- <div>
-                              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
+                              <span class="verticalalign-center mr-10 iconBigTarefa" >
+                                <i v-if="tarefa.situacao == 0" class="fi fi-rs-circle"></i>
+                                <i v-if="tarefa.situacao == 1" class="fi fi-rs-check-circle"></i>
+                              </span>
                             </div>
                             <div>
-                              <span class="verticalalign-center mr-10 star-meudia" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
-                            </div> -->
+                              <span class="verticalalign-center mr-10 iconBigTarefa" v-if="showBulkActionTarefa">
+                                <i v-if="!tarefa.selected" class="fi fi-rs-horizontal-rule"></i>
+                                <i v-if="tarefa.selected" class="fi fi-rs-check"></i>
+                              </span>
+                            </div>
                             <div class="ycenter mr-10">
                               <span :class="{
                                 'prioridade semPrioridade' : tarefa.prioridade == null,
@@ -445,51 +460,57 @@ section.projetoShow {
                           </div>
 
                           <div :class="{'mt-10 mb-10': isSmallScreen}">
-                            
+
                             <button class="btn btn-sm btn-clear sbtn_tarefa_concluida" type="button" 
                               @click="toggleModalEditarTarefa(tarefa,projetoExibir)" >
                               Editar
                             </button>
-                            
+
                             <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida ml-10 mr-10" type="button" 
-                              :disabled="tarefa.busyTarefasUpdate"
+                              :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                               @click="togglePrioridadesTarefa(tarefa)">
                                 <i class="fi fi-sr-priority-importance"></i>
                             </button>
 
                             <span v-if="tarefa.showMenuPrioridades">
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p1 mr-10" type="button"
-                                :disabled="tarefa.busyTarefasUpdate"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, 1)">P1
                               </button>
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p2 mr-10" type="button"
-                                :disabled="tarefa.busyTarefasUpdate"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, 2)">P2
                               </button>
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p3 mr-10" type="button"
-                                :disabled="tarefa.busyTarefasUpdate"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, 3)">P3
                               </button>
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p4 mr-10" type="button"
-                                :disabled="tarefa.busyTarefasUpdate"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, 4)">P4
                               </button>
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p5 mr-10" type="button"
-                                :disabled="tarefa.busyTarefasUpdate"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, 5)">P5
                               </button>
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
-                                :disabled="tarefa.busyTarefasUpdate"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, null)">x
                               </button>
                             </span>
 
                           </div>
 
+                          <InlineLoader class="ml-20"
+                            :textoAguarde="false"
+                            :busy="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
+                            :center="true">
+                          </InlineLoader>
+
                         </div>
 
                         <div class="">
-                          <div CLASS="mt-10 descricao_tarefa p-5">
+                          <div class="mt-10 descricao_tarefa p-5">
                             <span class="data_com_tarefa">
                               {{
                                 tarefa.datahoraFormatted != null ?
@@ -649,6 +670,8 @@ export default {
       projetoModalEditarProjetofoto: [],
       projetofotoModalEditarProjetofoto: [],
       collapsarProjetosfotos: true,
+
+      showBulkActionTarefa: false,
       
       windowWidth: 0,
       windowHeight: 0,
@@ -685,15 +708,21 @@ export default {
       const tempo = 3;
       if(this.timeoutIDUpdateProjeto != null){
         window.clearTimeout(this.timeoutIDUpdateProjeto);
-        // console.log('timeout cancelado!');
       }
       this.timeoutIDUpdateProjeto = window.setTimeout(() => {
         const sairDaEdicao = false;
         this.salvarEdicaoProjeto(projetoEditar, sairDaEdicao)
-        console.info('salvar o projeto!', projetoEditar);
         this.timeoutIDUpdateProjeto = null;
-        console.info('timeout removido!');
       }, tempo * 1000);
+    },
+
+    toggleTarefaSelected(tarefa){
+      if(!this.showBulkActionTarefa) return;
+      tarefa.selected = !tarefa.selected;
+    },
+
+    toggleShowBulkActionTarefa() {
+      this.showBulkActionTarefa = !this.showBulkActionTarefa
     },
 
     togglePrioridadesTarefa(tarefa) {
@@ -800,7 +829,6 @@ export default {
       for (let i = 0; i < this.projetos.length; i++) {
         if(this.projetos[i].id == tarefaExcluida.projeto){
           let tarefas = this.projetos[i].tarefas
-
           const indice = tarefas.findIndex(tarefa => tarefa.id === tarefaExcluida.id);
           console.log('id para remover encontrado: ', indice);
           // Se o elemento foi encontrado (índice não é -1)
@@ -808,7 +836,6 @@ export default {
             console.log('removido');
             tarefas.splice(indice, 1);
           }
-
           this.projetos[i].tarefas = tarefas;
         }
       }
@@ -845,11 +872,6 @@ export default {
     toggleExibirTarefasConcluidas()
     {
       this.exibirTarefasConcluidas = !this.exibirTarefasConcluidas;
-    },
-
-    toggleShowTarefas(projeto) {
-      projeto.showTarefas = !projeto.showTarefas
-      if(projeto.tarefas == null) this.loadTarefas(projeto)
     },
 
     toggleModalCriarProjeto () {
@@ -904,6 +926,7 @@ export default {
         }, 1);
       }
     },
+
     toggleFixarProjeto(projeto) {
       // ask for confirmation
       this.busyProjetosDelete = true;
@@ -978,6 +1001,32 @@ export default {
     /**
      * FUNCOES FETCH API
      */
+    deleteTarefasBulk(projeto) {
+      // ask for confirmation
+      if(!confirm("Deseja apagar as tarefas selecionadas? <br> [lista de tarefas]")){
+        return;
+      }
+
+      projeto.tarefas.forEach(async tarefa => {
+        if(!tarefa.selected) {
+          return;
+        }
+        tarefa.busyTarefasDelete = true
+        let requestData = {
+          'url': config.serverUrl + '/tarefas/' + tarefa.id,
+          'headers': new Headers({'Content-Type': 'application/json'}),
+          'method' : 'DELETE',
+        };
+        let [response, data] = await Request.fetch(requestData);
+        tarefa.busyTarefasDelete = false
+        if(response.ok == true) {
+          this.removeTarefaExcluida(tarefa);
+        } else {
+          console.error("ocorreu um erro: ", tarefa, response, data);
+        }
+      });
+    },
+
     buscaProjetos (primeiraExecucao = false) {
       this.busyProjetosLoad = true;
       let params = {};
@@ -1037,7 +1086,9 @@ export default {
             projetos[i].tarefas[j].meuDiaHoje = true;
           }
           projetos[i].tarefas[j].busyTarefasUpdate = false;
+          projetos[i].tarefas[j].busyTarefasDelete = false;
           projetos[i].tarefas[j].showMenuPrioridades = false
+          projetos[i].tarefas[j].selected = false
         }
       }
       return projetos;
@@ -1074,7 +1125,6 @@ export default {
       }
       return projetos;
     },
-
 
     projetosFillAdditionalProps(projetos) {
       for (let i = 0; i < projetos.length; i++) {
@@ -1115,25 +1165,6 @@ export default {
         console.error(error);
         this.busyProjetosUpdate = false;
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
-      });
-    },
-
-    loadTarefas(projeto){
-      this.busyTarefasLoad = true;
-      const params = {'orderBy': 'datahora,desc', 'projeto': projeto.id};
-      let requestData = {
-        'url': `${config.serverUrl}/tarefas${QueryStringConverter.toQueryString(params, true)}`,
-      };
-      Request.fetch(requestData)
-      .then(([response, data]) => {
-        // console.log('tarefas', {data}, 'into', projeto.id, projeto.nome);
-        projeto.tarefas = data
-        this.busyTarefasLoad = false;
-      })
-      .catch((error) => {
-        this.busyTarefasLoad = false;
-        this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
-        console.error(error);
       });
     },
 

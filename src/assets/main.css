@@ -73,6 +73,9 @@ body {
 .div_bg_offwhite {
     background-color: var(--offWhite);
 }
+.div_bg_gray {
+    background-color: #cacaca;
+}
 
 .font-weight-bold {
     font-weight: bold;
@@ -210,17 +213,16 @@ section.sectionBorder {
 
 
 
-
-.star-meudia {
-    font-size: 1.2rem;
+.iconBigTarefa {
+    font-size: 1.3rem;
 }
 .check-pendente {
     font-size: 1.2rem;
-    color: rgb(0, 0, 0);
+    color: black;
 }
 .check-concluido {
     font-size: 1.2rem;
-    color: green;
+    color: rgb(0, 66, 128);
 }
 .check-falhado {
     font-size: 1.2rem;
