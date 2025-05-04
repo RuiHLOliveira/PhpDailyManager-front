@@ -36,6 +36,21 @@ textarea.textareaHeight150 {
     height: 150px;
 }
 
+input[type=text].inlineInput,
+input[type=email].inlineInput,
+input[type=time].inlineInput,
+input[type=password].inlineInput,
+input[type=date].inlineInput
+{
+    width: inherit;
+    display: inline-block;
+}
+
+input[type=color].inlineInput
+{
+    width: 50px;
+    display: inline-block;
+}
 
 input[type=text].normalSizeInput,
 input[type=email].normalSizeInput,
@@ -47,7 +62,14 @@ input[type=date].normalSizeInput
     display: block;
 }
 
+input[type=color].normalSizeInput
+{
+    width: 50px;
+    display: block;
+}
+
 input[type=text],
+input[type=color],
 input[type=email],
 input[type=time],
 input[type=password],
@@ -70,6 +92,7 @@ input[type=date]
 }
 
 input[type=text].defaultInput,
+input[type=color].defaultInput,
 input[type=email].defaultInput,
 input[type=time].defaultInput,
 input[type=password].defaultInput,
@@ -79,6 +102,7 @@ input[type=date].defaultInput
 }
 
 input[type=text]:focus,
+input[type=color]:focus,
 input[type=time]:focus,
 input[type=email]:focus,
 input[type=password]:focus,
@@ -89,6 +113,7 @@ textarea.textarea:focus {
 }
 
 input[type=text]:disabled,
+input[type=color]:disabled,
 input[type=time]:disabled,
 input[type=email]:disabled,
 input[type=password]:disabled,

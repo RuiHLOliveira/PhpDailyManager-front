@@ -37,6 +37,11 @@
     align-items: flex-end;
 }
 
+.flex-center-combo{
+    align-items: center;
+    align-content: center;
+}
+
 .flexGrow1{
     flex-grow: 1;
 }

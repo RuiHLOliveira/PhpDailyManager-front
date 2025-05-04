@@ -15,20 +15,28 @@
 }
 
 .modalNotify {
-  margin-top: 20px;
+  border: 2px solid #00000070;
+  margin-top: 40px;
   margin-right: 20px;
   background-color: #29bb55;
   background-color: #67cc85;
   background-color: #8fe7a9;
   border-radius: 3px;
-  padding: 10px 20px;
+  padding: 20px 20px;
   display: flex;
   justify-content: center;
   align-items: top;
   width: 300px;
   /* min-width: 300px; */
   /* height: 50px; */
-    z-index: 99;
+  z-index: 99;
+}
+
+@media only screen and (min-width: 800px) {
+  .modalNotify {
+    margin-top: 20px;
+    margin-right: 20px;
+  }
 }
 
 .modalNotify-error {
@@ -40,7 +48,7 @@
 <template>
   <div>
     <div v-if="showNotify || debugShow" class="fix" :class="{ modalNotifyContainer : modalMode == true }">
-      <div :class="{ modalNotify : modalMode == true, 'modalNotify-error' : error == true }">
+      <div class="shadow-3" :class="{ modalNotify : modalMode == true, 'modalNotify-error' : error == true }">
         {{ !debugShow ? message : debugMessage }}
       </div>
     </div>

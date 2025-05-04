@@ -13,7 +13,7 @@ section.projetoList {
   flex-shrink: 0;
   div.projeto {
     justify-content: space-between;
-    background-color: rgb(228, 228, 228);
+    /* background-color: rgb(228, 228, 228); */
     /* border-radius: 5px; */
     button.situacaoFixedWidth {
       min-width: 100px;
@@ -63,6 +63,57 @@ section.projetoList {
 }
 
 
+
+.projeto {
+  .projetoNome {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+  .tagsDoProjeto {
+    /* border: 1px solid #00000011; */
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    .tagDoProjeto {
+      margin-right: 5px;
+      padding: 3px;
+    }
+  }
+  .botaoFixado {
+
+  }
+  .situacaoPrioridade{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  @media only screen and (min-width: 800px) {
+    .projetoNome {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    .tagsDoProjeto {
+      justify-content: flex-end;
+      width: 120px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      align-items: center;
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
 section.projetoShow {
   /**mobile */
   border-radius: 5px;
@@ -109,7 +160,7 @@ section.projetoShow {
 
       <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
         <!-- HEADER -->
-        <section class="div_bg_offwhite div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
+        <section class="div_bg_white div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">
             <h1>Projetos</h1>
             <div>
@@ -121,31 +172,105 @@ section.projetoShow {
         </section>
 
         <!-- FILTER -->
-        <div class="mt-10 p-5 div_bg_offwhite div_border_gray flex-wrap" v-if="projetoExibir.id == null">
-          <div class="mr-15">
-            <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
+        <div class="mt-10 p-5 div_bg_white div_border_gray flex-column" v-if="projetoExibir.id == null">
+
+          <div class="" :class="{
+            'flex-wrap flex-center-combo' : !isSmallScreen,
+            'flex-column' : isSmallScreen
+          }">
+
+            <div class="mr-5">
+              <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
+            </div>
+
+            <div class="flex flex-center-combo">
+              <!-- SITUACAO -->
+              <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
+                <option value="0">Todos</option>
+                <option value="1">Pendente</option>
+                <option value="2">Espera</option>
+                <option value="3">Pausado</option>
+                <option value="4">Concluído</option>
+              </select>
+              <!-- PRIORIDADE -->
+              <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
+                <option value="0">Todos</option>
+                <option value="1">Urgente</option>
+                <option value="2">Alta</option>
+                <option value="3">Media</option>
+                <option value="4">Baixa</option>
+                <option value="5">Baixissima</option>
+              </select>
+              <!-- <div class="mr-5">
+                <button class="btn my-5 btn-sm btn-clear" type="button" @click="buscaProjetos()">
+                  Recarregar Lista
+                </button>
+              </div> -->
+              <div class="mr-15">
+                <button class="btn btn-sm btn-clear" type="button" @click="showFilterTag = !showFilterTag">
+                  Filtro Tags
+                </button>
+              </div>
+            </div>
+
+            <!-- MODAL DE TAGS PARA FILTRO -->
+            <div v-if="showFilterTag" class="p-10 flex-column" style="top: 60px;"
+              :class="{
+                'menuAddTagFullscreen' : isSmallScreen,
+                'menuAddTag' : !isSmallScreen
+              }">
+
+              <!-- TITULO -->
+              <div class="flex justify-spacebetween flex-center-combo">
+                <span>Escolha a tag:</span>
+                <span>
+                  <button class="btn btn-sm btn-clear" type="button"
+                    @click="showFilterTag = !showFilterTag">
+                    <i class="fi fi-rr-x" ></i>
+                  </button>
+                </span>
+              </div>
+
+              <!-- LISTA DE SELECAO -->
+              <div class="mb-10">
+                <div v-if="listaTags.length > 0" class="flex-column">
+                  <div v-for="tag in listaTags" :key="tag.id"
+                    class="mt-10 flex-wrap flex-center-combo"
+                    :style="`color: ${tag.cor}`">
+
+                    <span class="cursor-pointer iconBigger"
+                      @click="removerTagNoFiltro(tag)"
+                      v-if="listaTagsFiltro.findIndex(tagFiltro => tagFiltro.id === tag.id) != -1">
+                      <i class="fi fi-sr-check-circle"></i>
+                    </span>
+
+                    <span class="cursor-pointer iconBigger"
+                      @click="adicionaTagNoFiltro(tag)"
+                      v-else>
+                      <i class="fi fi-rr-circle"></i>
+                    </span>
+
+                    <span class="ml-5" :style="`color: ${tag.cor}`">
+                      {{ tag.descricao }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
-          <!-- SITUACAO -->
-          <select class="smallSelect mr-15" v-model="selectedSituacao" name="situacao" id="situacao" @click="filtraListaProjeto()">
-            <option value="0">Todos</option>
-            <option value="1">Pendente</option>
-            <option value="2">Espera</option>
-            <option value="3">Pausado</option>
-            <option value="4">Concluído</option>
-          </select>
-          <!-- PRIORIDADE -->
-          <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
-            <option value="0">Todos</option>
-            <option value="1">Urgente</option>
-            <option value="2">Alta</option>
-            <option value="3">Media</option>
-            <option value="4">Baixa</option>
-            <option value="5">Baixissima</option>
-          </select>
-          <!-- BUTTON -->
-          <div class="mr-15">
-            <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">Recarregar Lista</button>
+
+          <div>
+            <!-- LISTA TAGS DO FILTRO -->
+            <span v-if="listaTagsFiltro.length > 0" class="flex-wrap">
+              <div v-for="tag in listaTagsFiltro" :key="tag.id"
+                class="my-10 ml-5 mr-5 p-5"
+                :style="`font-size: 0.8rem; border: 1px solid ${tag.cor}; color: ${tag.cor }`">
+                {{ tag.descricao }}
+              </div>
+            </span>
           </div>
+
         </div>
       </div>
 
@@ -158,53 +283,67 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto div_bg_offwhite div_border_gray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <div class="projeto div_bg_white div_border_gray my-10 ml-5 mr-15 px-10"
+                :class="{ 'flex flex-center-combo' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                 
                 <!-- PROJETO NOME -->
-                <span class="py-10 px-10">
+                <span class="projetoNome">
                   {{ projeto.nome }}
                 </span>
-
+                
                 <!-- TAGS -->
-                <div class="py-5 px-10 flex alignitens-center">
-                  <!-- fixado -->
-                  <button type="button" disabled="true"
-                    v-if="!projetoExibir.editMode && projeto.fixado"
-                    class="btn btn-sm btn-clear mr-10 my-5 btn">
-                    <i class="fi fi-ss-thumbtack"></i>
-                  </button>
-                  <!-- SITUACAO -->
-                  <button type="button" class="mr-10 btn btn-sm btnPrioridade"
-                    :class="{
-                      situacaoFixedWidth : configs.situacaoFixedWidth == true,
-                      situacaoPendente : projeto.situacao == 1,
-                      situacaoAguardandoResposta : projeto.situacao == 2,
-                      situacaoPausado : projeto.situacao == 3,
-                      situacaoConcluido : projeto.situacao == 4,
-                    }">
-                    {{ projeto.situacao }}-{{ projeto.situacaoDescritivo }}
-                  </button>
+                <div class="" :class="{
+                  'flex flex-center-combo' : !isSmallScreen,
+                  'flex-column mb-10' : isSmallScreen
+                }">
 
-                  <!-- PRIORIDADE -->
-                  <button type="button" class="mr-10 btn btn-sm btnPrioridade"
-                    :class="{
-                      prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
-                      prioridadeUrgente : projeto.prioridade == 1,
-                      prioridadeAlta : projeto.prioridade == 2,
-                      prioridadeMedia : projeto.prioridade == 3,
-                      prioridadeBaixa : projeto.prioridade == 4,
-                      prioridadeBaixissima : projeto.prioridade == 5,
-                    }">
-                    {{ projeto.prioridade }}-{{ projeto.prioridadeDescritivo }}
-                  </button>
+                  <!-- TAGS DO PROJETO -->
+                  <div v-if="projeto.tags != null && projeto.tags.length > 0" class="tagsDoProjeto">
+                    <div v-for="tag in projeto.tags" :key="tag.id" class="tagDoProjeto"
+                      :style="`border: 1px solid ${tag.cor}; color: ${tag.cor}`">
+                      {{ tag.descricao }}
+                    </div>
+                  </div>
+
+                  <!-- fixado -->
+                  <div class="botaoFixado" v-if="!projetoExibir.editMode && projeto.fixado">
+                    <button type="button" disabled="true"
+                      class="btn btn-sm btn-clear btn">
+                      <i class="fi fi-ss-thumbtack"></i>
+                    </button>
+                  </div>
+
+                  <div class="situacaoPrioridade flex flex-center-combo">
+                    <!-- SITUACAO -->
+                    <button type="button" class="mr-10 btn btn-sm btnPrioridade"
+                      :class="{
+                        situacaoFixedWidth : configs.situacaoFixedWidth == true,
+                        situacaoPendente : projeto.situacao == 1,
+                        situacaoAguardandoResposta : projeto.situacao == 2,
+                        situacaoPausado : projeto.situacao == 3,
+                        situacaoConcluido : projeto.situacao == 4,
+                      }">
+                      {{ projeto.situacao }}-{{ projeto.situacaoDescritivo }}
+                    </button>
+
+                    <!-- PRIORIDADE -->
+                    <button type="button" class="mr-10 btn btn-sm btnPrioridade"
+                      :class="{
+                        prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
+                        prioridadeUrgente : projeto.prioridade == 1,
+                        prioridadeAlta : projeto.prioridade == 2,
+                        prioridadeMedia : projeto.prioridade == 3,
+                        prioridadeBaixa : projeto.prioridade == 4,
+                        prioridadeBaixissima : projeto.prioridade == 5,
+                      }">
+                      {{ projeto.prioridade }}-{{ projeto.prioridadeDescritivo }}
+                    </button>
+
+                    <router-link :to='getProjetoUrl(projeto)' class="mr-10 btn btn-sm btn-clear">
+                      <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                    </router-link>
+                  </div>
                   
-                  <!-- COLUNA 3 -->
-                  <!-- <button type="button" class="mr-10 btn btn-sm" @click="toggleShowProjeto(projeto)">
-                    ...
-                  </button> -->
-                  <router-link class="mr-10 btn btn-sm" :to='getProjetoUrl(projeto)'>
-                    <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
-                  </router-link>
                 </div>
 
               </div>
@@ -223,14 +362,13 @@ section.projetoShow {
 
         <!-- PROJETO SHOW -->
         <section class="projetoShow divBgBlur my-10 p-10 mx-5" v-if="projetoExibir.id != null">
-        <!-- <div v-if="projetoExibir != [] && !busyProjetosLoad && !busyProjetosDelete"> -->
         <div v-if="projetoExibir.id != null">
 
           <div class="mb-10 flex justify-spacebetween">
-            <div>
-              <!-- <button v-if="!projetoExibir.editMode" class="btn mr-10 my-5 btn" type="button" @click="hideProjeto(projetoExibir)">...</button> -->
-              <router-link v-if="!projetoExibir.editMode" class="btn btn-clear mr-10 my-5 btn" to='/projetosListV2'>
-                <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-left"></i> Voltar
+            <div class="flex-wrap flex-center-combo">
+              <router-link v-if="!projetoExibir.editMode" to='/projetosListV2'
+                class="btn btn-clear mr-10 my-5 btn-icon-bigger flex-center-combo" style="display: inline-flex;">
+                <i class="fi fi-rr-arrow-small-left"></i> Voltar
               </router-link>
 
               <button v-if="!projetoExibir.editMode" class="btn btn-clear mx-10 my-5 btn" type="button" 
@@ -247,7 +385,7 @@ section.projetoShow {
                 Cancelar
               </button>
             </div>
-            <div>
+            <div class="flex-wrap flex-center-combo">
               <button v-if="projetoExibir.editMode"
                 class="btn mx-10 my-5 btn" type="button" 
                 @click="salvarEdicaoProjeto(projetoExibir)">
@@ -402,6 +540,108 @@ section.projetoShow {
                 </div>
               </div>
 
+              <!-- PROJETOS TAGS -->
+              <div class="mb-15 flex-column">
+
+                <div class="flex-wrap mb-10">
+                  <span class="projetoShowLabel mr-5">Tags: </span>
+                  
+                  <button class="btn btn-sm btn-clear" type="button" @click="toggleAdicionarTag(projetoExibir)">
+                    <i class="fi fi-rr-menu-dots" ></i>
+                  </button>
+
+                  <!-- LISTA TAGS DO PROJETO -->
+                  <span v-if="projetoExibir.tags != null && projetoExibir.tags.length > 0" class="flex-wrap">
+                    <div v-for="tag in projetoExibir.tags" :key="tag.id"
+                      class="ml-5 mr-5 p-5"
+                      :style="`font-size: 0.8rem; border: 1px solid ${tag.cor}; color: ${tag.cor }`">
+                      {{ tag.descricao }}
+                    </div>
+                  </span>
+
+                  <InlineLoader
+                    :textoAguarde="false"
+                    :busy="busyProjetosUpdateTags"
+                    :center="false">
+                  </InlineLoader>
+                </div>
+
+                <div v-if="showAddTag" class="p-10 flex-column"
+                  :class="{'menuAddTagFullscreen' : isSmallScreen, 'menuAddTag' : !isSmallScreen}">
+
+                  <div class="flex justify-spacebetween flex-center-combo" style="height: 30px">
+                    <span>
+                      Escolha a tag:
+                      <span class="ml-5">
+                        <InlineLoader
+                          :textoAguarde="false"
+                          :busy="busyCreateNewTag || busyProjetosUpdateTags"
+                          :center="false">
+                        </InlineLoader>
+                      </span>
+                    </span>
+                    <span v-if="isSmallScreen">
+                      <button class="btn btn-sm btn-clear" type="button" @click="toggleAdicionarTag(projetoExibir)">
+                        <i class="fi fi-rr-x" ></i>
+                      </button>
+                    </span>
+                  </div>
+
+                  <!-- SELECIONAR TAG -->
+                  <div class="mb-10">
+
+                    <div v-if="listaTags.length > 0" class="flex-column">
+
+                      <div v-for="tag in listaTags" :key="tag.id"
+                        class="mt-10 flex flex-center-combo"
+                        :style="`color: ${tag.cor }`">
+
+                        <span :disabled="busyProjetosUpdateTags" class="flex flex-center-combo cursor-pointer iconBigger"
+                          @click="removerTagProjeto(projetoExibir, tag)"
+                          v-if="projetoExibir.tags != null && projetoExibir.tags.findIndex(tagProjeto => tagProjeto.id === tag.id) != -1">
+                          <i class="fi fi-sr-check-circle"></i>
+                        </span>
+                        <span :disabled="busyProjetosUpdateTags" class="flex flex-center-combo cursor-pointer iconBigger"
+                          @click="salvaTagNoProjeto(projetoExibir, tag)"
+                          v-else>
+                          <i class="fi fi-rr-circle"></i>
+                        </span>
+
+                        <span class="ml-5" :style="`color: ${tag.cor }`">
+                          {{ tag.descricao }}
+                        </span>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <!-- CRIAÇÃO DE NOVA TAG -->
+                  <div class="mb-10 flex-column">
+                    <div class="mb-10 flex flex-center-combo">
+                      <input :disabled="busyCreateNewTag || busyProjetosUpdateTags"
+                        class="inlineInput" name="nome" type="text"
+                        placeholder="nova tag" v-model="novaTagDescricao">
+                      <input :disabled="busyCreateNewTag || busyProjetosUpdateTags"
+                        class="ml-5 inlineInput" name="cor" type="color"
+                        placeholder="nome" v-model="novaTagCor">
+                      <button :disabled="busyCreateNewTag || busyProjetosUpdateTags"
+                        type="button" class="ml-5 my-5 btn btn-clear btn-icon-bigger" @click="criarNovaTag()">
+                        <i class="fi fi-rr-check-circle"></i>
+                      </button>
+                    </div>
+
+                    <InlineLoader
+                      :textoAguarde="true"
+                      :busy="busyCreateNewTag || busyProjetosUpdateTags"
+                      :center="true">
+                    </InlineLoader>
+
+                  </div>
+
+                </div>
+                
+              </div>
+
 
               <!-- TAREFAS -->
               <div class="mb-15">
@@ -434,29 +674,28 @@ section.projetoShow {
                           'flex-column' : isSmallScreen
                         }">
 
-                          <div class="flex-wrap">
-                            <div>
-                              <span class="verticalalign-center mr-10 iconBigTarefa" >
-                                <i v-if="tarefa.situacao == 0" class="fi fi-rs-circle"></i>
-                                <i v-if="tarefa.situacao == 1" class="fi fi-rs-check-circle"></i>
-                              </span>
+                          <div class="flex-wrap flex-center-combo ml-5 mr-5">
+                            <div class="iconBigTarefa flex flex-center-combo" >
+                              <i v-if="tarefa.situacao == 0" class="fi fi-rs-circle"></i>
+                              <i v-if="tarefa.situacao == 1" class="fi fi-rs-check-circle"></i>
                             </div>
                             <div>
-                              <span class="verticalalign-center mr-10 iconBigTarefa" v-if="showBulkActionTarefa">
+                              <span class="iconBigTarefa flex flex-center-combo" v-if="showBulkActionTarefa">
                                 <i v-if="!tarefa.selected" class="fi fi-rs-horizontal-rule"></i>
                                 <i v-if="tarefa.selected" class="fi fi-rs-check"></i>
                               </span>
                             </div>
-                            <div class="ycenter mr-10">
-                              <span :class="{
-                                'prioridade semPrioridade' : tarefa.prioridade == null,
-                                'prioridade p1' : tarefa.prioridade == 1,
-                                'prioridade p2' : tarefa.prioridade == 2,
-                                'prioridade p3' : tarefa.prioridade == 3,
-                                'prioridade p4' : tarefa.prioridade == 4,
-                                'prioridade p5' : tarefa.prioridade == 5
-                              }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : 'Não possui' }}</span>
-                            </div>
+                          </div>
+                          
+                          <div class="mr-5 flex flex-center-combo">
+                            <span :class="{
+                              'prioridade semPrioridade' : tarefa.prioridade == null,
+                              'prioridade p1' : tarefa.prioridade == 1,
+                              'prioridade p2' : tarefa.prioridade == 2,
+                              'prioridade p3' : tarefa.prioridade == 3,
+                              'prioridade p4' : tarefa.prioridade == 4,
+                              'prioridade p5' : tarefa.prioridade == 5
+                            }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : 'Não possui' }}</span>
                           </div>
 
                           <div :class="{'mt-10 mb-10': isSmallScreen}">
@@ -658,6 +897,7 @@ export default {
       filtroSituacao: null,
       nextProgramedListingAmount: 0,
       filtroNomeProjeto: '',
+      filtroTag: '',
       exibirTarefasConcluidas: false,
       collapsarTarefas: false,
       projetoExibir: [],
@@ -670,6 +910,17 @@ export default {
       projetoModalEditarProjetofoto: [],
       projetofotoModalEditarProjetofoto: [],
       collapsarProjetosfotos: true,
+
+      listaTagsFiltro: [],
+
+      busyProjetosUpdateTags: false,
+      busyCreateNewTag: false,
+      showAddTag: false,
+      novaTagDescricao: null,
+      novaTagCor: null,
+      tagAddProjeto: null,
+      showFilterTag: false,
+      listaTags: [],
 
       showBulkActionTarefa: false,
       
@@ -702,6 +953,10 @@ export default {
 
     getProjetoUrl(projeto) {
       return UrlBuilder.getProjetoUrl(projeto);
+    },
+
+    toggleAdicionarTag(){
+      this.showAddTag = !this.showAddTag;
     },
 
     registrarDebounceUpdateProjeto(projetoEditar){
@@ -1027,6 +1282,113 @@ export default {
       });
     },
 
+    removerTagNoFiltro (tag) {
+      const index = this.listaTagsFiltro.findIndex(tagFiltro => (tagFiltro.id == tag.id));
+      if (index !== -1) {
+        this.listaTagsFiltro.splice(index, 1);
+      }
+      this.filtraListaProjeto()
+    },
+
+    adicionaTagNoFiltro (tag) {
+      this.listaTagsFiltro.push(tag);
+      this.filtraListaProjeto()
+    },
+
+    salvaTagNoProjeto(projeto, novaTag)
+    {
+      if(this.busyProjetosUpdateTags || this.busyCreateNewTag){
+        return;
+      }
+      if(projeto.tags == null) projeto.tags = [];
+      let listaTagsDoProjeto = projeto.tags;
+      for (let i = 0; i < listaTagsDoProjeto.length; i++) {
+        if(listaTagsDoProjeto[i].id == novaTag.id){
+          return;
+        }
+      }
+      for (let i = 0; i < this.listaTags.length; i++) {
+        if(this.listaTags[i].id == novaTag.id){
+          novaTag = this.listaTags[i];
+          break;
+        }
+      }
+      projeto.tags.push(novaTag);
+      this.updateTags(projeto);
+    },
+
+    removerTagProjeto(projeto, tagRemover)
+    {
+      if(this.busyProjetosUpdateTags || this.busyCreateNewTag){
+        return;
+      }
+      let listaTags = projeto.tags
+      const index = listaTags.findIndex(tag => tag.id === tagRemover.id);
+      if (index !== -1) {
+        console.log('removido');
+        listaTags.splice(index, 1);
+      }
+      projeto.tags = listaTags
+      this.updateTags(projeto);
+    },
+
+    validate_criarNovaTag(data){
+      let error = null;
+      console.log("")
+      if(data.descricao == null || data.descricao == '') error = 'Favor preencher o campo descrição.';
+      else if(data.cor == null || data.cor == '') error = 'Favor preencher o campo cor.';
+
+      if(error != null) {
+        this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true);
+        return false;
+      }
+      return true;
+    },
+
+    criarNovaTag() {
+      const data = {
+        'descricao': this.novaTagDescricao,
+        'cor': this.novaTagCor
+      }
+      if(!this.validate_criarNovaTag(data)) return;
+      this.busyCreateNewTag = true;
+      let requestData = {
+        'url': `${config.serverUrl}/tags`,
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'POST',
+        'data': data
+      };
+      return Request.fetch(requestData).then(([response, data]) => {
+        this.busyCreateNewTag = false;
+        this.$refs.notifier.notify('Tag criada!');
+        this.buscaTags();
+        this.novaTagDescricao = null;
+        this.novaTagCor = null;
+      }).catch((error) => {
+        console.error(error);
+        this.busyCreateNewTag = false;
+        this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
+      });
+
+    },
+
+
+    buscaTags()
+    {
+      let requestData = {
+        'url': `${config.serverUrl}/tags`,
+      };
+      Request.fetch(requestData)
+      .then(([response, data]) => {
+        console.log({data});
+        this.listaTags = data
+      })
+      .catch((error) => {
+        this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
+        console.error(error);
+      });
+    },
+
     buscaProjetos (primeiraExecucao = false) {
       this.busyProjetosLoad = true;
       let params = {};
@@ -1138,6 +1500,27 @@ export default {
       return projetos;
     },
 
+    updateTags(projeto) {
+      this.busyProjetosUpdateTags = true;
+      let body = {
+        'tags': projeto.tags,
+      };
+      let requestData = {
+        'url': `${config.serverUrl}/projetos/${projeto.id}/tags`,
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method' : 'PUT',
+        'data' : body
+      };
+      return Request.fetch(requestData).then(([response, data]) => {
+        this.busyProjetosUpdateTags = false;
+        this.$refs.notifier.notify('Tags do projeto salvas!')
+      }).catch((error) => {
+        console.error(error);
+        this.busyProjetosUpdateTags = false;
+        this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
+      });
+    },
+
     updateProjeto(projeto, sairDaEdicao = true) {
       console.log(projeto.id);
       this.busyProjetosUpdate = true;
@@ -1225,12 +1608,35 @@ export default {
         }
         listaProjetos = arrayfilter;
       }
+      
       // ************************ filtro por prioridade
       if(prioridadeFiltro != null){
         arrayfilter = [];
         for (let i = 0; i < listaProjetos.length; i++) {
           if(listaProjetos[i].prioridade == prioridadeFiltro){
             arrayfilter.push(listaProjetos[i])
+          }
+        }
+        listaProjetos = arrayfilter;
+      }
+      // ************************ filtro por tags
+      console.log('this.listaTagsFiltro', this.listaTagsFiltro);
+      if(this.listaTagsFiltro.length > 0){
+        arrayfilter = [];
+        for (let i = 0; i < listaProjetos.length; i++) {
+          let projetoTagValida = false;
+          if(listaProjetos[i].tags == null) {
+            continue;
+          }
+          for (let j = 0; j < listaProjetos[i].tags.length; j++) {
+            for (let k = 0; k < this.listaTagsFiltro.length; k++) {
+              if(listaProjetos[i].tags[j].id == this.listaTagsFiltro[k].id){
+                arrayfilter.push(listaProjetos[i]);
+                projetoTagValida = true
+                break;
+              }
+              if(projetoTagValida) break;
+            }
           }
         }
         listaProjetos = arrayfilter;
@@ -1275,6 +1681,7 @@ export default {
   },
   created () {
     this.buscaProjetos(true);
+    this.buscaTags();
   },
 }
 </script>

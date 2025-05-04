@@ -1,13 +1,66 @@
 
+.cursor-pointer{
+    cursor: pointer;
+}
+.cursor-pointer:hover{
+    filter: brightness(50%);
+}
+
 .fi {
-    position: relative;
-    top: 2px;
+    padding-top: 4px;
 }
-.iconBig > .fi{
+
+
+a.btn.btn-icon,
+button.btn.btn-icon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    padding: 3px 10px;
+}
+
+a.btn.btn-icon-big,
+button.btn.btn-icon-big {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    padding: 3px 10px;
+    .fi{
+        font-size: 1.1rem;
+        padding-top: 4px;
+    }
+}
+
+a.btn.btn-icon-bigger,
+button.btn.btn-icon-bigger {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    padding: 0px 10px;
+    .fi{
+        font-size: 1.5rem;
+        padding-top: 5px;
+    }
+}
+
+.iconBig >.fi{
     font-size: 1.1rem;
-    position: relative;
-    top: 2px;
+    padding-top: 4px;
 }
+
+.iconBigger >.fi{
+    font-size: 1.5rem;
+    padding-top: 5px;
+}
+
+a.btn.btn-sm-icon,
+button.btn.btn-sm-icon {
+    padding: 2px 5px;
+}
+
 /* DEFAULT BUTTON */
 a.btn,
 button.btn {
