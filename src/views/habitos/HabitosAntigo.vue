@@ -11,15 +11,35 @@
 .habitosList{
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
+/* @media only screen and (min-width: 800px) {
+  .habitosList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+} */
 
 .cardBoxHabito {
   border: 1px solid #bbbbbb;
   border-radius: 5px;
   background-color: #f1f1f1;
+  /* min-width: 90svw; */
+  /* min-width: 400px; */
   flex-grow: 1;
   flex-shrink: 0;
 }
+
+/* @media only screen and (min-width: 800px) {
+  .cardBoxHabito {
+    flex:1;
+    max-height: 87svh;
+    overflow-y: scroll;
+    min-width: 350px;
+  }
+} */
+
 
 .titleEditInput {
   flex-grow: 1;
@@ -30,13 +50,16 @@
   margin: 0px;
   height: 15px;
 }
-
 .daySquare {
   font-size: 0.8rem;
   display: inline-block;
   border: 1px solid #757575;
   border-radius: 1px;
   text-align: center;
+  /* min-width: 20px; */
+  /* max-width: 20px; */
+  /* min-height: 20px; */
+  /* max-height: 20px; */
   min-width: 16px;
   max-width: 16px;
   min-height: 16px;
@@ -55,42 +78,6 @@
   outline: 3px solid #000000;
 }
 
-.boxDescricao {
-  display: flex;
-  flex-direction: column;
-  background-color: #88888811;
-  border-radius: 10px;
-  width: calc(100% - 260px);
-  justify-content: center; /* centralização vertical */
-  padding: 10px 5px;
-}
-.boxDias {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* centralização horizontal */
-  /* background-color: #00000011; */
-  /* border-radius: 10px; */
-  min-width: 260px;
-  /* overflow-x: hidden; */
-}
-.iconDiaRealizado{
-  font-size: 1.6rem;
-  color: green;
-}
-
-.daySquareNovo {
-  font-size: 1rem;
-  display: inline-block;
-  border: 1px solid #757575;
-  border-radius: 1px;
-  text-align: center;
-  min-width:  35px;
-  max-width:  35px;
-  min-height: 35px;
-  max-height: 35px;
-  margin: 1px;
-  align-items: center;
-}
 </style>
 
 <template>
@@ -105,13 +92,13 @@
               <h1>Habitos</h1>
             </div>
             <div>
-              <button class="btn mx-5 btn-clear btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
+              <router-link class="btn btn-clear" to="/habitTracker">
+                  <i class="fi fi-rs-brightness"></i> Voltar para Hábitos
+              </router-link>
+              <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
             </div>
           </div>
           <div> <!-- right side -->
-              <router-link class="btn btn-clear btn-sm" to="/editarHabitos">
-                  <i class="fi fi-rs-brightness"></i> Editar Hábitos
-              </router-link>
           </div>
         </div>
         
@@ -123,72 +110,115 @@
             :center="true">
           </InlineLoader>
 
-          <!-- linha 1 -->
-          <div class="flex flex-center-combo mb-5">
-            <!-- descricao do habito -->
-            <div class="flex-column boxDescricao">
-              <div class="flex font-weight-bold">
-                Descrição
-              </div>
-            </div>
-
-            <div class="ml-5 boxDias">
-              <div class="flex">
-                <span v-for="dia in semana" :key="dia.dia" class="daySquareNovo flex-column flex-center-combo">
-                  <div>{{ dia.weekDayFirstLetter }}</div>
-                  <div>{{ dia.dia }}</div>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- lista de habitos -->
-          <div v-if="habitos != [] && !busyHabitosLoad" class="habitosList">
+          <!--  && busyHabitosLoad == true  -->
+          <div v-if="habitos != [] && !busyHabitosLoad" class="habitosList"> <!-- lista de habitos -->
             <div v-for="habito in habitos" :key="habito.id">
 
-              <!-- linha 1 -->
-              <div class="flex flex-center-combo mb-5">
-                <!-- descricao do habito -->
-                <div class="boxDescricao">
-                  <div class="">
+              <div class="cardBoxHabito p-5 mb-5">
 
-                    <InlineLoader
-                      :busy="habito.busyHabitosConcluir">
-                    </InlineLoader>
+                <!-- LINE 1 -->
+                <div class="flex-wrap justify-spacebetween alignitens-center"> 
 
-                    <button class="btn btn-checkbox mx-5" style="position: relative; top: 3px;" 
-                      type="button" @click="concluirHabito(habito)"
-                      :disabled="habito.busyHabitosConcluir"
-                      v-if="!habito.busyHabitosConcluir">
-                      <i class="fi fi-bs-checkbox" style="color: green;" v-if="habito.realizadoHoje"></i>
-                      <i class="fi fi-bs-square" style="color: #444444;" v-if="!habito.realizadoHoje"></i>
-                    </button>
+                  <!-- common -->
+                  <div class="flexGrow1 flex-wrap alignitens-start" v-if="!habito.editMode">
 
-                    <span class="mr-10 font-weight-bold">{{ habito.hora }}</span>
-                    <span>{{ habito.descricao }}</span>
-                  </div>
-                  <div v-if="showMotivo[habito.id]">
-                    <span class="my-5 p-5 italicDarkGray" >
-                      {{ habito.motivo ?? 'sem motivo cadastrado' }}
-                    </span>
-                  </div>
-                </div>
+                    <!-- BOTAO CHECK -->
+                    <div class="pr-15">
+                      <button class="btn btn-checkbox mx-5"  style="font-size: 1.5rem;" 
+                        type="button" @click="concluirHabito(habito)"
+                        :disabled="habito.busyHabitosConcluir">
 
-                <div class="ml-5 boxDias">
-                  <div class="flex-wrap">
-                    <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
-                      <!-- <div class="daySquareNovo" :class="{ daySquareGreen : dia.realizado }"> -->
-                      <div class="daySquareNovo flex-column flex-center-combo">
-                        <!-- <div>{{ dia.weekDayFirstLetter }}</div> -->
-                        <!-- <div>{{ dia.dia }}</div> -->
-                        <i v-if="dia.realizado" class="fi fi-bs-check iconDiaRealizado"></i>
+
+                        <i class="fi fi-bs-checkbox" style="color: green;"
+                          v-if="habito.realizadoHoje"
+                        ></i>
+
+                        <i class="fi fi-bs-square" style="color: #444444;"
+                          v-if="!habito.realizadoHoje"
+                        ></i>
+                      </button>
+                    </div>
+
+                    <!-- QUADRINHOS -->
+                    <div class="pr-15">
+                      <div class="flex-wrap">
+                        <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
+                          <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
+                            {{ dia.weekDayFirstLetter }}
+                          </div>
+                          <div class="daySquare" :class="{ daySquareGreen : dia.realizado }">
+                            {{ dia.dia }}
+                          </div>
+                        </span>
                       </div>
-                    </span>
+                    </div>
+
+                    <!-- TITULO E MOTIVO -->
+                    <div class="pr-15" style="max-width: 550px;">
+                      <div>
+                        <span>{{ habito.hora }}</span>
+                        <br><span style="font-weight: bold;">{{ habito.descricao }}</span>
+                      </div>
+                      <div>
+                        <span class="my-5 p-5 italicDarkGray" v-if="showMotivo[habito.id]">
+                          {{ habito.motivo ?? 'sem motivo cadastrado' }}
+                        </span>
+                      </div>
+                    </div>
+
                   </div>
+
+                  <!-- edicao -->
+                  <div class="flexGrow1 flex-column alignitens-start" v-if="habito.editMode"> 
+                    <div class="marginVerticalSpacer titleEditInput">
+                      <input :disabled="busyHabitosUpdate || habito.busyHabitosConcluir" name="hora" type="time" v-model="habito.horaEditar">
+                      <input :disabled="busyHabitosUpdate || habito.busyHabitosConcluir" name="descricao" type="text" v-model="habito.descricaoEditar">
+                      <input :disabled="busyHabitosUpdate || habito.busyHabitosConcluir" name="motivo" type="text" v-model="habito.motivoEditar">
+                    </div>
+                    <div class="marginVerticalSpacer">
+                    </div>
+                  </div>
+
+                  <!-- right buttons -->
+                   
+                  <div class="flex-nowrap" v-if="!habito.editMode" style="min-width: 60px;"> 
+                    <button class="btn btn-clear btn-sm mr-10" type="button"
+                      @click="toggleShowMotivoHabito(habito)">
+                      <i class="fi fi-rr-search"></i>
+                    </button>
+                    <button class="btn btn-clear btn-sm" type="button"
+                      :disabled="habito.busyHabitosConcluir"
+                      @click="toggleEdicaoHabito(habito)">
+                       <i class="fi fi-rs-edit"></i>
+                    </button>
+                  </div>
+
+                  <div class="flex-column" v-if="habito.editMode"> 
+
+                    <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="cancelarEdicaoHabito(habito)">Cancelar</button>
+                    <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm" type="button" @click="salvarEdicaoHabito(habito)">
+                      Salvar
+                      <InlineLoader :busy="busyHabitosUpdate"></InlineLoader>
+                    </button>
+                    <button :disabled="busyHabitosUpdate" v-if="habito.editMode" class="btn mx-5 my-5 btn-sm btn-red" type="button" @click="excluirHabito(habito)">Excluir</button>
+                  </div>
+
                 </div>
+
+                <!-- LINE 2 -->
+                <div class="mt-15 mb-10">
+                    <InlineLoader
+                      :textoAguarde="true"
+                      :busy="habito.busyHabitosConcluir"
+                      :center="true">
+                    </InlineLoader>
+                </div>
+                <!-- fim body -->
+
               </div>
 
             </div>
+
           </div>
 
         </div>

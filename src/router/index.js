@@ -9,6 +9,7 @@ import Inspiracao from '../views/projetos/Inspiracao.vue'
 import Tarefas from '../views/tarefas/Tarefas.vue'
 import Realizacoes from '../views/tarefas/Realizacoes.vue'
 import Habitos from '../views/habitos/Habitos.vue'
+import HabitosAntigo from '../views/habitos/HabitosAntigo.vue'
 import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
 import Backup from '../views/Backup.vue'
@@ -70,6 +71,12 @@ const router = createRouter({
       path: '/habitTracker',
       name: 'HabitTracker',
       component: Habitos,
+      props: true
+    },
+    {
+      path: '/editarHabitos',
+      name: 'HabitTrackerAntigo',
+      component: HabitosAntigo,
       props: true
     },
     {
