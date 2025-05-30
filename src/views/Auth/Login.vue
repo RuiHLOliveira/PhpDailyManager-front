@@ -22,17 +22,17 @@ section.login {
 
           <div>
             <label for="email">Email:</label>
-            <input :disabled="busy" name="email" type="email" placeholder="email" v-model="email">
+            <input :disabled="busy" name="email" type="email" placeholder="email" id="email" v-model="email">
           </div>
 
           <div class="mt-15">
             <label for="password">Senha:</label>
-            <input :disabled="busy" name="password" type="password" placeholder="senha" v-model="password">
+            <input :disabled="busy" name="password" type="password" placeholder="senha" id="senha" v-model="password">
           </div>
 
           <div class="mt-10 flex-column">
-            <button class="btn mt-20 mb-30" :disabled="busy" @click="login()">Entrar</button>
-            <router-link :disabled="busy" class="btn" to="/register">Register</router-link>
+            <button class="btn mt-20 mb-30" :disabled="busy" @click="login()" id="button-entrar">Entrar</button>
+            <router-link :disabled="busy" class="btn" id="router-link-register" to="/register">Register</router-link>
           </div>
           
           <div class="mt-30 mb-10">
@@ -100,7 +100,14 @@ export default {
       .catch((error) => {
         console.error(error);
         this.busy = false;
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true) // this.notify('Ocorreu um erro: ' + error);
+        let message = error;
+        console.info('[LOG] erro...', message);
+        if(error == 'Failed to fetch' || error == null || error == '') {
+          console.info('[LOG] mensagem padrão...');
+          message = 'Falha no login.';
+        }
+        console.info('[LOG] mensagem...', message);
+        this.$refs.notifier.notify('Ocorreu um erro: ' + message, true)
       });
     },
   },
