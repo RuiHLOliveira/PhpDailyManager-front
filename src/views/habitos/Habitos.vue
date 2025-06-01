@@ -157,7 +157,7 @@
                     </InlineLoader>
 
                     <button class="btn btn-checkbox mx-5" style="position: relative; top: 3px;" 
-                      type="button" @click="concluirHabito(habito)"
+                      type="button" @click="toggleModalConcluirHabito(habito)"
                       :disabled="habito.busyHabitosConcluir"
                       v-if="!habito.busyHabitosConcluir">
                       <i class="fi fi-bs-checkbox" style="color: green;" v-if="habito.realizadoHoje"></i>
@@ -203,6 +203,12 @@
       v-model:exibirModal="exibirModalCriarHabito"
       @reloadListaHabitosHabitTracker="buscaHabitos()">
     </ModalCriarHabito>
+    
+    <ModalCompletarHabito
+      v-model:exibirModal="exibirModalCompletarHabito"
+      v-model:habitoCompletar="habitoCompletar"
+      @reloadListaHabitosHabitTracker="buscaHabitos()">
+    </ModalCompletarHabito>
 
   </div>
 </template>
@@ -216,6 +222,7 @@ import Loader from '@/components/Loader.vue';
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import ModalCriarHabito from '@/views/habitos/ModalCriarHabito.vue';
+import ModalCompletarHabito from './ModalCompletarHabito.vue';
 
 export default {
   name: 'Habitos',
@@ -223,6 +230,7 @@ export default {
     Loader,
     InlineLoader,
     ModalCriarHabito,
+    ModalCompletarHabito,
     Notifier,
   },
   inject: ['configuracoes'],
@@ -238,6 +246,8 @@ export default {
       habitos: [],
       showMotivo: [],
       exibirModalCriarHabito: false,
+      exibirModalCompletarHabito: false,
+      habitoCompletar: [],
     }
   },
   methods: {
@@ -258,6 +268,18 @@ export default {
     /**
      * FUNCOES TOGGLE
      */
+
+    toggleModalConcluirHabito(habitoCompletar) {
+      this.exibirModalCompletarHabito = !this.exibirModalCompletarHabito
+      if(this.exibirModalCompletarHabito) {
+        console.info("abrindo modal", this.habitoCompletar)
+        this.habitoCompletar = habitoCompletar;
+      } else {
+        this.habitoCompletar = [];
+        console.info("fechando modal", this.habitoCompletar)
+      }
+    },
+
     toggleModalCriarHabito () {
       this.exibirModalCriarHabito = true;
     },

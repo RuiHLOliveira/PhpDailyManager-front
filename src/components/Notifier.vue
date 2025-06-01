@@ -82,6 +82,7 @@ export default {
       }, 3000);
     },
   },
+  expose: ['notify'],
   watch: {
     // showNotify (newValue, oldValue) {
     //   if(newValue === true) {
