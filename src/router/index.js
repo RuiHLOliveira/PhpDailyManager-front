@@ -13,6 +13,7 @@ import HabitosAntigo from '../views/habitos/HabitosAntigo.vue'
 import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
 import Backup from '../views/Backup.vue'
+import Historicos from '../views/Historicos/Historicos.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -65,6 +66,12 @@ const router = createRouter({
       path: '/realizacoes',
       name: 'Realizacoes',
       component: Realizacoes,
+      props: true
+    },
+    {
+      path: '/historicos',
+      name: 'Historicos',
+      component: Historicos,
       props: true
     },
     {

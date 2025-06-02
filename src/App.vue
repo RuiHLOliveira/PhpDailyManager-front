@@ -32,6 +32,9 @@
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/realizacoes">
               <i class="fi fi-rs-list-check"></i> Realizações
           </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/historicos">
+              <i class="fi fi-rs-list-check"></i> Historicos
+          </router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker">
               <i class="fi fi-rs-brightness"></i> Habit Tracker
           </router-link>

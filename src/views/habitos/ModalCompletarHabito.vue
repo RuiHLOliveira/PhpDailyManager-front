@@ -54,8 +54,6 @@ import config from '@/core/config.js'
 
 import { ref, watch, watchEffect } from 'vue';
 
-const notifier = ref();
-
 const busy = ref(false);
 const needReload = ref(false);
 // const habitoCompletar = ref([]);
@@ -82,10 +80,10 @@ watch(() => props.exibirModal, (novo, antigo) => {
   // FUNCIONA
 });
 
-// /**
-//  * CONTROLES DE TELA
-//  */
-function notify(text, error = false){notifier.value.notify(text,error)}
+function notify(text, error = false){
+  const notifier = ref();
+  notifier.value.notify(text,error)
+}
 
 function fecharModal() {
   emit('update:exibirModal', false)

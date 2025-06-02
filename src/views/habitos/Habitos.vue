@@ -215,6 +215,7 @@
 
 <script>
 import DateTime from '@/core/DateTime.js'
+import { HabitosStorage } from '@/core/storage/HabitosStorage.js'
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js'
@@ -353,15 +354,16 @@ export default {
      */
     buscaHabitos () {
       this.busyHabitosLoad = true;
-      let params = {
-        'relations': 'habitoRealizados',
-        'orderBy': 'hora,asc'
-      };
-      params = QueryStringConverter.toQueryString(params, true);
-      let requestData = {
-        'url': `${config.serverUrl}/habitos${params}`,
-      };
-      Request.fetch(requestData)
+      // let params = {
+      //   'relations': 'habitoRealizados',
+      //   'orderBy': 'hora,asc'
+      // };
+      // params = QueryStringConverter.toQueryString(params, true);
+      // let requestData = {
+      //   'url': `${config.serverUrl}/habitos${params}`,
+      // };
+      HabitosStorage.index()
+      // Request.fetch(requestData)
       .then(([response, data]) => {
         console.log({data});
         this.fillShowMotivo(data)
