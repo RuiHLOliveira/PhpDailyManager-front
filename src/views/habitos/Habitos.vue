@@ -354,16 +354,7 @@ export default {
      */
     buscaHabitos () {
       this.busyHabitosLoad = true;
-      // let params = {
-      //   'relations': 'habitoRealizados',
-      //   'orderBy': 'hora,asc'
-      // };
-      // params = QueryStringConverter.toQueryString(params, true);
-      // let requestData = {
-      //   'url': `${config.serverUrl}/habitos${params}`,
-      // };
       HabitosStorage.index()
-      // Request.fetch(requestData)
       .then(([response, data]) => {
         console.log({data});
         this.fillShowMotivo(data)

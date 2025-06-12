@@ -1,4 +1,4 @@
-export default {
+const DateTime = {
 
     listWeekDay () {
         return [
@@ -10,7 +10,6 @@ export default {
             'D', 'S', 'T', 'Q', 'Q', 'S', 'S'
         ];
     },
-
 
     newDatetimeTz(dateString){
         let date = new Date(dateString);
@@ -96,3 +95,5 @@ export default {
     }
 
 }
+
+export default DateTime;

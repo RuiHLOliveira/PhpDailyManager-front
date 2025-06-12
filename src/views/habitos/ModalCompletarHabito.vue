@@ -53,7 +53,9 @@ import Request from '@/core/request.js'
 import config from '@/core/config.js'
 
 import { ref, watch, watchEffect } from 'vue';
+import { HabitosStorage } from '../../core/storage/HabitosStorage';
 
+const notifier = ref();
 const busy = ref(false);
 const needReload = ref(false);
 // const habitoCompletar = ref([]);
@@ -69,7 +71,7 @@ const props = defineProps({
 const emit = defineEmits([
   'reloadListaHabitosHabitTracker',
   'update:exibirModal',
-  'update:habitoCompletar'
+  'update:habitoCompletar',
 ]);
 
 watch(() => props.habitoCompletar, (novo, antigo) => {
@@ -81,36 +83,28 @@ watch(() => props.exibirModal, (novo, antigo) => {
 });
 
 function notify(text, error = false){
-  const notifier = ref();
   notifier.value.notify(text,error)
 }
 
 function fecharModal() {
   emit('update:exibirModal', false)
-  if(needReload == true) {
+  if(needReload.value == true) {
     console.log('reload');
     emit('reloadListaHabitosHabitTracker');
-    // emit('update:habitoCompletar', habitoCompletar);
-    needReload = false;
+    needReload.value = false;
   }
-  if(habitoFoiCompletado == true) {
+  if(habitoFoiCompletado.value == true) {
     console.info('habito completado');
-    emit('habitoCompletar', habitoCompletar);
-    // localHabitoCompletar = [];
-    habitoFoiCompletado = false
+    emit('habitoCompletar', props.habitoCompletar);
+    habitoFoiCompletado.value = false
   }
 }
 
 function concluirHabito() {
   if(props.habitoCompletar.realizadoHoje == true) return;
   busy.value = true;
-  let requestData = {
-    'url': `${config.serverUrl}/habitos/${props.habitoCompletar.id}/concluir`,
-    'headers': new Headers({'Content-Type': 'application/json'}),
-    'method' : 'POST',
-    'data' : {'textoObservacao': textoObservacao.value}
-  };
-  return Request.fetch(requestData).then(([response, data]) => {
+  HabitosStorage.concluir(props.habitoCompletar, textoObservacao.value)
+  .then(([response, data]) => {
     busy.value = false;
     needReload.value = true;
     habitoFoiCompletado.value = true;
