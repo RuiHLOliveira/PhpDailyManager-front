@@ -58,11 +58,12 @@
 .boxDescricao {
   display: flex;
   flex-direction: column;
-  background-color: #88888811;
-  border-radius: 10px;
+  background-color: #88888822;
+  /* border-radius: 10px; */
   width: calc(100% - 260px);
   justify-content: center; /* centralização vertical */
-  padding: 10px 5px;
+  padding: 5px 5px;
+  margin-bottom: 10px;
 }
 .boxDias {
   display: flex;
@@ -70,7 +71,8 @@
   align-items: center; /* centralização horizontal */
   /* background-color: #00000011; */
   /* border-radius: 10px; */
-  min-width: 260px;
+  min-width: 240px;
+  margin-bottom: 10px;
   /* overflow-x: hidden; */
 }
 .iconDiaRealizado{
@@ -79,15 +81,15 @@
 }
 
 .daySquareNovo {
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: inline-block;
   border: 1px solid #757575;
   border-radius: 1px;
   text-align: center;
-  min-width:  35px;
-  max-width:  35px;
-  min-height: 35px;
-  max-height: 35px;
+  min-width:  30px;
+  max-width:  30px;
+  min-height: 30px;
+  max-height: 30px;
   margin: 1px;
   align-items: center;
 }
@@ -125,12 +127,6 @@
 
           <!-- linha 1 -->
           <div class="flex flex-center-combo mb-5">
-            <!-- descricao do habito -->
-            <div class="flex-column boxDescricao">
-              <div class="flex font-weight-bold">
-                Descrição
-              </div>
-            </div>
 
             <div class="ml-5 boxDias">
               <div class="flex">
@@ -138,6 +134,13 @@
                   <div>{{ dia.weekDayFirstLetter }}</div>
                   <div>{{ dia.dia }}</div>
                 </span>
+              </div>
+            </div>
+            
+            <!-- descricao do habito -->
+            <div class="flex-column boxDescricao">
+              <div class="flex font-weight-bold">
+                Descrição
               </div>
             </div>
           </div>
@@ -148,6 +151,20 @@
 
               <!-- linha 1 -->
               <div class="flex flex-center-combo mb-5">
+                
+                <div class="ml-5 boxDias">
+                  <div class="flex-wrap">
+                    <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
+                      <!-- <div class="daySquareNovo" :class="{ daySquareGreen : dia.realizado }"> -->
+                      <div class="daySquareNovo flex-column flex-center-combo">
+                        <!-- <div>{{ dia.weekDayFirstLetter }}</div> -->
+                        <!-- <div>{{ dia.dia }}</div> -->
+                        <i v-if="dia.realizado" class="fi fi-bs-check iconDiaRealizado"></i>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+
                 <!-- descricao do habito -->
                 <div class="boxDescricao">
                   <div class="">
@@ -174,18 +191,6 @@
                   </div>
                 </div>
 
-                <div class="ml-5 boxDias">
-                  <div class="flex-wrap">
-                    <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
-                      <!-- <div class="daySquareNovo" :class="{ daySquareGreen : dia.realizado }"> -->
-                      <div class="daySquareNovo flex-column flex-center-combo">
-                        <!-- <div>{{ dia.weekDayFirstLetter }}</div> -->
-                        <!-- <div>{{ dia.dia }}</div> -->
-                        <i v-if="dia.realizado" class="fi fi-bs-check iconDiaRealizado"></i>
-                      </div>
-                    </span>
-                  </div>
-                </div>
               </div>
 
             </div>
