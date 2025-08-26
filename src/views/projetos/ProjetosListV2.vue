@@ -13,6 +13,7 @@ section.projetoList {
   flex-shrink: 0;
   div.projeto {
     justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.281);
     /* background-color: rgb(228, 228, 228); */
     /* border-radius: 5px; */
     button.situacaoFixedWidth {
@@ -22,33 +23,6 @@ section.projetoList {
     button.prioridadeFixedWidth {
       min-width: 100px;
       max-width: 100px;
-    }
-    .col1 {
-      /* border-right: 1px solid rgb(167, 167, 167); */
-      width: 68%;
-      display: inline-block;
-    }
-    .col2 {
-      text-align: center;
-      /* border-right: 1px solid rgb(167, 167, 167); */
-      width: 10%;
-      min-width: 100px;
-      display: inline-block;
-    }
-    .col3 {
-      text-align: center;
-      /* border-right: 1px solid rgb(167, 167, 167); */
-      width: 10%;
-      min-width: 100px;
-      display: inline-block;
-    }
-    .col4 {
-      text-align: center;
-      /* border-right: 1px solid rgb(167, 167, 167); */
-      width: 4%;
-      min-width: 4%;
-      max-width: 4%;
-      display: inline-block;
     }
   }
 }
@@ -62,45 +36,53 @@ section.projetoList {
   }
 }
 
+.btnSituacao{
+  padding: 5px 10px;
+  border-radius: 50px;
+}
+.btnBgOnly{
+  background-color: white;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 50px;
+}
+.btnBgOnly:hover{
+  background-color: rgb(225, 225, 225);
+}
 
 
 .projeto {
   .projetoNome {
+    font-size: 1.2rem;
     margin-top: 10px;
     margin-bottom: 5px;
   }
-  .tagsDoProjeto {
+  .projeto_tags {
     /* border: 1px solid #00000011; */
     font-size: 0.8rem;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
+    justify-content: flex-end;
+    align-items: center;
     margin-top: 5px;
     margin-bottom: 5px;
-    .tagDoProjeto {
+    margin-right: 10px;
+    /* width: 120px; */
+    .projeto_tags_tag {
       margin-right: 5px;
       padding: 3px;
     }
-  }
-  .botaoFixado {
-
-  }
-  .situacaoPrioridade{
-    margin-top: 10px;
-    margin-bottom: 10px;
   }
   @media only screen and (min-width: 800px) {
     .projetoNome {
       margin-top: 5px;
       margin-bottom: 5px;
     }
-    .tagsDoProjeto {
+    .projeto_tags {
       justify-content: flex-end;
-      width: 120px;
-      margin-top: 5px;
-      margin-bottom: 5px;
-      align-items: center;
+      width: 150px;
     }
   }
 
@@ -156,15 +138,15 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container div_bg_white">
+    <div class="container">
 
-      <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
+      <div class="position_sticky py-10 div_border_bottom_gray" style="background-color: white;">
         <!-- HEADER -->
-        <section class="div_bg_white div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
+        <section class="div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">
             <h1>Projetos</h1>
             <div>
-              <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+              <button class="btn ml-15 btn-sm btn-clear" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
             </div>
           </div>
           <div>
@@ -172,7 +154,7 @@ section.projetoShow {
         </section>
 
         <!-- FILTER -->
-        <div class="mt-10 p-5 div_bg_white div_border_gray flex-column" v-if="projetoExibir.id == null">
+        <div class="mt-10 p-5 flex-column" v-if="projetoExibir.id == null">
 
           <div class="" :class="{
             'flex-wrap flex-center-combo' : !isSmallScreen,
@@ -195,11 +177,11 @@ section.projetoShow {
               <!-- PRIORIDADE -->
               <select class="smallSelect mr-15" v-model="selectedPrioridade" name="prioridade" id="prioridade" @click="filtraListaProjeto()">
                 <option value="0">Todos</option>
-                <option value="1">Urgente</option>
-                <option value="2">Alta</option>
-                <option value="3">Media</option>
-                <option value="4">Baixa</option>
-                <option value="5">Baixissima</option>
+                <option value="1">P1 Urgente</option>
+                <option value="2">P2 Alta</option>
+                <option value="3">P3 Media</option>
+                <option value="4">P4 Baixa</option>
+                <option value="5">P5 Baixissima</option>
               </select>
               <!-- <div class="mr-5">
                 <button class="btn my-5 btn-sm btn-clear" type="button" @click="buscaProjetos()">
@@ -283,8 +265,9 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto div_bg_white div_border_gray my-10 ml-5 mr-15 px-10"
-                :class="{ 'flex flex-center-combo' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <!-- modelo dual column -->
+              <div class="projeto ml-5 mr-15 pt-15 pb-15" :class="{ 'flex flex-center-combo' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <!-- <div class="projeto flex-column div_border_bottom_gray my-15 ml-5 mr-15 pt-5 pb-5"> -->
                 
                 <!-- PROJETO NOME -->
                 <span class="projetoNome">
@@ -292,18 +275,10 @@ section.projetoShow {
                 </span>
                 
                 <!-- TAGS -->
-                <div class="" :class="{
-                  'flex flex-center-combo' : !isSmallScreen,
-                  'flex-column mb-10' : isSmallScreen
-                }">
-
-                  <!-- TAGS DO PROJETO -->
-                  <div v-if="projeto.tags != null && projeto.tags.length > 0" class="tagsDoProjeto">
-                    <div v-for="tag in projeto.tags" :key="tag.id" class="tagDoProjeto"
-                      :style="`border: 1px solid ${tag.cor}; color: ${tag.cor}`">
-                      {{ tag.descricao }}
-                    </div>
-                  </div>
+                <!-- modelo dual column -->
+                <div class="" :class="{'flex flex-center-combo' : !isSmallScreen,'flex-column mb-10' : isSmallScreen}">
+                <!-- <div class="flex flex-center-combo"> -->
+                <!-- <div class="flex-column mb-10"> -->
 
                   <!-- fixado -->
                   <div class="botaoFixado" v-if="!projetoExibir.editMode && projeto.fixado">
@@ -313,9 +288,18 @@ section.projetoShow {
                     </button>
                   </div>
 
-                  <div class="situacaoPrioridade flex flex-center-combo">
+                  <div class="flex flex-center-combo" style="justify-content: flex-end;">
+
+                    <!-- TAGS DO PROJETO -->
+                    <div v-if="projeto.tags != null && projeto.tags.length > 0" class="projeto_tags">
+                      <div v-for="tag in projeto.tags" :key="tag.id" class="projeto_tags_tag"
+                        :style="`border: 1px solid ${tag.cor}; color: ${tag.cor}`">
+                        {{ tag.descricao }}
+                      </div>
+                    </div>
+
                     <!-- SITUACAO -->
-                    <button type="button" class="mr-10 btn btn-sm btnPrioridade"
+                    <!-- <button type="button" class="mr-10 btn btn-sm btnPrioridade"
                       :class="{
                         situacaoFixedWidth : configs.situacaoFixedWidth == true,
                         situacaoPendente : projeto.situacao == 1,
@@ -323,24 +307,39 @@ section.projetoShow {
                         situacaoPausado : projeto.situacao == 3,
                         situacaoConcluido : projeto.situacao == 4,
                       }">
-                      {{ projeto.situacao }}-{{ projeto.situacaoDescritivo }}
-                    </button>
+                      {{ projeto.situacao }}-
+                      {{ projeto.situacaoDescritivo }}
+                    </button> -->
+                    <div class="mr-10 btnSituacao" style="line-height: 0; font-size: 1.5rem;">
+                      <i v-if="projeto.situacao == 1" class="fi fi-rr-square"></i>
+                      <i v-if="projeto.situacao == 2" class="fi fi-rr-user-time"></i>
+                      <i v-if="projeto.situacao == 3" class="fi fi-rr-pause"></i>
+                      <i v-if="projeto.situacao == 4" class="fi fi-rr-checkbox"></i>
+                    </div>
 
                     <!-- PRIORIDADE -->
-                    <button type="button" class="mr-10 btn btn-sm btnPrioridade"
+                    <button type="button" class="mr-15 btn btn-sm btnPrioridade"
                       :class="{
                         prioridadeFixedWidth : configs.prioridadeFixedWidth == true,
-                        prioridadeUrgente : projeto.prioridade == 1,
-                        prioridadeAlta : projeto.prioridade == 2,
-                        prioridadeMedia : projeto.prioridade == 3,
-                        prioridadeBaixa : projeto.prioridade == 4,
-                        prioridadeBaixissima : projeto.prioridade == 5,
+                        smallPrioridadeUrgente : projeto.prioridade == 1,
+                        smallPrioridadeAlta : projeto.prioridade == 2,
+                        smallPrioridadeMedia : projeto.prioridade == 3,
+                        smallPrioridadeBaixa : projeto.prioridade == 4,
+                        smallPrioridadeBaixissima : projeto.prioridade == 5,
                       }">
-                      {{ projeto.prioridade }}-{{ projeto.prioridadeDescritivo }}
+                      P{{ projeto.prioridade }}
                     </button>
+                    <!-- <div class="mr-10 btnSituacao" style="line-height: 0; font-size: 1.5rem;">
+                      <i v-if="projeto.prioridade == 1" class="fi fi-rr-square-1 btn btn-sm"></i>
+                      <i v-if="projeto.prioridade == 2" class="fi fi-rr-square-2 btn btn-sm"></i>
+                      <i v-if="projeto.prioridade == 3" class="fi fi-rr-square-3 btn btn-sm"></i>
+                      <i v-if="projeto.prioridade == 4" class="fi fi-rr-square-4 btn btn-sm"></i>
+                      <i v-if="projeto.prioridade == 5" class="fi fi-rr-square-5 btn btn-sm"></i>
+                    </div> -->
 
-                    <router-link :to='getProjetoUrl(projeto)' class="mr-10 btn btn-sm btn-clear">
-                      <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                    <router-link :to='getProjetoUrl(projeto)' class="mr-10 btn btnBgOnly" style="line-height: 0; font-size: 1.5rem;">
+                      <!-- <i class="fi fi-rr-arrow-small-right"></i> -->
+                      <i class="fi fi-rr-folder-open"></i>
                     </router-link>
                   </div>
                   
@@ -480,27 +479,27 @@ section.projetoShow {
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeUrgente"
                       :class="{selected : projetoExibir.prioridadeEditar == 1}"
                       @click="toggleEditarPrioridade(projetoExibir, 1)">
-                      1-Urgente
+                      P1
                     </button>
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeAlta"
                       :class="{selected : projetoExibir.prioridadeEditar == 2}"
                       @click="toggleEditarPrioridade(projetoExibir, 2)">
-                      2-Alta
+                      P2
                     </button>
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeMedia"
                       :class="{selected : projetoExibir.prioridadeEditar == 3}"
                       @click="toggleEditarPrioridade(projetoExibir, 3)">
-                      3-Media
+                      P3
                     </button>
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeBaixa"
                       :class="{selected : projetoExibir.prioridadeEditar == 4}"
                       @click="toggleEditarPrioridade(projetoExibir, 4)">
-                      4-Baixa
+                      P4
                     </button>
                     <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeBaixissima"
                       :class="{selected : projetoExibir.prioridadeEditar == 5}"
                       @click="toggleEditarPrioridade(projetoExibir, 5)">
-                      5-Baixissima
+                      P5
                     </button>
                   </div>
 
@@ -1301,9 +1300,9 @@ export default {
         return;
       }
       if(projeto.tags == null) projeto.tags = [];
-      let listaTagsDoProjeto = projeto.tags;
-      for (let i = 0; i < listaTagsDoProjeto.length; i++) {
-        if(listaTagsDoProjeto[i].id == novaTag.id){
+      let listaprojeto_tags = projeto.tags;
+      for (let i = 0; i < listaprojeto_tags.length; i++) {
+        if(listaprojeto_tags[i].id == novaTag.id){
           return;
         }
       }
