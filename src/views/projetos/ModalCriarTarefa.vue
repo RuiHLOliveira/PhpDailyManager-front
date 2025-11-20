@@ -8,7 +8,7 @@
       <div class="modal">
         <h1 class="textCenter mb-10">Nova Tarefa</h1>
         
-        <h3 class="inputlikeDiv mb-10">
+        <h3 class="textCenter mb-10">
           Projeto: {{ projeto?.nome }}
         </h3>
 
@@ -34,10 +34,10 @@
 
         <br>
         <div class="mt-10">
-          <button :disabled="busy || busyProjetosLoad" class="btn btn-clear iconBig mr-10" @click="fecharModal()">
+          <button :disabled="busy || busyProjetosLoad" class="btn iconBig mr-10" @click="fecharModal()">
             <i class="fi fi-br-left" ></i> Fechar
           </button>
-          <button :disabled="busy || busyProjetosLoad" class="btn btn-clear iconBig mr-10" @click="criarTarefa()">
+          <button :disabled="busy || busyProjetosLoad" class="btn iconBig mr-10" @click="criarTarefa()">
             <i class="fi fi-br-disk"></i> Salvar
           </button>
         </div>

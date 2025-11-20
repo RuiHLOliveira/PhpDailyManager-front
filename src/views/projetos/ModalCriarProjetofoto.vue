@@ -6,8 +6,8 @@
   <div v-if="exibirModal">
     <div class="modalBackground">
       <div class="modal">
-        <h1>Nova Foto de Projeto</h1>
-        <h3>
+        <h1 class="textCenter mb-10">Nova Foto de Projeto</h1>
+        <h3 class="textCenter mb-10">
           {{ projeto?.nome }}
         </h3>
 

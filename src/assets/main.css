@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Sora:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Sora:wght@100..800&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Sora:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-rounded/css/uicons-regular-rounded.css');
 @import url('https://cdn-uicons.flaticon.com/2.5.1/uicons-regular-straight/css/uicons-regular-straight.css');
@@ -28,15 +29,18 @@
 @import url('./prioridades.css');
 @import url('./tarefas.css');
 
+@import url('./darkmode.css');
+
 
 * {
   box-sizing: border-box;
 }
 
 html * {
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
+    /* font-family: 'Work Sans', sans-serif; */
     /* font-family: 'Inconsolata', sans-serif; */
-    /* font-family: 'Roboto', sans-serif; */
+    font-family: 'Roboto', sans-serif;
     /* font-family: 'Ubuntu', sans-serif; */
     /* font-family: 'Sora', sans-serif; */
 }
@@ -71,27 +75,13 @@ body {
     z-index: 10;
 }
 
-
-.divBgBlur {
-    background-color: #ffffff77;
-}
-.div_bg_white {
-    background-color: #ffffff;
-}
-.div_bg_offwhite {
-    background-color: var(--offWhite);
-}
-.div_bg_gray {
-    background-color: #cacaca;
-}
-
 .font-weight-bold {
     font-weight: bold;
 }
 
-.italicDarkGray{
+.italicoSutil{
     font-style: italic;
-    color: var(--darkGray);
+    color: #757575;
 }
 
 
@@ -104,22 +94,9 @@ body {
 }
 
 .mainBackground {
-    background-color: #363636;
-    background-color: #ffffff;
+    background-color: var(--darkmode-bg-color);
     min-height: 100svh;
 }
-
-.background {
-    /* background: url('./../bgimg.jpg'); */
-    /* background-attachment: fixed; */
-    /* background-repeat: no-repeat; */
-    /* background-position: center; */
-    /* background-size: cover; */
-    
-}
-/* .background-blur {
-    backdrop-filter: blur(4px);
-} */
 
 nav.topNav {
     border-bottom: 1px solid #b8b8b8;

@@ -7,7 +7,8 @@
 }
 
 .fi {
-    padding-top: 4px;
+    background-color: inherit;
+    /* padding-top: 4px; */
 }
 
 
@@ -58,18 +59,19 @@ button.btn.btn-icon-bigger {
 
 a.btn.btn-sm-icon,
 button.btn.btn-sm-icon {
-    padding: 2px 5px;
+    padding: 3px 5px;
 }
 
 /* DEFAULT BUTTON */
 a.btn,
 button.btn {
     text-align: center;
-    background-color: var(--default-button-color);
-    color: #ffffff;
     display: inline-block;
     padding: 5px 10px;
     border-radius: 3px;
+    
+    background-color: var(--darkmode-default-button-color);
+    color: #ffffff;
 
     /* link */
     text-decoration: none;
@@ -82,14 +84,9 @@ button.btn {
 }
 a.btn:hover,
 button:hover {
-    background-color: var(--default-hover-button-color-background);
+    background-color: var(--darkmode-default-hover-button-color-background);
 }
 
-a.btn-my-5,
-button.btn-my-5{
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
 
 /* DISABLED BUTTON */
 a.btn:disabled,
@@ -129,12 +126,12 @@ button.btn-red {
 a.btn-clear,
 button.btn-clear {
     border: 1px solid #575757;
-    background-color: #00000000;
-    color: #313131;
+    background-color: var(--darkmode-dark-button-color);
+    color: var(--darkmode-font-color);
 }
 a.btn-clear:hover,
 button.btn-clear:hover {
-    background-color: #00000010;
+    background-color: var(--darkmode-dark-hover-button-color-background);
 }
 
 /* CLEAR BUTTON */
@@ -187,7 +184,7 @@ button.btn-wider {
 a.btn.btn-sm,
 button.btn-sm {
     font-size: 0.9rem;
-    padding: 2px 5px;
+    padding: 3px 5px;
 }
 
 
@@ -203,7 +200,10 @@ button.btnPrioridade {
 
 a.selected,
 button.selected {
-    outline: 3px solid #000000;
+    padding: 10px 5px;
+    outline: 1px #acacac;
+    outline-style: solid;
+    outline-offset: 2px;
 }
 
 a.prioridadeUrgente,
@@ -343,7 +343,7 @@ a.smallSituacaoPendente,
 button.smallSituacaoPendente {
     background-color: #20c920;
 
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #20c920;
     color: #20c920;
 }
@@ -353,7 +353,7 @@ a.smallSituacaoPendente:hover,
 button.smallSituacaoPendente:hover {
     background-color: #20c920;
 
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #20c920;
     color: #20c920;
 }
@@ -363,7 +363,7 @@ a.smallSituacaoAguardandoResposta,
 button.smallSituacaoAguardandoResposta {
     background-color: #0099ff;
 
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #0099ff;
     color: #0099ff;
 }
@@ -373,7 +373,7 @@ a.smallSituacaoAguardandoResposta:hover,
 button.smallSituacaoAguardandoResposta:hover {
     background-color: #0099ff;
 
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #0099ff;
     color: #0099ff;
 }
@@ -383,7 +383,7 @@ a.smallSituacaoPausado,
 button.smallSituacaoPausado {
     background-color: #575757;
     
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #575757;
     color: #575757;
 }
@@ -393,7 +393,7 @@ a.smallSituacaoPausado:hover,
 button.smallSituacaoPausado:hover {
     background-color: #757575;
 
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #575757;
     color: #575757;
 }
@@ -405,7 +405,7 @@ button.smallSituacaoConcluido {
     color: #444444;
     text-decoration: line-through;
     
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #8d8d8d;
     color: #8d8d8d;
 }
@@ -415,7 +415,7 @@ a.smallSituacaoConcluido:hover,
 button.smallSituacaoConcluido:hover {
     background-color: #b1b1b1;
 
-    background-color: white;
+    background-color: var(--darkmode-bg-color);
     border: 1px solid #8d8d8d;
     color: #8d8d8d;
 }

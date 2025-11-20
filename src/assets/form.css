@@ -2,12 +2,12 @@
 
 label {
     font-size: 1rem;
-    color: #3d3d3d;
+    color: #ffffff;
     margin-top: 20px;
 }
 
 .inputlikeDiv {
-    color: #3d3d3d;
+    color: #ffffff;
     border: 0px;
 
     border: 1px solid var(--form-border-color);
@@ -19,7 +19,8 @@ label {
 textarea.textarea {
     font-size: 1rem;
     font-weight: normal;
-    color: #3d3d3d;
+    color: var(--darkmode-font-color);
+    background-color: var(--darkmode-bg-color);
     border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
@@ -42,12 +43,14 @@ input[type=time].inlineInput,
 input[type=password].inlineInput,
 input[type=date].inlineInput
 {
+    background-color: var(--darkmode-bg-color);
     width: inherit;
     display: inline-block;
 }
 
 input[type=color].inlineInput
 {
+    background-color: var(--darkmode-bg-color);
     width: 50px;
     display: inline-block;
 }
@@ -60,12 +63,14 @@ input[type=date].normalSizeInput
 {
     width: inherit;
     display: block;
+    background-color: var(--darkmode-bg-color);
 }
 
 input[type=color].normalSizeInput
 {
     width: 50px;
     display: block;
+    background-color: var(--darkmode-bg-color);
 }
 
 input[type=text],
@@ -75,8 +80,9 @@ input[type=time],
 input[type=password],
 input[type=date]
 {
+    background-color: var(--darkmode-bg-color);
     font-size: 1rem;
-    color: #3d3d3d;
+    color: #ffffff;
     border: 0px;
 
     border: 1px solid var(--form-border-color);
@@ -98,6 +104,7 @@ input[type=time].defaultInput,
 input[type=password].defaultInput,
 input[type=date].defaultInput
 {
+    background-color: var(--darkmode-bg-color);
     margin-bottom: 20px; /* ajustado */
 }
 
@@ -109,6 +116,7 @@ input[type=password]:focus,
 input[type=date]:focus,
 textarea.textarea:focus {
     outline: 2px solid #7da3ce;
+    background-color: var(--darkmode-bg-color);
     /* outline: none; */
 }
 
@@ -119,15 +127,17 @@ input[type=email]:disabled,
 input[type=password]:disabled,
 input[type=date]:disabled,
 textarea.textarea:disabled {
-    background-color: #cfcfcf;
+    color: #696969;
+    background-color: var(--darkmode-bg-color);
     cursor: not-allowed;
     /* outline: none; */
 }
 
 
 select.fullSelect {
+    background-color: var(--darkmode-bg-color);
     font-size: 1rem;
-    color: #181818;
+    color: #ffffff;
     border: 0px;
 
     border: 1px solid var(--form-border-color);
@@ -152,8 +162,9 @@ select.fullSelect:disabled {
 }
 
 select.smallSelect {
+    background-color: var(--darkmode-bg-color);
     font-size: 1rem;
-    color: #181818;
+    color: #ffffff;
     border: 0px;
 
     border: 1px solid var(--form-border-color);

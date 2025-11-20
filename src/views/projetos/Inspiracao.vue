@@ -1,10 +1,14 @@
 <style scoped>
 
 .projetofoto {
-  border: 10px solid #ffddbb;
-  border-radius: 20px;
+  /* border: 10px solid #ffddbb;
+  border: 10px solid #f7e4d1; */
+  outline: 3px #4e4e4e;
+  outline-style: solid;
+  outline-offset: 5px;
+  /* border-radius: 20px; */
   max-width: 400px;
-  max-height: 400px;
+  max-height: 300px;
 }
 
 section.projetoList {
@@ -13,7 +17,8 @@ section.projetoList {
   flex-shrink: 0;
   div.projeto {
     justify-content: space-between;
-    background-color: rgb(228, 228, 228);
+    background-color: var(--darkmode-bg-color);
+    color: var(--darkmode-font-color);
     /* border-radius: 5px; */
     button.situacaoFixedWidth {
       min-width: 100px;
@@ -79,27 +84,16 @@ section.projetoShow {
   }
 }
 
-.linhaBox {
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #d3d3d3;
-  border: 1px solid #d3d3d3;
-}
-.linhaBox:hover {
-  /* background-color: #cccccc; */
-  border: 1px solid rgb(88, 88, 88);
-}
-
 </style>
 
 <template>
   <div>
-    <div class="container div_bg_white">
+    <div class="container darkmodeBgBlack">
 
       
-      <div class="position_sticky div_bg_white pb-10 div_border_bottom_gray">
+      <div class="position_sticky darkmodeBgBlack pb-10 div_border_bottom_gray">
         <!-- HEADER -->
-        <section class="div_bg_offwhite div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
+        <section class="darkmodeBgBlack div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">
             <h1>OBJETIVOS e FOTOS</h1>
           </div>
@@ -107,7 +101,7 @@ section.projetoShow {
 
         <div>
           <!-- FILTER -->
-          <div class="mt-10 p-5 div_bg_offwhite div_border_gray flex-wrap" v-if="projetoExibir.id == null">
+          <div class="mt-10 p-5 darkmodeBgBlack flex-wrap" v-if="projetoExibir.id == null">
             <div class="mr-15">
               <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
             </div>
@@ -145,9 +139,9 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
 
-              <div v-if="projeto.nome.includes('OBJ - ')">
+              <div v-if="projeto.nome.includes('OBJ - ')" class="div_border_gray">
 
-                <div class="projeto div_bg_offwhite div_border_gray my-10 ml-5 mr-15"
+                <div class="projeto darkmodeBgBlack my-10 ml-5 mr-15"
                 :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                   <!-- PROJETO NOME -->
                   <span class="py-10 px-10">
@@ -185,17 +179,20 @@ section.projetoShow {
                       {{ projeto.prioridade }}-{{ projeto.prioridadeDescritivo }}
                     </button>
                   </div>
+                  
+                  <div class="my-10 ml-5 mr-15">
+                    <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarProjetofoto(projeto)">Criar Foto Link +</button>
+                  </div>
                 </div>
 
-                <div class="my-10 ml-5 mr-15">
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarProjetofoto(projeto)">Criar Foto Link +</button>
-                </div>
 
                 <div v-if="projeto.projetosfotos.length > 0">
-                  <div class="flex-wrap">
+                  <div class="flex-wrap justify-center">
                     <!-- CADA PROJETO FOTO -->
-                    <div v-for="projetofoto in projeto.projetosfotos" :key="projetofoto?.id" >
-                      <div class="flex-column div_border_gray ml-5 mr-5 p-5 mb-5" v-if="projetofoto != null">
+                    <div v-for="projetofoto in projeto.projetosfotos" :key="projetofoto?.id"
+                      class="flex-wrap justify-center"
+                      style="width:90%; border-top: 3px solid #404040;">
+                      <div class="flex-column mx-5 p-5 mb-15" v-if="projetofoto != null">
                           <div class="mb-10">
                             {{ projetofoto.descricao }}
                             <button class="btn btn-sm btn_tarefa_concluida" type="button" 
@@ -216,7 +213,7 @@ section.projetoShow {
           </div>
         </section>
 
-        <div class="divBgBlur my-5 py-5" v-if="busyProjetosLoad">
+        <div class="darkmodeBgBlack my-5 py-5" v-if="busyProjetosLoad">
           <InlineLoader
             :textoAguarde="true"
             :busy="busyProjetosLoad"

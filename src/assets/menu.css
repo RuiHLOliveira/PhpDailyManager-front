@@ -15,32 +15,27 @@ nav.leftNav {
     max-width: 100svw;
     min-height: 100svh;
     max-height: 100svh;
-    background-color: var(--default-button-color);
-    background-color: #ffffff;
+    background-color: var(--darkmode-bg-color);
     font-size: 1.1rem;
     .leftNavTitle {
         padding: 0 10px;
         text-align: center;
         font-size: 1.5rem;
-        color: white;
-        color: #000000;
+        color: var(--darkmode-font-color);
     }
     .leftNavText {
         padding: 0 10px;
         text-align: center;
-        color: white;
-        color: #000000;
+        color: var(--darkmode-font-color);
     }
     .menuItem {
         padding: 10px 15px;
         text-decoration: none;
         cursor: pointer;
-        color: rgb(255, 255, 255);
-        color: #000000;
+        color: var(--darkmode-font-color);
     }
     .menuItem:hover {
-        background-color:  var(--default-hover-button-color);
-        background-color:  #dbdbdb;
+    background-color: var(--darkmode-dark-hover-button-color-background);
     }
 }
 

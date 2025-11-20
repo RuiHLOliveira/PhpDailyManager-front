@@ -99,7 +99,7 @@
   <div>
     <div class="container">
 
-      <div class="divBgBlur"> <!-- HABITOS -->
+      <div class="darkmodeBgBlack"> <!-- HABITOS -->
         
         <div class="flex justify-spacebetween py-5 px-15"> <!-- TITLE -->
           <div class="flex justify-spacebetween alignitens-center"> <!-- left side -->
@@ -185,7 +185,7 @@
                     <span>{{ habito.descricao }}</span>
                   </div>
                   <div v-if="showMotivo[habito.id]">
-                    <span class="my-5 p-5 italicDarkGray" >
+                    <span class="my-5 p-5 italicoSutil" >
                       {{ habito.motivo ?? 'sem motivo cadastrado' }}
                     </span>
                   </div>

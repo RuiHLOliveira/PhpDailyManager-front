@@ -18,7 +18,8 @@
   border-radius: 5px;
   width: 120px;
   height: 40px;
-  background: #f1f1f1;
+  background: var(--darkmode-bg-color);
+  color: var(--darkmode-font-color);
   border: 1px solid var(--gray-button-border);
   /* border: 1px solid; */
   /* border-color: #f1f1f1; */

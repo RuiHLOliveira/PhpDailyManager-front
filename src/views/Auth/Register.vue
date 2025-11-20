@@ -13,8 +13,8 @@ section.register {
 </style>
 
 <template>
-  <div class="background">
-    <div class="background-blur">
+  <div class="">
+    <div class="">
       <div class="container flex alignitens-center justify-center">
 
         <section class="register mt-15 px-15 py-30 px-30">

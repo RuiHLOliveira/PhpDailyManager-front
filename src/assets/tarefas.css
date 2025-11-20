@@ -5,12 +5,12 @@
     border-radius: 5px;
 }
 .data_com_tarefa {
-    font-size: 1.2rem;
-    font-family: 'Inconsolata';
+    font-size: 0.8rem;
+    /* font-family: 'Inconsolata'; */
 }
 .data_com_tarefa_button_gray {
-    font-size: 1.2rem;
-    font-family: 'Inconsolata';
+    font-size: 0.8rem;
+    /* font-family: 'Inconsolata'; */
     padding: 5px;
     /* novo estilo */
     border: 1px solid #eeeeee;
@@ -19,8 +19,8 @@
 }
 
 .data_na_tarefa{
-  font-size: 1.2rem;
-  font-family: 'Inconsolata';
+    font-size: 0.8rem;
+  /* font-family: 'Inconsolata'; */
   border: 1px solid var(--whitegray);
   border-radius: 5px;
 }

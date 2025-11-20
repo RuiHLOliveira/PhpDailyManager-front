@@ -20,9 +20,9 @@
 
 <template>
   <div>
-    <div class="container div_bg_white">
+    <div class="container darkmodeBgBlack">
       
-      <div class="position_sticky div_border_bottom_gray div_bg_white">
+      <div class="position_sticky div_border_bottom_gray darkmodeBgBlack">
         <section class="mb-10 p-10 pb-15">
           <!-- style="min-height: 11vh" -->
           <div class="flex-wrap">
@@ -110,7 +110,7 @@
                   <div class="flex-wrap alignitens-center">
                     <div class="">
                       <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
-                      <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-sr-checkbox"></i></span>
+                      <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-rr-checkbox"></i></span>
                       <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                     </div>
                     <div class="">
@@ -134,13 +134,13 @@
 
                     <div class="flex alignitens-center" :class="{'mt-10' : isSmallScreen, '': !isSmallScreen}">
 
-                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-gray btn_tarefa_concluida mr-10" type="button" 
+                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida mr-10" type="button" 
                         :disabled="tarefa.busyTarefasUpdate"
                         @click="toggleModalEditarTarefa(tarefa)">
                           <i class="fi fi-rr-edit"></i> Editar
                       </button>
 
-                      <button v-if="!tarefa.editMode" class="my-10 btn btn-sm btn-gray btn_tarefa_concluida" type="button" 
+                      <button v-if="!tarefa.editMode" class="my-10 btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
                         :disabled="tarefa.busyTarefasUpdate"
                         @click="togglePrioridadesTarefa(tarefa)">
                           <i class="fi fi-sr-priority-importance"></i> Prioridade
@@ -175,7 +175,7 @@
                     </div>
                     
                     <div class="ycenter" :class="{'mt-10' : isSmallScreen, 'ml-10': !isSmallScreen}">
-                      <router-link class="mr-10 btn btn-sm btn-gray projetoNaTarefa p-5" :to='getProjetoUrl(tarefa.projeto)'>
+                      <router-link class="mr-10 btn btn-sm btn-clear projetoNaTarefa p-5" :to='getProjetoUrl(tarefa.projeto)'>
                         {{ tarefa.projeto.nome }}
                       </router-link>
                     </div>
@@ -204,7 +204,7 @@
 
                   <!-- LINHA 2 MOTIVO -->
                   <div class="mt-5 mb-5" v-if="showMotivo[tarefa.id]">
-                    <span class="mr-5 p-5 pl-10 italicDarkGray motivo_tarefa" >
+                    <span class="mr-5 p-5 pl-10 italicoSutil motivo_tarefa" >
                       "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
                     </span>
                   </div>

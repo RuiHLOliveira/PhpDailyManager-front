@@ -6,12 +6,15 @@
   max-width: 400px;
   max-height: 400px;
 }
-
 section.projetoList {
   flex-basis: 100%;
   flex-grow: 0;
   flex-shrink: 0;
   div.projeto {
+    background-color: #1f1c20;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
     justify-content: space-between;
     border-bottom: 1px solid rgba(0, 0, 0, 0.281);
     /* background-color: rgb(228, 228, 228); */
@@ -41,13 +44,13 @@ section.projetoList {
   border-radius: 50px;
 }
 .btnBgOnly{
-  background-color: white;
-  color: black;
+  background-color: var(--darkmode-dark-button-color);
+  color: var(--darkmode-font-color);
   padding: 5px 10px;
   border-radius: 50px;
 }
 .btnBgOnly:hover{
-  background-color: rgb(225, 225, 225);
+  background-color: var(--darkmode-dark-hover-button-color-background);
 }
 
 
@@ -107,7 +110,7 @@ section.projetoShow {
     /* text-decoration: underline; */
     font-size: 1.3rem;
     /* font-weight: bold; */
-    color: #000000;
+    color: var(--darkmode-font-color);
   }
 }
 @media only screen and (min-width: 800px) {
@@ -119,19 +122,23 @@ section.projetoShow {
 .linhaBox {
   padding: 10px;
   border-radius: 5px;
-  background-color: #d3d3d3;
+  color: var(--darkmode-font-color);
+  background-color: var(--darkmode-bg-color);
   border: 1px solid #d3d3d3;
 }
 .linhaBox:hover {
-  /* background-color: #cccccc; */
-  border: 1px solid rgb(88, 88, 88);
+  border: 1px solid #939393;
 }
 
 .clickableTarefa {
   cursor: pointer;
 }
 .clickableTarefa:hover {
-  background-color: #d3d3d3;
+    background-color: rgba(54, 65, 133, 0.5);
+}
+.tarefaSelected{
+    background-color: rgb(56, 68, 82);
+    background-color: rgba(54, 65, 133, 0.8);
 }
 
 </style>
@@ -140,13 +147,13 @@ section.projetoShow {
   <div>
     <div class="container">
 
-      <div class="position_sticky py-10 div_border_bottom_gray" style="background-color: white;">
+      <div class="position_sticky py-10 div_border_bottom_gray darkmodeBgBlack">
         <!-- HEADER -->
         <section class="div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">
             <h1>Projetos</h1>
             <div>
-              <button class="btn ml-15 btn-sm btn-clear" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+              <button class="btn btn-sm ml-15" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
             </div>
           </div>
           <div>
@@ -184,12 +191,12 @@ section.projetoShow {
                 <option value="5">P5 Baixissima</option>
               </select>
               <!-- <div class="mr-5">
-                <button class="btn my-5 btn-sm btn-clear" type="button" @click="buscaProjetos()">
+                <button class="btn my-5 btn-sm" type="button" @click="buscaProjetos()">
                   Recarregar Lista
                 </button>
               </div> -->
               <div class="mr-15">
-                <button class="btn btn-sm btn-clear" type="button" @click="showFilterTag = !showFilterTag">
+                <button class="btn btn-sm" type="button" @click="showFilterTag = !showFilterTag">
                   Filtro Tags
                 </button>
               </div>
@@ -206,7 +213,7 @@ section.projetoShow {
               <div class="flex justify-spacebetween flex-center-combo">
                 <span>Escolha a tag:</span>
                 <span>
-                  <button class="btn btn-sm btn-clear" type="button"
+                  <button class="btn btn-sm" type="button"
                     @click="showFilterTag = !showFilterTag">
                     <i class="fi fi-rr-x" ></i>
                   </button>
@@ -217,8 +224,7 @@ section.projetoShow {
               <div class="mb-10">
                 <div v-if="listaTags.length > 0" class="flex-column">
                   <div v-for="tag in listaTags" :key="tag.id"
-                    class="mt-10 flex-wrap flex-center-combo"
-                    :style="`color: ${tag.cor}`">
+                    class="mt-10 flex-wrap flex-center-combo">
 
                     <span class="cursor-pointer iconBigger"
                       @click="removerTagNoFiltro(tag)"
@@ -283,7 +289,7 @@ section.projetoShow {
                   <!-- fixado -->
                   <div class="botaoFixado" v-if="!projetoExibir.editMode && projeto.fixado">
                     <button type="button" disabled="true"
-                      class="btn btn-sm btn-clear btn">
+                      class="btn btn-sm">
                       <i class="fi fi-ss-thumbtack"></i>
                     </button>
                   </div>
@@ -338,7 +344,6 @@ section.projetoShow {
                     </div> -->
 
                     <router-link :to='getProjetoUrl(projeto)' class="mr-10 btn btnBgOnly" style="line-height: 0; font-size: 1.5rem;">
-                      <!-- <i class="fi fi-rr-arrow-small-right"></i> -->
                       <i class="fi fi-rr-folder-open"></i>
                     </router-link>
                   </div>
@@ -351,7 +356,7 @@ section.projetoShow {
           </div>
         </section>
 
-        <div class="divBgBlur my-5 py-5" v-if="busyProjetosLoad">
+        <div class="my-5 py-5" v-if="busyProjetosLoad">
           <InlineLoader
             :textoAguarde="true"
             :busy="busyProjetosLoad"
@@ -360,26 +365,26 @@ section.projetoShow {
         </div>
 
         <!-- PROJETO SHOW -->
-        <section class="projetoShow divBgBlur my-10 p-10 mx-5" v-if="projetoExibir.id != null">
+        <section class="projetoShow my-10 p-10 mx-5" v-if="projetoExibir.id != null">
         <div v-if="projetoExibir.id != null">
 
           <div class="mb-10 flex justify-spacebetween">
             <div class="flex-wrap flex-center-combo">
               <router-link v-if="!projetoExibir.editMode" to='/projetosListV2'
-                class="btn btn-clear mr-10 my-5 btn-icon-bigger flex-center-combo" style="display: inline-flex;">
+                class="btn mr-10 my-5 btn-icon-bigger flex-center-combo" style="display: inline-flex;">
                 <i class="fi fi-rr-arrow-small-left"></i> Voltar
               </router-link>
 
-              <button v-if="!projetoExibir.editMode" class="btn btn-clear mx-10 my-5 btn" type="button" 
+              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
               @click="toggleFixarProjeto(projetoExibir)">
                 {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
               </button>
 
-              <button v-if="!projetoExibir.editMode" class="btn btn-clear mx-10 my-5 btn" type="button" 
+              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
               @click="toggleEdicaoProjeto(projetoExibir)">
                 Editar
               </button>
-              <button v-if="projetoExibir.editMode" class="btn btn-clear mr-10 my-5 btn" type="button" 
+              <button v-if="projetoExibir.editMode" class="btn mr-10 my-5" type="button" 
               @click="cancelarEdicaoProjeto(projetoExibir)">
                 Cancelar
               </button>
@@ -409,7 +414,14 @@ section.projetoShow {
             <div class="mr-5">
               <div class="mb-15">
                 <div class="mb-5">
-                  <span class="projetoShowLabel">Projeto: </span>
+                  <!-- <span class="projetoShowLabel">Projeto: </span> -->
+                  
+                  <div v-if="!projetoExibir.editMode" class="mb-10 projetoShowLabel whitespace-pre">
+                    {{ projetoExibir.nome }}
+                  </div>
+                  <div v-if="projetoExibir.editMode">
+                    <input name="atividade" type="text" v-model="projetoExibir.nomeEditar">
+                  </div>
                   
                   <span v-if="!projetoExibir.editMode" class="">
                     <!-- FIXADO -->
@@ -439,12 +451,6 @@ section.projetoShow {
                   </span>
 
                 </div>
-                <div v-if="!projetoExibir.editMode" class="linhaBox whitespace-pre">
-                  {{ projetoExibir.nome }}
-                </div>
-                <div v-if="projetoExibir.editMode">
-                  <input name="atividade" type="text" v-model="projetoExibir.nomeEditar">
-                </div>
               </div>
 
               <div class="mb-15">
@@ -452,22 +458,22 @@ section.projetoShow {
                 <div v-if="projetoExibir.editMode" :class="{ 'flex' : isSmallScreen, 'flex-column' : !isSmallScreen}">
 
                   <div class="marginVerticalSpacer" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoPendente"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 situacaoPendente"
                       :class="{selected : projetoExibir.situacaoEditar == 1}"
                       @click="toggleEditarSituacao(projetoExibir, 1)">
                       0-Pendente
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoAguardandoResposta"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 situacaoAguardandoResposta"
                       :class="{selected : projetoExibir.situacaoEditar == 2}"
                       @click="toggleEditarSituacao(projetoExibir, 2)">
                       1-Espera
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoPausado"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 situacaoPausado"
                       :class="{selected : projetoExibir.situacaoEditar == 3}"
                       @click="toggleEditarSituacao(projetoExibir, 3)">
                       2-Suspenso
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 situacaoConcluido"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 situacaoConcluido"
                       :class="{selected : projetoExibir.situacaoEditar == 4}"
                       @click="toggleEditarSituacao(projetoExibir, 4)">
                       3-Concluído
@@ -476,27 +482,27 @@ section.projetoShow {
                   
 
                   <div class="marginVerticalSpacer" :class="{ 'flex' : !isSmallScreen, 'flex-column ml-10' : isSmallScreen}">
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeUrgente"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 prioridadeUrgente"
                       :class="{selected : projetoExibir.prioridadeEditar == 1}"
                       @click="toggleEditarPrioridade(projetoExibir, 1)">
                       P1
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeAlta"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 prioridadeAlta"
                       :class="{selected : projetoExibir.prioridadeEditar == 2}"
                       @click="toggleEditarPrioridade(projetoExibir, 2)">
                       P2
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeMedia"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 prioridadeMedia"
                       :class="{selected : projetoExibir.prioridadeEditar == 3}"
                       @click="toggleEditarPrioridade(projetoExibir, 3)">
                       P3
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeBaixa"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 prioridadeBaixa"
                       :class="{selected : projetoExibir.prioridadeEditar == 4}"
                       @click="toggleEditarPrioridade(projetoExibir, 4)">
                       P4
                     </button>
-                    <button type="button" class="btn btn-my-5 btn-sm btnPrioridade mr-5 prioridadeBaixissima"
+                    <button type="button" class="btn my-5 btn-sm btnPrioridade mr-5 prioridadeBaixissima"
                       :class="{selected : projetoExibir.prioridadeEditar == 5}"
                       @click="toggleEditarPrioridade(projetoExibir, 5)">
                       P5
@@ -524,7 +530,7 @@ section.projetoShow {
                       <div class="flex-column div_border_gray ml-5 mr-5 p-5 mb-5">
                           <div class="mb-10">
                             {{ projetofoto.descricao }}
-                            <button class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
+                            <button class="btn btn-sm btn_tarefa_concluida" type="button" 
                               @click="toggleModalEditarProjetofoto(projetofoto,projetoExibir)" >
                               Editar
                             </button> 
@@ -545,7 +551,7 @@ section.projetoShow {
                 <div class="flex-wrap mb-10">
                   <span class="projetoShowLabel mr-5">Tags: </span>
                   
-                  <button class="btn btn-sm btn-clear" type="button" @click="toggleAdicionarTag(projetoExibir)">
+                  <button class="btn btn-sm" type="button" @click="toggleAdicionarTag(projetoExibir)">
                     <i class="fi fi-rr-menu-dots" ></i>
                   </button>
 
@@ -580,7 +586,7 @@ section.projetoShow {
                       </span>
                     </span>
                     <span v-if="isSmallScreen">
-                      <button class="btn btn-sm btn-clear" type="button" @click="toggleAdicionarTag(projetoExibir)">
+                      <button class="btn btn-sm" type="button" @click="toggleAdicionarTag(projetoExibir)">
                         <i class="fi fi-rr-x" ></i>
                       </button>
                     </span>
@@ -624,7 +630,7 @@ section.projetoShow {
                         class="ml-5 inlineInput" name="cor" type="color"
                         placeholder="nome" v-model="novaTagCor">
                       <button :disabled="busyCreateNewTag || busyProjetosUpdateTags"
-                        type="button" class="ml-5 my-5 btn btn-clear btn-icon-bigger" @click="criarNovaTag()">
+                        type="button" class="ml-5 my-5 btn btn-icon-bigger" @click="criarNovaTag()">
                         <i class="fi fi-rr-check-circle"></i>
                       </button>
                     </div>
@@ -646,14 +652,14 @@ section.projetoShow {
               <div class="mb-15">
                 <div class="mb-15 flex-wrap">
                   <span class="projetoShowLabel mr-15">Tarefas: </span>
-                  <button class="btn btn-sm btn-clear mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
-                  <button class="btn btn-sm btn-clear mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
-                  <button class="btn btn-sm btn-clear mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar Tarefas</button>
-                  <button class="btn btn-sm btn-clear mr-5" type="button" @click="toggleShowBulkActionTarefa()" v-if="projetoExibir.tarefas.length > 0">
+                  <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
+                  <button class="btn btn-sm mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
+                  <button class="btn btn-sm mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar Tarefas</button>
+                  <button class="btn btn-sm mr-5" type="button" @click="toggleShowBulkActionTarefa()" v-if="projetoExibir.tarefas.length > 0">
                     {{ !showBulkActionTarefa ? 'Selecionar' : 'Esconder seleção' }}
                   </button>
-                  <button class="btn btn-sm btn-clear mr-5" type="button" @click="deleteTarefasBulk(projetoExibir)" v-if="showBulkActionTarefa && projetoExibir.tarefas.length > 0">Apagar</button>
-                  <button type="button" class="btn btn-sm btn-clear" v-if="projetoExibir.tarefas.length > 0 && collapsarTarefas">
+                  <button class="btn btn-sm mr-5" type="button" @click="deleteTarefasBulk(projetoExibir)" v-if="showBulkActionTarefa && projetoExibir.tarefas.length > 0">Apagar</button>
+                  <button type="button" class="btn btn-sm" v-if="projetoExibir.tarefas.length > 0 && collapsarTarefas">
                     ...
                   </button>
                 </div>
@@ -662,7 +668,7 @@ section.projetoShow {
                   <!-- CADA TAREFA -->
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
                     <div class="div_border_gray p-5 mb-5"
-                      :class="{ 'div_bg_gray' : tarefa.selected, 'clickableTarefa' : showBulkActionTarefa }"
+                      :class="{ 'tarefaSelected' : tarefa.selected, 'clickableTarefa' : showBulkActionTarefa }"
                       @click="toggleTarefaSelected(tarefa)"
                       v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       

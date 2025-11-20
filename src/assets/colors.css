@@ -8,7 +8,21 @@
     --default-button-color-background: #20648b;
     --situacao1-button-color-background: #1c7c73; */
 
-    /* novos */
+    /* DARKMODE */
+    --darkmode-font-color: #ffffff;
+    --darkmode-bg-color: #0a0a0a;
+    /* --darkmode-bg-color: #000000; */
+    
+    --darkmode-default-button-color: #1f234b;
+    --darkmode-default-button-color: #322677;
+    --darkmode-default-button-color: rgb(68, 77, 175);
+    --darkmode-default-hover-button-color-background: #2c245a;
+
+    --darkmode-dark-button-color: #000000;
+    --darkmode-dark-hover-button-color-background: #303030;
+
+
+    /* WHITEMODE */
     --form-border-color: #b8b8b8;
     --default-button-color: #26a67b;
     --default-hover-button-color:#109060;

@@ -32,6 +32,7 @@
     background-color: green;
     background-color: var(--prioridade5);
     color: rgb(255, 255, 255);
+    color: rgb(19, 19, 19);
     font-size: 0.8rem;
 }
 .semPrioridade, button.semPrioridade {

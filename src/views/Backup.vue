@@ -5,11 +5,11 @@
   <div>
     <div class="container">
 
-      <section class="divBgBlur my-10 p-10">
+      <section class="darkmodeBgBlack my-10 p-10">
         <h1>Backup</h1>
       </section>
       
-      <section class="divBgBlur my-10 p-10">
+      <section class="darkmodeBgBlack my-10 p-10">
         <div class="mb-15">
           <h3 class="pageTitle">Baixar Backup</h3>
           <div>
@@ -33,7 +33,7 @@
         </div>
       </section>
 
-      <section class="divBgBlur my-10 p-10">
+      <section class="darkmodeBgBlack my-10 p-10">
         <div class="mb-15">
           <h3 class="pageTitle">Importar Backup</h3>
           <div>

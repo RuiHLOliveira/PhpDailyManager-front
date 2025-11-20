@@ -1,13 +1,14 @@
 <style scoped>
 .modalAdditionalTag {
     font-size: 0.8rem;
-    background-color: rgb(109, 109, 109);
-    color: white;
+    color: var(--darkmode-font-color);
+    background-color: var(--darkmode-bg-color);
     border-radius: 5px;
 }
 .modalInboxItem {
   border-radius: 5px;
-  background-color: #bbbbbb77;
+    color: var(--darkmode-font-color);
+    background-color: #252525;
 }
 a.link{
   color: #116dc8;
