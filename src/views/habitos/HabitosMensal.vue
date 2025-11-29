@@ -1,28 +1,24 @@
 <style scoped>
 
-.boxHabito{
-  background-color: #252525;
-  padding: 10px 5px;
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-}
-
-@media only screen and (min-width: 800px) {
-  .boxHabito{
-    width: 400px;
-    max-width: 400px;
-  }
-}
-
-
 .marginVerticalSpacer {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 .whitespace-pre{
   white-space: pre-wrap;
+}
+
+.habitosList{
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBoxHabito {
+  border: 1px solid #bbbbbb;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .titleEditInput {
@@ -59,6 +55,16 @@
   outline: 3px solid #000000;
 }
 
+.boxDescricao {
+  display: flex;
+  flex-direction: column;
+  background-color: #88888822;
+  /* border-radius: 10px; */
+  width: calc(100% - 260px);
+  justify-content: center; /* centralização vertical */
+  padding: 5px 5px;
+  margin-bottom: 10px;
+}
 .boxDias {
   display: flex;
   flex-direction: column;
@@ -101,14 +107,13 @@
               <h1>Habitos</h1>
             </div>
             <div>
-              <button class="mx-5 btn btn-sm btn-clear" type="button" @click="toggleModalCriarEditarHabito()">Criar Habito +</button>
+              <button class="btn mx-5 btn-clear btn-sm" type="button" @click="toggleModalCriarHabito()">Criar Habito +</button>
             </div>
           </div>
-          <div class="flex justify-spacebetween alignitens-center">
-            <!-- right side -->
-            <button type="button" class="mx-5 btn btn-sm btn-clear" @click="toggleHabitosControl()">
-              <i class="fi fi-rs-brightness"></i> Editar Habitos
-            </button>
+          <div> <!-- right side -->
+              <router-link class="btn btn-clear btn-sm" to="/editarHabitos">
+                  <i class="fi fi-rs-brightness"></i> Editar Hábitos
+              </router-link>
           </div>
         </div>
         
@@ -120,48 +125,69 @@
             :center="true">
           </InlineLoader>
 
+          <!-- linha 1 -->
+          <div class="flex flex-center-combo mb-5">
+
+            <div class="ml-5 boxDias">
+              <div class="flex">
+                <span v-for="dia in semana" :key="dia.dia" class="daySquareNovo flex-column flex-center-combo">
+                  <div>{{ dia.weekDayFirstLetter }}</div>
+                  <div>{{ dia.dia }}</div>
+                </span>
+              </div>
+            </div>
+            
+            <!-- descricao do habito -->
+            <div class="flex-column boxDescricao">
+              <div class="flex font-weight-bold">
+                Descrição
+              </div>
+            </div>
+          </div>
+
           <!-- lista de habitos -->
-          <div v-if="habitos != [] && !busyHabitosLoad" :class="isSmallScreen ? 'flex-column' :  'flex-wrap'">
+          <div v-if="habitos != [] && !busyHabitosLoad" class="habitosList">
             <div v-for="habito in habitos" :key="habito.id">
 
               <!-- linha 1 -->
-              <div class="mb-5">
+              <div class="flex flex-center-combo mb-5">
+                
+                <div class="ml-5 boxDias">
+                  <div class="flex-wrap">
+                    <span v-for="dia in habito.semana" :key="dia.dia" class="flex-column">
+                      <!-- <div class="daySquareNovo" :class="{ daySquareGreen : dia.realizado }"> -->
+                      <div class="daySquareNovo flex-column flex-center-combo">
+                        <!-- <div>{{ dia.weekDayFirstLetter }}</div> -->
+                        <!-- <div>{{ dia.dia }}</div> -->
+                        <i v-if="dia.realizado" class="fi fi-bs-check iconDiaRealizado"></i>
+                      </div>
+                    </span>
+                  </div>
+                </div>
 
                 <!-- descricao do habito -->
-                <div class="boxHabito">
+                <div class="boxDescricao">
+                  <div class="">
 
-                  <div class="flex-column">
+                    <InlineLoader
+                      :busy="habito.busyHabitosConcluir">
+                    </InlineLoader>
 
-                    <div class="flex justify-spacebetween">
-                      <div>
-                        <button class="btn btn-checkbox mx-5" style="position: relative; top: 3px;" 
-                          type="button" @click="toggleModalConcluirHabito(habito)"
-                          :disabled="habito.busyHabitosConcluir"
-                          v-if="!habito.busyHabitosConcluir">
-                          <i class="fi fi-bs-checkbox" style="color: green;" v-if="habito.realizadoHoje"></i>
-                          <i class="fi fi-bs-square" style="color: #444444;" v-if="!habito.realizadoHoje"></i>
-                        </button>
-                        <span class="mx-10 font-weight-bold">{{ habito.hora }}</span>
-                        <span>{{ habito.descricao }}</span>
-                      </div>
-                      <div>
-                        <button class="btn btn-clear btn-sm ml-20" type="button"
-                          v-if="habitosControl"
-                          @click="toggleModalCriarEditarHabito(habito)">
-                          <i class="fi fi-rs-edit"></i>
-                        </button>
-                      </div>
-                    </div>
+                    <button class="btn btn-checkbox mx-5" style="position: relative; top: 3px;" 
+                      type="button" @click="toggleModalConcluirHabito(habito)"
+                      :disabled="habito.busyHabitosConcluir"
+                      v-if="!habito.busyHabitosConcluir">
+                      <i class="fi fi-bs-checkbox" style="color: green;" v-if="habito.realizadoHoje"></i>
+                      <i class="fi fi-bs-square" style="color: #444444;" v-if="!habito.realizadoHoje"></i>
+                    </button>
 
-                    <!-- <div class="mt-10">
-                    </div> -->
-                    
-                    <div v-if="showMotivo[habito.id]">
-                      <span class="my-5 p-5 italicoSutil" >
-                        {{ habito.motivo ?? 'sem motivo cadastrado' }}
-                      </span>
-                    </div>
-
+                    <span class="mr-10 font-weight-bold">{{ habito.hora }}</span>
+                    <span>{{ habito.descricao }}</span>
+                  </div>
+                  <div v-if="showMotivo[habito.id]">
+                    <span class="my-5 p-5 italicoSutil" >
+                      {{ habito.motivo ?? 'sem motivo cadastrado' }}
+                    </span>
                   </div>
                 </div>
 
@@ -178,11 +204,10 @@
 
     <Notifier ref="notifier"></Notifier>
 
-    <ModalCriarEditarHabito
-      v-model:exibirModal="exibirModalCriarEditarHabito"
-      v-model:habito="habitoModalEditar"
+    <ModalCriarHabito
+      v-model:exibirModal="exibirModalCriarHabito"
       @reloadListaHabitosHabitTracker="buscaHabitos()">
-    </ModalCriarEditarHabito>
+    </ModalCriarHabito>
     
     <ModalCompletarHabito
       v-model:exibirModal="exibirModalCompletarHabito"
@@ -202,7 +227,7 @@ import QueryStringConverter from '@/core/QueryStringConverter.js'
 import Loader from '@/components/Loader.vue';
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
-import ModalCriarEditarHabito from '@/views/habitos/ModalCriarEditarHabito.vue';
+import ModalCriarHabito from '@/views/habitos/ModalCriarHabito.vue';
 import ModalCompletarHabito from './ModalCompletarHabito.vue';
 
 export default {
@@ -210,7 +235,7 @@ export default {
   components: {
     Loader,
     InlineLoader,
-    ModalCriarEditarHabito,
+    ModalCriarHabito,
     ModalCompletarHabito,
     Notifier,
   },
@@ -226,29 +251,12 @@ export default {
       semana: [],
       habitos: [],
       showMotivo: [],
-      exibirModalCriarEditarHabito: false,
+      exibirModalCriarHabito: false,
       exibirModalCompletarHabito: false,
       habitoCompletar: [],
-      habitoModalEditar: [],
-      
-      windowWidth: 0,
-      windowHeight: 0,
-
-      habitosControl: false,
-
     }
   },
-  computed: {
-    isSmallScreen() {
-      return this.windowWidth < 800
-    },
-  },
   methods: {
-    
-    getDimensions() {
-      this.windowWidth = document.documentElement.clientWidth;
-      this.windowHeight = document.documentElement.clientHeight;
-    },
     
     /** 
      * FUNCOES HELPER IMPORTADAS
@@ -278,20 +286,12 @@ export default {
       }
     },
 
-    toggleModalCriarEditarHabito(habito = null) {
-      this.habitoModalEditar = []
-      if(habito != null) {
-        this.habitoModalEditar = habito
-      }
-      this.exibirModalCriarEditarHabito = true;
+    toggleModalCriarHabito () {
+      this.exibirModalCriarHabito = true;
     },
 
     toggleShowMotivoHabito (habito) {
       this.showMotivo[habito.id] = !this.showMotivo[habito.id];
-    },
-
-    toggleHabitosControl() {
-      this.habitosControl = !this.habitosControl;
     },
 
     /**
@@ -366,6 +366,7 @@ export default {
         data = this.ordenarHabitos(data)
         data = this.defineCamposExtras(data)
         data = this.defineRealizadoHoje(data)
+        data = this.fillSemanaRealizados(data)
         this.habitos = data
         this.busyHabitosLoad = false;
       })
@@ -389,6 +390,7 @@ export default {
       })
       return habitos
     },
+
     
     defineCamposExtras(habitos){
       for (let i = 0; i < habitos.length; i++) {
@@ -411,6 +413,28 @@ export default {
       return habitos;
     },
 
+    fillSemanaRealizados(habitos){
+      for (let i = 0; i < habitos.length; i++) {
+        habitos[i].semana = this.montaSemanaAtual()
+        for (let j = 0; j < habitos[i].habitoRealizados.length; j++) {
+          // console.log('habito Realizado', habitos[i].habitoRealizados[j])
+          const realizadoEmDateObject = this.newDatetimeTz(habitos[i].habitoRealizados[j].realizadoEm);
+          const weekDayNumber = this.getWeekDayNumber(realizadoEmDateObject)
+          const date = this.getDate(realizadoEmDateObject)
+          const month = this.getMonth(realizadoEmDateObject)
+          const year = this.getYear(realizadoEmDateObject)
+          if(date == habitos[i].semana[weekDayNumber].dia
+            && month == habitos[i].semana[weekDayNumber].mes
+            && year == habitos[i].semana[weekDayNumber].ano
+          ){
+            habitos[i].semana[weekDayNumber]['realizado'] = true
+          }
+          // console.log('depois ', habitos[i].semana[weekDayNumber]);
+        }
+      }
+      return habitos;
+    },
+    
     updateHabito(habito) {
       console.log(habito.id);
       this.busyHabitosUpdate = true;
@@ -465,6 +489,41 @@ export default {
         this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
       });
     },
+
+    montaSemanaAPartirDomingo(dateDomingo)
+    {
+      const oneDayTimestamp = 24 * 60 * 60 * 1000
+      let dia = dateDomingo
+      let semana = [];
+      let qtd = 7;
+      for (let i = 0; i < qtd; i++) {
+        if(i > 0) {
+          dia.setTime(dia.getTime() + (oneDayTimestamp)); // sums 1 day
+        }
+        semana.push({
+          dateObject: new Date(dia.getTime()),
+          dia: this.getDate(new Date(dia.getTime())),
+          mes: this.getMonth(new Date(dia.getTime())),
+          ano: this.getYear(new Date(dia.getTime())),
+          weekDay: this.getWeekDay(new Date(dia.getTime())),
+          weekDayFirstLetter: this.getWeekDayFirstLetter(new Date(dia.getTime())),
+          realizado: false
+        })
+      }
+      return semana;
+    },
+    montaSemanaAtual() {
+      const oneDayTimestamp = 24 * 60 * 60 * 1000
+      let hoje = new Date()
+      // console.log('hoje', hoje.getDay(), hoje.getDate());
+      let domingo = new Date(hoje.getTime() - (hoje.getDay() * oneDayTimestamp)); //returns to sunday
+      // console.log('domingo', domingo.getDay(), domingo.getDate());
+      let semana = this.montaSemanaAPartirDomingo(domingo);
+      // console.log(semana);
+      this.semana = semana
+      return semana;
+    },
+
   },
   watch: {
     configuracoes(a, b) {
@@ -472,15 +531,8 @@ export default {
     }
   },
   created () {
+    // this.montaSemanaAtual();
     this.buscaHabitos();
   },
-  mounted() {
-    window.addEventListener('resize', this.getDimensions);
-    this.getDimensions()
-  },
-  unmounted() {
-    window.removeEventListener('resize', this.getDimensions);
-  },
-
 }
 </script>

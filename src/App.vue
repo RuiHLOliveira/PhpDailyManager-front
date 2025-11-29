@@ -35,6 +35,9 @@
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker">
               <i class="fi fi-rs-brightness"></i> Habit Tracker
           </router-link>
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTrackerMensal">
+              <i class="fi fi-rs-brightness"></i> habitTrackerMensal
+          </router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inspiracao">
             <i class="fi fi-sr-circle-1"></i> Inspiração
           </router-link>

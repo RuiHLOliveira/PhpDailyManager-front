@@ -35,6 +35,30 @@ export const HabitosStorage = reactive({
         });
     },
 
+    criar(habito) {
+        return new Promise((resolve, reject) => {
+            this.apiCriar(habito)
+            .then(([response,data]) => {
+                this.forceNextReload = true;
+                resolve([response,data]);
+            }).catch((error) => {
+                reject(error)
+            });
+        });
+    },
+    
+    editar(habito) {
+        return new Promise((resolve, reject) => {
+            this.apiEditar(habito)
+            .then(([response,data]) => {
+                this.forceNextReload = true;
+                resolve([response,data]);
+            }).catch((error) => {
+                reject(error)
+            });
+        });
+    },
+
     substituir(habito) {
         if(this.habitos == null || this.habitos.length == 0) return;
         const index = this.habitos.findIndex(e => e.id === habito.id);
@@ -68,6 +92,40 @@ export const HabitosStorage = reactive({
         const url = `${config.serverUrl}/habitos/${habito.id}/concluir`
         const headers = new Headers({'Content-Type': 'application/json'})
         const body = {'textoObservacao': textoObservacao}
+        let requestData = {
+            'url': url,
+            'headers': headers,
+            'method' : 'POST',
+            'data' : body
+        };
+        return Request.fetch(requestData);
+    },
+
+    apiEditar(habito) {
+        const url = `${config.serverUrl}/habitos/${habito.id}`
+        const headers = new Headers({'Content-Type': 'application/json'})
+        const body = {
+            'descricao': habito.descricao,
+            'motivo': habito.motivo,
+            'hora': habito.hora,
+        };
+        let requestData = {
+            'url': url,
+            'headers': headers,
+            'method' : 'PUT',
+            'data' : body
+        };
+        return Request.fetch(requestData);
+    },
+
+    apiCriar(habito) {
+        const url = `${config.serverUrl}/habitos`
+        const headers = new Headers({'Content-Type': 'application/json'})
+        const body = {
+            'descricao': habito.descricao,
+            'motivo': habito.motivo,
+            'hora': habito.hora,
+        };
         let requestData = {
             'url': url,
             'headers': headers,
