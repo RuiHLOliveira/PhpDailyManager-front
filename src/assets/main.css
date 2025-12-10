@@ -30,6 +30,7 @@
 @import url('./tarefas.css');
 
 @import url('./darkmode.css');
+@import url('./fiIcons.css');
 
 
 * {
@@ -45,7 +46,7 @@ html * {
     /* font-family: 'Sora', sans-serif; */
 }
 html {
-    font-size: 10pt;
+    font-size: 12pt;
     padding: 0px;
 }
 
@@ -198,18 +199,3 @@ section.sectionBorder {
 
 
 
-.iconBigTarefa {
-    font-size: 1.3rem;
-}
-.check-pendente {
-    font-size: 1.2rem;
-    color: black;
-}
-.check-concluido {
-    font-size: 1.2rem;
-    color: rgb(0, 66, 128);
-}
-.check-falhado {
-    font-size: 1.2rem;
-    color: red;
-}

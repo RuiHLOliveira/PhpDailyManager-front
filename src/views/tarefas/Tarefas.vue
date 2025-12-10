@@ -1,20 +1,5 @@
-<style>
+<style scoped>
 
-.tarefa {
-  padding: 10px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #919191;
-  border-bottom: 1px solid #646464;
-  border-bottom: 0px solid #d3d3d3;
-  
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #d3d3d3;
-}
 
 </style>
 
@@ -137,13 +122,13 @@
                       <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida mr-10" type="button" 
                         :disabled="tarefa.busyTarefasUpdate"
                         @click="toggleModalEditarTarefa(tarefa)">
-                          <i class="fi fi-rr-edit"></i> Editar
+                          <i class="fi fi-rr-edit"></i>
                       </button>
 
                       <button v-if="!tarefa.editMode" class="my-10 btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
                         :disabled="tarefa.busyTarefasUpdate"
                         @click="togglePrioridadesTarefa(tarefa)">
-                          <i class="fi fi-sr-priority-importance"></i> Prioridade
+                          <i class="fi fi-sr-priority-importance"></i>
                       </button>
 
                       <div class="div_border_gray px-5 py-5 ml-10" v-if="tarefa.showMenuPrioridades" :class="{'': !isSmallScreen}">

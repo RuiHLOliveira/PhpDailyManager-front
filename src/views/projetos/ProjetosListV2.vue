@@ -130,17 +130,6 @@ section.projetoShow {
   border: 1px solid #939393;
 }
 
-.clickableTarefa {
-  cursor: pointer;
-}
-.clickableTarefa:hover {
-    background-color: rgba(54, 65, 133, 0.5);
-}
-.tarefaSelected{
-    background-color: rgb(56, 68, 82);
-    background-color: rgba(54, 65, 133, 0.8);
-}
-
 </style>
 
 <template>
@@ -149,14 +138,52 @@ section.projetoShow {
 
       <div class="position_sticky py-10 div_border_bottom_gray darkmodeBgBlack">
         <!-- HEADER -->
-        <section class="div_border_gray my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
+        <section class="my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">
             <h1>Projetos</h1>
-            <div>
-              <button class="btn btn-sm ml-15" type="button" @click="toggleModalCriarProjeto()">Criar Projeto +</button>
+            <div class="">
+              <button class="btn btn-sm mx-15" type="button"
+                v-if="projetoExibir.id == null"
+                @click="toggleModalCriarProjeto()">
+                Criar Projeto +
+              </button>
+
+              <router-link v-if="projetoExibir.id != null && !projetoExibir.editMode" to='/projetosListV2'
+                class="btn ml-15 mr-10 my-5 flex-center-combo" style="display: inline-flex;">
+                <i class="fi fi-rr-arrow-small-left"></i> Voltar
+              </router-link>
+
+              <button v-if="projetoExibir.id != null && !projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
+                @click="toggleFixarProjeto(projetoExibir)">
+                {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
+              </button>
+
+              <button v-if="projetoExibir.id != null && !projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
+                @click="toggleEdicaoProjeto(projetoExibir)">
+                Editar
+              </button>
+
             </div>
           </div>
-          <div>
+          <div v-if="projetoExibir.id != null">
+            <div class="flex-wrap flex-center-combo justify-spacebetween">
+              <button v-if="projetoExibir.editMode"
+                class="btn mx-10 mr-10 my-5" type="button" 
+                @click="cancelarEdicaoProjeto(projetoExibir)">
+                Cancelar
+              </button>
+              <button v-if="projetoExibir.editMode"
+                class="btn mx-10 my-5 btn" type="button" 
+                @click="salvarEdicaoProjeto(projetoExibir)">
+                Salvar
+              </button>
+              <button v-if="projetoExibir.editMode"
+                class="btn mx-10 my-5 btn btn-red" type="button" 
+                @click="excluirProjeto(projetoExibir)">
+                Excluir
+              </button>
+            </div>
+
           </div>
         </section>
 
@@ -368,41 +395,6 @@ section.projetoShow {
         <section class="projetoShow my-10 p-10 mx-5" v-if="projetoExibir.id != null">
         <div v-if="projetoExibir.id != null">
 
-          <div class="mb-10 flex justify-spacebetween">
-            <div class="flex-wrap flex-center-combo">
-              <router-link v-if="!projetoExibir.editMode" to='/projetosListV2'
-                class="btn mr-10 my-5 btn-icon-bigger flex-center-combo" style="display: inline-flex;">
-                <i class="fi fi-rr-arrow-small-left"></i> Voltar
-              </router-link>
-
-              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
-              @click="toggleFixarProjeto(projetoExibir)">
-                {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
-              </button>
-
-              <button v-if="!projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
-              @click="toggleEdicaoProjeto(projetoExibir)">
-                Editar
-              </button>
-              <button v-if="projetoExibir.editMode" class="btn mr-10 my-5" type="button" 
-              @click="cancelarEdicaoProjeto(projetoExibir)">
-                Cancelar
-              </button>
-            </div>
-            <div class="flex-wrap flex-center-combo">
-              <button v-if="projetoExibir.editMode"
-                class="btn mx-10 my-5 btn" type="button" 
-                @click="salvarEdicaoProjeto(projetoExibir)">
-                Salvar
-              </button>
-              <button v-if="projetoExibir.editMode"
-                class="btn mx-10 my-5 btn btn-red" type="button" 
-                @click="excluirProjeto(projetoExibir)">
-                Excluir
-              </button>
-            </div>
-          </div>
-
           <InlineLoader
             :textoAguarde="true"
             :busy="busyProjetosUpdate || busyProjetosDelete"
@@ -546,7 +538,7 @@ section.projetoShow {
               </div>
 
               <!-- PROJETOS TAGS -->
-              <div class="mb-15 flex-column">
+              <div class="mb-15 flex-column div_border_bottom_gray">
 
                 <div class="flex-wrap mb-10">
                   <span class="projetoShowLabel mr-5">Tags: </span>
@@ -649,25 +641,28 @@ section.projetoShow {
 
 
               <!-- TAREFAS -->
-              <div class="mb-15">
+              <div class="mb-15 div_border_bottom_gray">
                 <div class="mb-15 flex-wrap">
                   <span class="projetoShowLabel mr-15">Tarefas: </span>
                   <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
                   <button class="btn btn-sm mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
-                  <button class="btn btn-sm mr-5" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">Minimizar Tarefas</button>
-                  <button class="btn btn-sm mr-5" type="button" @click="toggleShowBulkActionTarefa()" v-if="projetoExibir.tarefas.length > 0">
-                    {{ !showBulkActionTarefa ? 'Selecionar' : 'Esconder seleção' }}
+                  <button class="btn btn-sm mr-15" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">
+                    <span v-if="!collapsarTarefas"><i class="fi fi-rr-eye-crossed"></i></span>
+                    <span v-if="collapsarTarefas"><i class="fi fi-rr-eye"></i></span>
                   </button>
-                  <button class="btn btn-sm mr-5" type="button" @click="deleteTarefasBulk(projetoExibir)" v-if="showBulkActionTarefa && projetoExibir.tarefas.length > 0">Apagar</button>
-                  <button type="button" class="btn btn-sm" v-if="projetoExibir.tarefas.length > 0 && collapsarTarefas">
-                    ...
+                  <button class="btn btn-sm mr-15" type="button" @click="toggleShowBulkActionTarefa()" v-if="!collapsarTarefas && projetoExibir.tarefas.length > 0">
+                    <span v-if="!showBulkActionTarefa"><i class="fi fi-rr-trash"></i></span>
+                    <span v-if="showBulkActionTarefa"><i class="fi fi-rr-arrow-left"></i> <i class="fi fi-rr-ban"></i></span>
+                  </button>
+                  <button class="btn btn-sm mr-15" type="button" @click="deleteTarefasBulk(projetoExibir)" v-if="!collapsarTarefas && showBulkActionTarefa && projetoExibir.tarefas.length > 0">
+                    <i class="fi fi-rr-trash"></i> Apagar
                   </button>
                 </div>
 
                 <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas">
                   <!-- CADA TAREFA -->
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
-                    <div class="div_border_gray p-5 mb-5"
+                    <div class="tarefa"
                       :class="{ 'tarefaSelected' : tarefa.selected, 'clickableTarefa' : showBulkActionTarefa }"
                       @click="toggleTarefaSelected(tarefa)"
                       v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
@@ -681,15 +676,16 @@ section.projetoShow {
 
                           <div class="flex-wrap flex-center-combo ml-5 mr-5">
                             <div class="iconBigTarefa flex flex-center-combo" >
-                              <i v-if="tarefa.situacao == 0" class="fi fi-rs-circle"></i>
-                              <i v-if="tarefa.situacao == 1" class="fi fi-rs-check-circle"></i>
+                              <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+                              <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-rr-checkbox"></i></span>
+                              <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                             </div>
-                            <div>
-                              <span class="iconBigTarefa flex flex-center-combo" v-if="showBulkActionTarefa">
+                            <!-- <div>
+                              <span class="ml-5 iconBigTarefa flex flex-center-combo" v-if="showBulkActionTarefa">
                                 <i v-if="!tarefa.selected" class="fi fi-rs-horizontal-rule"></i>
                                 <i v-if="tarefa.selected" class="fi fi-rs-check"></i>
                               </span>
-                            </div>
+                            </div> -->
                           </div>
                           
                           <div class="mr-5 flex flex-center-combo">
@@ -754,7 +750,7 @@ section.projetoShow {
                         </div>
 
                         <div class="">
-                          <div class="mt-10 descricao_tarefa p-5">
+                          <div class="mt-10">
                             <span class="data_com_tarefa">
                               {{
                                 tarefa.datahoraFormatted != null ?
@@ -763,7 +759,7 @@ section.projetoShow {
                               }}
                             </span>
                             <span class="mr-5 ml-5">
-                              <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
+                              <i class="fi fi-rr-arrow-small-right"></i>
                             </span>
                             <span>
                               {{ tarefa.descricao }}
