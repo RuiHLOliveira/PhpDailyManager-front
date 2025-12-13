@@ -100,7 +100,7 @@ body {
 }
 
 nav.topNav {
-    border-bottom: 1px solid #b8b8b8;
+    border-bottom: 1px solid var(--darkmode-border-gray);
     position: absolute;
     min-width: 100svw;
     background-color: #eeeeee;
@@ -138,7 +138,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 section.sectionBorder {
-    border-top: 1px solid #b8b8b8;
+    border-top: 1px solid var(--darkmode-border-gray);
     margin-top: 20px;
     padding-bottom: 20px;
     /* background-color: beige; */

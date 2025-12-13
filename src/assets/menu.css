@@ -1,6 +1,6 @@
 
 nav.topNav {
-    border-bottom: 1px solid #b8b8b8;
+    border-bottom: 1px solid var(--darkmode-border-gray);
     position: absolute;
     min-width: 100svw;
     background-color: #eeeeee;
@@ -10,7 +10,7 @@ nav.topNav {
 nav.leftNav {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #878787;
+    border-right: 1px solid var(--darkmode-border-gray);
     min-width: 100svw;
     max-width: 100svw;
     min-height: 100svh;

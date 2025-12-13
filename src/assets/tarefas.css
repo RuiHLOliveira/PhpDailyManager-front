@@ -10,7 +10,7 @@
 
 .projetoNaTarefa {
     font-size: 0.9rem;
-    border: 1px solid var(--whitegray);
+    border: 1px solid var(--darkmode-border-gray2);
     border-radius: 5px;
 }
 .data_com_tarefa {
@@ -30,15 +30,15 @@
 .data_na_tarefa{
     font-size: 0.8rem;
   /* font-family: 'Inconsolata'; */
-  border: 1px solid var(--whitegray);
+  border: 1px solid var(--darkmode-border-gray2);
   border-radius: 5px;
 }
 .descricao_tarefa {
-    border: 1px solid var(--whitegray);
+    border: 1px solid var(--darkmode-border-gray2);
     border-radius: 5px;
 }
 .motivo_tarefa{
-    border-left: 3px solid var(--whitegray);
+    border-left: 3px solid var(--darkmode-border-gray2);
 }
 
 

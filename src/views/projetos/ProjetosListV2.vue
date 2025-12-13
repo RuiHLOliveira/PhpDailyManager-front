@@ -1,8 +1,8 @@
 <style scoped>
 
 .projetofoto {
-  border: 10px solid #ffddbb;
-  border-radius: 20px;
+  border: 10px solid #7c7c7c;
+  border-style: inset;
   max-width: 400px;
   max-height: 400px;
 }
@@ -16,9 +16,6 @@ section.projetoList {
     margin-bottom: 10px;
     border-radius: 5px;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.281);
-    /* background-color: rgb(228, 228, 228); */
-    /* border-radius: 5px; */
     button.situacaoFixedWidth {
       min-width: 100px;
       max-width: 100px;
@@ -61,7 +58,6 @@ section.projetoList {
     margin-bottom: 5px;
   }
   .projeto_tags {
-    /* border: 1px solid #00000011; */
     font-size: 0.8rem;
     display: flex;
     flex-direction: row;
@@ -124,11 +120,11 @@ section.projetoShow {
   border-radius: 5px;
   color: var(--darkmode-font-color);
   background-color: var(--darkmode-bg-color);
-  border: 1px solid #d3d3d3;
+  border: 1px solid var(--darkmode-border-gray);
 }
-.linhaBox:hover {
+/* .linhaBox:hover {
   border: 1px solid #939393;
-}
+} */
 
 </style>
 
