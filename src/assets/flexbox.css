@@ -2,6 +2,10 @@
     display: flex;
     flex-wrap: nowrap;
 }
+.flex-reverse{
+    display: flex;
+    flex-direction: row-reverse;
+}
 .flex-wrap {
     display: flex;
     flex-wrap: wrap;
@@ -9,6 +13,10 @@
 .flex-column {
     display: flex;
     flex-direction: column;
+}
+.flex-column-reverse{
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .justify-spacebetween {
@@ -39,6 +47,10 @@
 
 .flex-center-combo {
     align-items: center;
+    align-content: center;
+}
+
+.aligncontent-center{
     align-content: center;
 }
 
