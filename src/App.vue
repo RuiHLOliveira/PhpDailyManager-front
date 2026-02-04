@@ -17,8 +17,8 @@
           <span class="leftNavText my-15">Olá, usuario!</span>
           <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
           <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/primeiraPagina">
-              <i class="fi fi-sr-circle-1"></i> Primeira Página
+          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/personagem">
+              <i class="fi fi-rs-brightness"></i> Personagem
           </router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inbox">
               <i class="fi fi-rs-inbox-in"></i> Inbox
@@ -34,9 +34,6 @@
           </router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTracker">
               <i class="fi fi-rs-brightness"></i> Habit Tracker
-          </router-link>
-          <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/habitTrackerMensal">
-              <i class="fi fi-rs-brightness"></i> habitTrackerMensal
           </router-link>
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/inspiracao">
             <i class="fi fi-sr-circle-1"></i> Inspiração
@@ -128,7 +125,7 @@ export default {
     
     redirectAfterLogin(){
       this.updateLoggedIn()
-      this.$router.push({ path: '/primeiraPagina' })
+      this.$router.push({ path: '/personagem' })
     },
 
     logout() {

@@ -8,6 +8,7 @@ import ProjetosListV2 from '../views/projetos/ProjetosListV2.vue'
 import Inspiracao from '../views/projetos/Inspiracao.vue'
 import Tarefas from '../views/tarefas/Tarefas.vue'
 import Habitos from '../views/habitos/Habitos.vue'
+import Personagem from '../views/Personagem/Personagem.vue'
 import HabitosAntigo from '../views/habitos/HabitosAntigo.vue'
 import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
@@ -71,6 +72,12 @@ const router = createRouter({
       path: '/habitTracker',
       name: 'HabitTracker',
       component: Habitos,
+      props: true
+    },
+    {
+      path: '/personagem',
+      name: 'Personagem',
+      component: Personagem,
       props: true
     },
     {
