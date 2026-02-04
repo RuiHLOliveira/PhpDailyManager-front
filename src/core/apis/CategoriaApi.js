@@ -8,7 +8,7 @@ export default {
       'categoria': novaCategoria,
     };
     let requestData = {
-      'url': config.serverUrl + '/categoriaItems',
+      'url': config.serverUrl + '/inboxitemCategorias',
       'headers': new Headers({ 'Content-Type': 'application/json' }),
       'method': 'POST',
       'data': body
@@ -16,7 +16,7 @@ export default {
     return Request.fetch(requestData);
   },
   loadListaCategorias(orderBy = []) {
-    let url = config.serverUrl + '/categoriaItems';
+    let url = config.serverUrl + '/inboxitemCategorias';
     if(orderBy.length > 0){
         url += '?orderBy='+orderBy[0]
     }

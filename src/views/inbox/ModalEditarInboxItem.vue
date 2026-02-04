@@ -36,7 +36,7 @@ a.link:visited {
           </div>
           
           <div class="mt-5 mb-5">
-            <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.categoriaItem?.categoria ?? '-' }}</span>
+            <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.inboxitemCategoria?.categoria ?? '-' }}</span>
             <span class=" m-5 p-5 modalAdditionalTag">{{ inboxItemLocal.origemDescritivo }}</span>
           </div>
         </div>
@@ -82,9 +82,9 @@ a.link:visited {
               </InlineLoader>
             </div>
 
-            <select v-if="inboxItemLocal.categoriaItem != null && !showCriarCategoria"
+            <select v-if="inboxItemLocal.inboxitemCategoria != null && !showCriarCategoria"
               class="mb-10 fullSelect" name="categoria" id="situacao"
-              v-model="inboxItemLocal.categoriaItem.id">
+              v-model="inboxItemLocal.inboxitemCategoria.id">
               <option v-for="listaCategoria in listaCategorias" :key="listaCategoria.id"
                 :value="listaCategoria.id">{{ listaCategoria.categoria }}</option>
             </select>
@@ -212,7 +212,7 @@ export default {
       let body = {
         'nome': this.inboxItemLocal.nome,
         'link': this.inboxItemLocal.link,
-        'categoriaItem': this.inboxItemLocal.categoriaItem,
+        'inboxitemCategoria': this.inboxItemLocal.inboxitemCategoria,
         'acao': this.inboxItemLocal.acao,
       };
       let requestData = {
@@ -294,8 +294,8 @@ export default {
     },
     inboxItem(newProp, oldProp) {
       this.inboxItemLocal = deepCopy.deepCopy(newProp);
-      if(this.inboxItemLocal.categoriaItem == null) {
-        this.inboxItemLocal.categoriaItem = {id: null}
+      if(this.inboxItemLocal.inboxitemCategoria == null) {
+        this.inboxItemLocal.inboxitemCategoria = {id: null}
       }
       console.log(this.inboxItemLocal);
     }

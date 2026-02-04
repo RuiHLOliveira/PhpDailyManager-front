@@ -54,8 +54,8 @@ a.link:visited {
           <button class="btn btn-sm m-5" @click="loadInboxItemCategoria(null)" type="button">
             Sem Categoria
           </button>
-          <button class="btn btn-sm m-5" @click="loadInboxItemCategoria(categoriaItem)" type="button" v-for="categoriaItem in listaCategorias">
-            {{ categoriaItem.categoria }}
+          <button class="btn btn-sm m-5" @click="loadInboxItemCategoria(inboxitemCategoria)" type="button" v-for="inboxitemCategoria in listaCategorias">
+            {{ inboxitemCategoria.categoria }}
           </button>
         </div>
       </section>
@@ -94,7 +94,7 @@ a.link:visited {
               <div> <!-- TEXTO -->
                 <div class="mb-10">
                   <span class="additionalTag p-5 mr-10">
-                    {{ inboxItem.categoriaItem?.categoria ?? '-'}}
+                    {{ inboxItem.inboxitemCategoria?.categoria ?? '-'}}
                   </span>
                   <span class="additionalTag p-5 mr-10">
                     {{ inboxItem.origemDescritivo }}
@@ -266,14 +266,14 @@ export default {
     //     this.$refs.notifier.notify(`Ocorreu um erro: ${error}`, true)
     //   });
     // },
-    loadInboxItemCategoria(categoriaItem = null)
+    loadInboxItemCategoria(inboxitemCategoria = null)
     {
-      this.setCategoriaEscolhida(categoriaItem)
-      this.loadInboxItem(categoriaItem?.id ?? null)
+      this.setCategoriaEscolhida(inboxitemCategoria)
+      this.loadInboxItem(inboxitemCategoria?.id ?? null)
     },
 
-    setCategoriaEscolhida(categoriaItem){
-      this.categoriaEscolhida = categoriaItem ?? {'categoria':'Sem Categoria'};
+    setCategoriaEscolhida(inboxitemCategoria){
+      this.categoriaEscolhida = inboxitemCategoria ?? {'categoria':'Sem Categoria'};
     },
 
     loadInboxItem(){
@@ -281,7 +281,7 @@ export default {
       this.busyInboxLoad = true;
       if(categoria == null) categoria = '0'
       const params = {
-        'categoriaItem': categoria,
+        'inboxitemCategoria': categoria,
         'orderBy': 'created_at,desc'
       };
       let requestData = {
