@@ -15,6 +15,7 @@
 }
 
 .modalNotify {
+  color: black;
   border: 2px solid #00000070;
   margin-top: 40px;
   margin-right: 20px;
@@ -41,6 +42,7 @@
 
 .modalNotify-error {
   background-color: #e78f8f;
+  color: black;
 }
 
 </style>

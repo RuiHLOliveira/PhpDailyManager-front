@@ -92,6 +92,10 @@ const DateTime = {
             return true;
         }
         return false;
+    },
+
+    convertStringToDateObject(string){
+        return new Date(string.replace(" ", "T") + "Z");
     }
 
 }

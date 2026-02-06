@@ -816,6 +816,7 @@ section.projetoShow {
   </div>
 
     <Notifier ref="notifier"></Notifier>
+    <RecompensaPopup ref="recompensaPopup"></RecompensaPopup>
 
     <ModalCriarProjeto
       v-model:exibirModal="exibirModalCriarProjeto"
@@ -861,12 +862,14 @@ import QueryStringConverter from '@/core/QueryStringConverter.js'
 import Loader from '@/components/Loader.vue';
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
+import RecompensaPopup from '@/components/RecompensaPopup.vue';
+
 import ModalCriarProjeto from '@/views/projetos/ModalCriarProjeto.vue';
 import ModalCriarTarefa from '@/views/projetos/ModalCriarTarefa.vue';
 import ModalEditarTarefa from '@/views/projetos/ModalEditarTarefa.vue';
 import ModalCriarProjetofoto from '@/views/projetos/ModalCriarProjetofoto.vue';
 import ModalEditarProjetofoto from '@/views/projetos/ModalEditarProjetofoto.vue';
-import BackupProjetos from "@/views/projetos/BackupProjetos.vue";
+
 import TarefasApi from '../../core/apis/TarefasApi';
 
 export default {
@@ -879,8 +882,8 @@ export default {
     ModalEditarTarefa,
     ModalCriarProjetofoto,
     ModalEditarProjetofoto,
-    BackupProjetos,
     Notifier,
+    RecompensaPopup,
   },
   inject: ['configuracoes'],
   data: () => {
@@ -902,7 +905,6 @@ export default {
       projetoModalNovaTarefa: [],
       tarefaModalEditarTarefa: [],
       projetoModalEditarTarefa: [],
-      exibirModalBackupProjetos: false,
       carregarPreviamenteAsTarefas: true,
       filtroPrioridade: null,
       filtroSituacao: null,
@@ -1545,10 +1547,11 @@ export default {
       };
       return Request.fetch(requestData).then(([response, data]) => {
         this.busyProjetosUpdate = false;
-        // this.resetFields(true)
+        if(projeto.situacao == 4) {
+          this.$refs.recompensaPopup.show(data);
+        }
         this.$refs.notifier.notify('Projeto salvo!')
         if(sairDaEdicao) this.toggleEdicaoProjeto(projeto)
-        // this.buscaProjetos(); // nao atualiza a lista para não atrapalhar o fluxo
       }).catch((error) => {
         console.error(error);
         this.busyProjetosUpdate = false;

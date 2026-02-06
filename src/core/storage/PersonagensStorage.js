@@ -24,7 +24,7 @@ export const PersonagensStorage = reactive({
     loadFromApi(resolve, reject) {
         this.apiLoad().then(([response,data]) => {
             this.personagens = data
-            this.forceNextReload = false;
+            this.forceNextReload = true;
             resolve([response,data]);
         }).catch((error) => {
             reject(error)

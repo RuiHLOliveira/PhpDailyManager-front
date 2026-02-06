@@ -40,6 +40,7 @@
     </div>
 
     <Notifier ref="notifier"></Notifier>
+    <RecompensaPopup ref="recompensaPopup"></RecompensaPopup>
   </div>
 </Teleport>
 </template>
@@ -49,6 +50,7 @@ import DateTime from '@/core/DateTime.js'
 import deepCopy from '@/core/deepcopy.js';
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
+import RecompensaPopup from '@/components/RecompensaPopup.vue';
 import Request from '@/core/request.js'
 import config from '@/core/config.js'
 
@@ -56,6 +58,7 @@ import { ref, watch, watchEffect } from 'vue';
 import { HabitosStorage } from '../../core/storage/HabitosStorage';
 
 const notifier = ref();
+const recompensaPopup = ref();
 const busy = ref(false);
 const needReload = ref(false);
 // const habitoCompletar = ref([]);
@@ -105,11 +108,12 @@ function concluirHabito() {
   busy.value = true;
   HabitosStorage.concluir(props.habitoCompletar, textoObservacao.value)
   .then(([response, data]) => {
-    busy.value = false;
     needReload.value = true;
     habitoFoiCompletado.value = true;
     props.habitoCompletar.situacao = 1;
+    busy.value = false;
     notify('Habito concluído!')
+    recompensaPopup.value.show(data)
   }).catch((error) => {
     console.error(error);
     busy.value = false;

@@ -4,17 +4,37 @@
   padding: 20px;
   background-color: var(--darkmode-border-gray);
   border-radius: 5px;
-  max-width: 400px;
+  max-width: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  /* align-items: flex-end; */
 }
 .personagem__titulo{
   font-weight: bold;
   font-size: 1.2rem;
   margin-bottom: 10px;
 }
+
+.historicoPersonagem {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgb(180, 180, 180);
+  /* border-radius: 10px; */
+  margin-top: 20px;
+  padding-top: 10px
+}
+
+.boxImgInline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.boxImgInline img.imgInline{
+  max-width: 32px;
+}
+
 </style>
 
 <template>
@@ -35,11 +55,32 @@
           :center="true">
         </InlineLoader>
 
-        <div v-if="!busyPersonagensLoad" class="personagem">
-          <span class="personagem__titulo">{{ personagem.nome }}</span>
-          <span>Lv {{ personagem.nivel }}</span>
-          <span>{{ personagem.experiencia }} XP</span>
-          <span>Ouro: {{ personagem.ouro }}</span>
+        <div v-if="!busyPersonagensLoad">
+          <div class="personagem">
+            <span class="personagem__titulo">{{ personagem.nome }}</span>
+            <span>Lv {{ personagem.nivel }}</span>
+            <span class="boxImgInline">
+              {{ personagem.experiencia }} / {{ personagem.expProximoNivel }}
+              <img class="imgInline" src="/fc865.png" alt="">
+            </span>
+            <span class="boxImgInline">
+              {{ personagem.ouro }}
+              <img class="imgInline" src="/fc131.png" alt="">
+            </span>
+            <div>
+              <div v-for="historico in personagem.personagemhistoricos" class="historicoPersonagem">
+                <span>{{ historico.createdatFormatted }}</span>
+                <span>{{ historico.texto }}</span>
+                <span class="boxImgInline">
+                  <span v-for="recompensa in historico.dadosjson.recompensas" class="boxImgInline">
+                    {{ recompensa.quantidade }}
+                    <img v-if="recompensa.moeda == 'ouro'" class="imgInline" src="/fc131.png" alt="">
+                    <img v-if="recompensa.moeda == 'experiencia'" class="imgInline" src="/fc865.png" alt="">
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
       </section>
@@ -93,9 +134,13 @@ function loadPersonagens () {
   PersonagensStorage.index()
   .then(([response, data]) => {
     console.log('[data] ', data)
-    personagem.value = data[0]
-    console.log('[personagem] ', personagem)
-    console.log('[personagem.value] ', personagem.value)
+    data = data[0]
+    data.personagemhistoricos.forEach(historico => {
+      if(typeof historico.dadosjson === 'string') historico.dadosjson = JSON.parse(historico.dadosjson);
+      let dateobject = DateTime.convertStringToDateObject(historico.createdat.date);
+      historico.createdatFormatted = DateTime.getWeekDay(dateobject) +', '+ DateTime.formatBrDateTime(dateobject);
+    });
+    personagem.value = data
     busyPersonagensLoad.value = false;
   })
   .catch((error) => {

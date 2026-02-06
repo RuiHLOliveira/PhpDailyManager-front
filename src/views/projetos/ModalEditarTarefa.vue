@@ -141,6 +141,7 @@
       </div>
     </div>
     <Notifier ref="notifier"></Notifier>
+    <RecompensaPopup ref="recompensaPopup"></RecompensaPopup>
   </div>
 </Teleport>
 </template>
@@ -150,13 +151,15 @@ import DateTime from '@/core/DateTime.js'
 import deepCopy from '@/core/deepcopy.js';
 import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
+import RecompensaPopup from '@/components/RecompensaPopup.vue';
 import Request from '@/core/request.js'
 import config from '@/core/config.js'
 
 export default {
   components: {
     InlineLoader,
-    Notifier
+    Notifier,
+    RecompensaPopup
   },
   data: function () {
     return {
@@ -340,6 +343,7 @@ export default {
         this.needReload = true;
         this.tarefaLocal.situacao = 1
         this.tarefa.situacao = 1
+        this.$refs.recompensaPopup.show(data);
       }).catch((error) => {
         console.error(error);
         this.busy = false;
