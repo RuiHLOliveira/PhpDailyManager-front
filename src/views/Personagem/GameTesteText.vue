@@ -170,10 +170,10 @@
               <div class="flex-column gap-10 mt-10">
                 <div v-for="habilidade in habilidades" :key="habilidade.nome">
                   <button type="button" class="btn btn-sm"
-                    :disabled="batalhaFinalizada || habilidade.segundosCooldownRestante > 0"
+                    :disabled="batalhaFinalizada || habilidade.recargaRestante > 0"
                     @click="usaHabilidade(personagem, habilidade, chefaoSelecionado)">
                     {{ habilidade.nome }}
-                    {{ habilidade.segundosCooldownRestante > 0 ? `(${habilidade.segundosCooldownRestante})` : '' }}
+                    {{ habilidade.recargaRestante > 0 ? `(${habilidade.recargaRestante})` : '' }}
                   </button>
                 </div>
               </div>
@@ -189,23 +189,36 @@
                 :vidaTotal="chefaoSelecionado.pontosVida"
                 :vidaAtual="chefaoSelecionado.pontosVidaAtuais"
               ></BarraDeVida>
+
+              colocar habilidades aqui
               
-              <div class="container-batalha">
-                <div 
-                  v-for="animacao in pontuacaoDeBatalha" 
-                  :key="animacao.id" 
-                  class="log-dano"
-                  :class="{ 'sumindo': !animacao.mostrar, 'displayNone': !animacao.mostrar2 }"
-                >
-                  <span>
-                    {{ animacao.quem }} {{ animacao.oque }} {{ animacao.alvo }} : 
-                    <strong class="texto-dano">{{ animacao.dano }}</strong>
-                  </span>
+              <div class="flex-column gap-10 mt-10">
+                <div v-for="habilidade in chefaoSelecionado.habilidades" :key="habilidade.nome">
+                  <button type="button" class="btn btn-sm"
+                    :disabled="batalhaFinalizada || habilidade.recargaRestante > 0">
+                    {{ habilidade.nome }}
+                    {{ habilidade.recargaRestante > 0 ? `(${habilidade.recargaRestante})` : '' }}
+                  </button>
                 </div>
               </div>
 
             </div>
             <img class="imgPersonagemChefao" :src="'./masmorras/'+chefaoSelecionado.imagem" alt="">
+          </div>
+        </div>
+        <div>
+          <div class="container-batalha">
+            <div 
+              v-for="animacao in pontuacaoDeBatalha" 
+              :key="animacao.id" 
+              class="log-dano"
+              :class="{ 'sumindo': !animacao.mostrar, 'displayNone': !animacao.mostrar2 }"
+            >
+              <span>
+                {{ animacao.quem }} {{ animacao.oque }} {{ animacao.alvo }} : 
+                <strong class="texto-dano">{{ animacao.dano }}</strong>
+              </span>
+            </div>
           </div>
         </div>
         <div class="batalhaFinalizada" v-if="batalhaFinalizada">
@@ -240,44 +253,80 @@ const pontuacaoDeBatalha = ref([]);
 const masmorraSelecionada = ref(null);
 const chefaoSelecionado = ref(null);
 const habilidades = ref([]);
-const chefaoGCD = ref(false);
 const batalhaFinalizada = ref(false)
 const jogardorVenceu = ref(false);
+const chefaoAggrado = ref(false);
+
+const chefeAggradoInterval = ref(null);
 
 function loadHabilidades() {
   habilidades.value = [
     {
-      nome: 'ataque comum',
-      dano: props.personagem.atributos.ataque * 1,
-      cooldown: 3,
-      segundosCooldownRestante: 0,
-    },
-    {
       nome: 'ataque especial',
       dano: props.personagem.atributos.ataque * 1.9,
-      cooldown: 15,
-      segundosCooldownRestante: 0,
-    }
+      recarga: 15,
+      recargaRestante: 0,
+    },
+    {
+      nome: 'ataque comum',
+      dano: props.personagem.atributos.ataque * 1,
+      recarga: 3,
+      recargaRestante: 0,
+    },
   ];
 }
 
+function chefaoAggroAutoAtaque(){
+  if(chefaoAggrado.value == true) return;
+  if(chefaoAggrado.value == false) chefaoAggrado.value = true;
+  chefeAggradoInterval.value = setInterval(() => {
+    // escolhe habilidade do chefao
+    let habilidadeEscolhida = null;
+    for (let habilidade of chefaoSelecionado.value.habilidades) {
+      if(habilidade.recargaRestante == 0){
+        habilidadeEscolhida = habilidade;
+        console.log('[habilidadeEscolhida]',habilidadeEscolhida.nome, habilidadeEscolhida)
+        break;
+      }
+    }
+    if(habilidadeEscolhida == null){
+      console.log('[não escolhida]');
+      return;
+    }
+    //executa habilidade
+    usaHabilidade (chefaoSelecionado.value, habilidadeEscolhida, props.personagem)
+  }, 2000);
+}
+
 function usaHabilidade (atacante, habilidade, defensor) {
+  // começa batalha caso não tenha iniciado
+  chefaoAggroAutoAtaque()
   //aplica cd
-  habilidade.segundosCooldownRestante = habilidade.cooldown;
-  for (let i = 0; i < habilidade.cooldown; i++){
+  habilidade.recargaRestante = habilidade.recarga;
+  for (let i = 0; i < habilidade.recarga; i++){
     let timeout = 1000 * (i+1);
     // console.log('registrou timeout em', habilidade.nome, timeout);
     setTimeout(() => {
-      habilidade.segundosCooldownRestante--;
-      // console.log('rodou timeout em', habilidade.nome, habilidade.segundosCooldownRestante);
+      habilidade.recargaRestante--;
+      // console.log('rodou timeout em', habilidade.nome, habilidade.recargaRestante);
     }, timeout);
   }
   // calcula dano
-  const dano = habilidade.dano - defensor.defesa
+  
+  const defesa = defensor.defesa ?? defensor.atributos.defesa;
+
+  const dano = habilidade.dano - defesa
+  console.log('[habilidade.dano]',habilidade.dano)
+  console.log('[defensor.defesa]', defesa)
+  console.log('[dano]',dano)
   // debita dano
-  defensor.pontosVidaAtuais -= dano
+  if(defensor.atributos) {
+    defensor.atributos.vidaAtual -= dano
+  } else {
+    defensor.pontosVidaAtuais -= dano
+  }
   // invoca texto animado
-  animacaoRegistroBatalha(atacante.nome,'atacou',defensor.nome,dano);
+  animacaoRegistroBatalha(atacante.nome, 'atacou', defensor.nome, dano);
   // handle fim batalha
   handleFimBatalha()
 }
@@ -285,12 +334,17 @@ function usaHabilidade (atacante, habilidade, defensor) {
 function handleFimBatalha(){
   if(chefaoSelecionado.value.pontosVidaAtuais <= 0){
     // fim batalha
-    batalhaFinalizada.value = true;
     jogardorVenceu.value = true;
+
+    batalhaFinalizada.value = true;
+    chefaoAggrado.value = false;
+    clearInterval(chefeAggradoInterval.value)
   }
   else if(props.personagem.atributos.vidaAtual <= 0){
     // fim batalha
     batalhaFinalizada.value = true;
+    chefaoAggrado.value = false;
+    clearInterval(chefeAggradoInterval.value)
   }
 }
 
@@ -312,14 +366,14 @@ function animacaoRegistroBatalha(quem, oque, alvo, dano) {
     if (item) {
       item.mostrar = false;
     }
-  }, 1000);
+  }, 1500);
 
   setTimeout(() => {
     const item = pontuacaoDeBatalha.value.find(a => a.id === novaAnimacao.id);
     if (item) {
       item.mostrar2 = false;
     }
-  }, 2000);
+  }, 3000);
 }
 
 const masmorrasCarregadas = computed(() => {
@@ -355,6 +409,8 @@ function voltarSelecaoMasmorras(){
 function lutarContraChefao(chefao){
   chefaoSelecionado.value = chefao
   chefaoSelecionado.value.pontosVidaAtuais = chefaoSelecionado.value.pontosVida;
+  console.log('props.personagem.atributos.vidaAtual',props.personagem.atributos.vidaAtual)
+  console.log('props.personagem.atributos.vidaMaxima',props.personagem.atributos.vidaMaxima)
 }
 
 function loadMasmorras () {
