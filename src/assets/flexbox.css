@@ -35,6 +35,16 @@
     justify-content: end;
 }
 
+.alignitems-start {
+    align-items: flex-start;
+}
+.alignitems-center {
+    align-items: center;
+}
+.alignitems-end {
+    align-items: flex-end;
+}
+/* deprecated */
 .alignitens-start {
     align-items: flex-start;
 }
@@ -71,4 +81,18 @@
 
 .flex-sons-grow > *{
     flex-grow: 1;
+}
+
+
+.gap-5 {
+    gap: 5px;
+}
+.gap-10 {
+    gap: 10px;
+}
+.gap-15 {
+    gap: 15px;
+}
+.gap-20 {
+    gap: 20px;
 }

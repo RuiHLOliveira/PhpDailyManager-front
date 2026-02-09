@@ -91,8 +91,6 @@ import Notifier from '@/components/Notifier.vue';
 import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js'
-import {RecompensasStorage} from '@/core/storage/RecompensasStorage.js'
-import {RecompensasacoesStorage} from '@/core/storage/RecompensasacoesStorage.js'
 
 export default {
   name: 'HabitTracker',
@@ -121,56 +119,6 @@ export default {
     toggleCriarAcao(recompensa){
       recompensa.criarNovaAcao = !recompensa.criarNovaAcao;
     },
-
-    criarNovaRecompensa()
-    {
-      if(this.nomeNovaRecompensa == '') return;
-      this.busy = true;
-      RecompensasStorage.criar(this.nomeNovaRecompensa)
-      .then((data) => {
-        this.$refs.notifier.notify('Recompensa criada!')
-        this.busy = false;
-        this.nomeNovaRecompensa = '';
-      }).catch((error) => {
-        console.error(error);
-        this.busy = false;
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-      });
-    },
-
-    criarNovaRecompensaacao(recompensa){
-      if(this.tipoatividadeNovaAcao == ''
-        || this.quantidadeNovaAcao == 0
-      ) return;
-      this.busy = true;
-      RecompensasacoesStorage.criar(this.quantidadeNovaAcao, this.tipoatividadeNovaAcao, recompensa.id)
-      .then((data) => {
-        this.$refs.notifier.notify('Recompensa acao criada!')
-        this.busy = false;
-        this.tipoatividadeNovaAcao = '';
-        this.quantidadeNovaAcao = 0;
-      }).catch((error) => {
-        console.error(error);
-        this.busy = false;
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-      });
-    },
-
-    buscaRecompensasEAcoes () {
-      this.busy = true;
-      RecompensasStorage.index().then((data) => {
-        this.recompensas = data[1]
-        this.recompensas.forEach((recompensa) => {recompensa.criarNovaAcao = false});
-        console.log('[recompensas] ', this.recompensas)
-        this.busy = false;
-      })
-      .catch((error) => {
-        this.busy = false;
-        console.error(error);
-        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
-      });
-    },
-
 
     toggleCriarConfiguracao(){
       this.exibirCriarConfiguracao = !this.exibirCriarConfiguracao
@@ -261,7 +209,6 @@ export default {
   created () {
     this.buscaConfiguracoes();
     this.loadDarkmode();
-    this.buscaRecompensasEAcoes();
   },
 }
 </script>

@@ -1,5 +1,5 @@
+const environmentDev = false;
 export default {
     frontSubfolderUrl: 'PhpDailyManager-front/#',
-    serverUrl: 'https://sproject-back.onrender.com/api',
-    // serverUrl: 'http://localhost/api',
+    serverUrl: environmentDev ? 'http://localhost/api' : 'https://sproject-back.onrender.com/api',
 };

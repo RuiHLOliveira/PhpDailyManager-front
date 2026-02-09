@@ -38,6 +38,7 @@
 }
 
 html * {
+    image-rendering: pixelated;
     /* font-family: 'Poppins', sans-serif; */
     /* font-family: 'Work Sans', sans-serif; */
     /* font-family: 'Inconsolata', sans-serif; */
