@@ -30,6 +30,18 @@ export const PersonagensStorage = reactive({
             reject(error)
         });
     },
+    
+    salvarAtributos(personagem) {
+        return new Promise((resolve, reject) => {
+            this.apiSalvarAtributos(personagem)
+            .then(([response,data]) => {
+                this.forceNextReload = true;
+                resolve([response,data]);
+            }).catch((error) => {
+                reject(error)
+            });
+        });
+    },
 
     // funcionalidades de api
     apiLoad() {
@@ -42,6 +54,19 @@ export const PersonagensStorage = reactive({
             'url': `${config.serverUrl}/personagens${params}`,
         };
         return Request.fetch(requestData)
+    },
+
+    apiSalvarAtributos(personagem) {
+        const url = `${config.serverUrl}/personagens/${personagem.id}/atualizarAtributos`
+        const headers = new Headers({'Content-Type': 'application/json'})
+        const body = {'atributosjson': personagem.atributosjson}
+        let requestData = {
+            'url': url,
+            'headers': headers,
+            'method' : 'PUT',
+            'data' : body
+        };
+        return Request.fetch(requestData);
     },
 
 });

@@ -39,7 +39,7 @@
       :class="{ 'low-hp': ((vidaAtual * 100)/vidaTotal) < 30 }">
     </div>
     <div class="valores">
-      <span class="mr-5">[{{ ((vidaAtual * 100)/vidaTotal) }}%]</span>
+      <span class="mr-5">[{{ ((vidaAtual * 100)/vidaTotal).toFixed(2) }}%]</span>
       <span>{{ vidaAtual }} / {{ vidaTotal }}</span>
     </div>
   </div>

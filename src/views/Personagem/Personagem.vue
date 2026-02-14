@@ -46,8 +46,10 @@
         <div class="flex alignitems-center">
           <h1 class="">Personagem</h1>
           <div>
-            <button type="button" class="ml-10 btn btn-sm" @click="jogar2d()">Jogar 2d</button>
-            <button type="button" class="ml-10 btn btn-sm" @click="jogarText()">Jogar text</button>
+            <!-- <button type="button" class="ml-10 btn btn-sm" @click="jogar2d()">Jogar 2d</button> -->
+            <button type="button" class="ml-10 btn btn-sm" :disabled="busyPersonagensLoad" @click="jogarText()">Jogar text</button>
+            <button type="button" class="ml-10 btn btn-sm" :disabled="busyPersonagensLoad" @click="carregarLoja()">Loja</button>
+            <button type="button" class="ml-10 btn btn-sm" :disabled="busyPersonagensLoad" @click="carregarTelaClasse()">Classe</button>
           </div>
         </div>
       </section>
@@ -110,6 +112,12 @@
 
       </section>
 
+    <ClassesEspecializacoesTalentos ref="classesEspecializacoesTalentos" class="mt-10"
+      v-if="telaClasse"
+      :telaClasse="telaClasse"
+      :personagem="personagem"
+    ></ClassesEspecializacoesTalentos>
+
     <GameTeste2d ref="gameTeste" class="mt-10"
       v-if="runGame2d"
       :runGame2d="runGame2d"
@@ -138,6 +146,7 @@ import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import GameTesteText from '@/views/Personagem/GameTesteText.vue';
 import GameTeste2d from '@/views/Personagem/GameTeste2d.vue';
+import ClassesEspecializacoesTalentos from '@/views/Personagem/ClassesEspecializacoesTalentos.vue';
 import { PersonagensStorage } from '@/core/storage/PersonagensStorage.js'
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -157,6 +166,7 @@ function notify(text, error = false){
   notifier.value.notify(text,error)
 }
 
+const classesEspecializacoesTalentos = ref();
 const gameTeste2d = ref();
 const gameTesteText = ref();
 const notifier = ref();
@@ -165,7 +175,11 @@ const busyPersonagensLoad = ref(false);
 const showHistorico = ref(true);
 const runGame2d = ref(false);
 const runGameText = ref(false);
+const runLoja = ref(false);
+const telaClasse = ref(false);
+
 const personagem = ref([]);
+
 const windowWidth =  ref(0);
 const windowHeight =  ref(0);
 
@@ -177,6 +191,16 @@ function jogar2d(){
 function jogarText(){
   showHistorico.value = false;
   runGameText.value = true;
+}
+
+function carregarLoja(){
+  showHistorico.value = false;
+  runLoja.value = true;
+}
+
+function carregarTelaClasse() {
+  showHistorico.value = false;
+  telaClasse.value = true;
 }
 
 function loadPersonagens () {
