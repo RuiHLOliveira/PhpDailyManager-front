@@ -14,6 +14,7 @@ import Invitations from '../views/Invitations.vue'
 import Configuracoes from '../views/Configuracoes.vue'
 import Backup from '../views/Backup.vue'
 import Historicos from '../views/Historicos/Historicos.vue'
+import DailySummary from '@/views/tarefas/DailySummary.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -110,6 +111,11 @@ const router = createRouter({
       path: '/backup',
       name: 'backup',
       component: Backup
+    },
+    {
+      path: '/daily-summary',
+      name: 'DailySummary',
+      component: DailySummary,
     },
     // {
     //   path: '/listaContas',
