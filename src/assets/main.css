@@ -113,6 +113,11 @@ nav.topNav {
     margin: 0 auto;
     padding: 5px;
 }
+.containerLarge {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 5px;
+}
 .containerFullWidth {
     max-width: 100%;
     margin: 0 auto;

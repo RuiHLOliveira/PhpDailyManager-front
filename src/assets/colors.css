@@ -53,9 +53,27 @@
     
     --whitegray: #c2c2c2;
 
-    --prioridade1: #ff0000;
-    --prioridade2: #ff4500;
-    --prioridade3: #ffef00;
-    --prioridade4: #d9ff00;
-    --prioridade5: #cefca4;
+    /* novas cores de prioridade */
+    --prioridade1: #b22222; /* firebrick */
+    --prioridade2: #ff8c00; /* darkorange */
+    --prioridade3: #ffd700; /* gold */
+    --prioridade4: #32cd32; /* limegreen */
+    --prioridade5: #87ceeb; /* skyblue */
+    --prioridade1text: white; /* firebrick */
+    --prioridade2text: black; /* darkorange */
+    --prioridade3text: black; /* gold */
+    --prioridade4text: black; /* limegreen */
+    --prioridade5text: black; /* skyblue */
+
+    --prioridade1-border: 1px solid rgba(0, 0, 0, 0.35);
+    --prioridade2-border: 1px solid rgba(0, 0, 0, 0.25);
+    --prioridade3-border: 1px solid rgba(0, 0, 0, 0.22);
+    --prioridade4-border: 1px solid rgba(0, 0, 0, 0.22);
+    --prioridade5-border: 1px solid rgba(0, 0, 0, 0.18);
+
+    --prioridade1-textshadow: 0 0 4px rgba(0, 0, 0, 0.45);
+    --prioridade2-textshadow: 0 0 3px rgba(255, 255, 255, 0.45);
+    --prioridade3-textshadow: 0 0 3px rgba(0, 0, 0, 0.35);
+    --prioridade4-textshadow: 0 0 3px rgba(0, 0, 0, 0.35);
+    --prioridade5-textshadow: 0 0 3px rgba(0, 0, 0, 0.30);
 }

@@ -102,9 +102,52 @@ section.projetoList {
   border-left: 4px solid #c4c4c4;
 }
 
+.col-completa {
+  width: 30px;
+}
+.col-prioridade {
+  width: 40px;
+}
+.col-texto {
+  width: 660px;
+}
+.col-acoes {
+  width: 80px;
+}
+.menu-propriedades-container {
+  position: relative;
+  top: -16px;
+}
+.menu-prioridades{
+  position: absolute;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+}
 
+/* Horizontal scroll container for tarefas only */
+.tarefasScroll {
+  overflow-x: scroll;
+  max-width: 95vw;
+}
 
+@media only screen and (min-width: 800px) {
+  .tarefasScroll {
+    overflow-x: scroll;
+    max-width: calc(95vw - 200px);
+  }
+}
 
+.tarefasScroll > div {
+  /* display: inline-block; */
+  /* vertical-align: top; */
+  width: 860px;
+  /* white-space: normal; */
+}
+
+.maxViewportWidth{
+  max-width: 100vw;
+}
 
 
 
@@ -143,8 +186,11 @@ section.projetoShow {
 </style>
 
 <template>
-  <div>
-    <div :class="{'container' : !modoExibicao, 'containerFullWidth' : modoExibicao, }">
+    <div :class="{
+      'container' : !modoExibicao,
+      'containerFullWidth' : modoExibicao,
+      'maxViewportWidth': isSmallScreen
+    }">
 
       <div class="position_sticky py-10 div_border_bottom_gray darkmodeBgBlack">
         <!-- HEADER -->
@@ -669,36 +715,28 @@ section.projetoShow {
                   </button>
                 </div>
 
-                <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas">
+                <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas" class="tarefasScroll">
                   <!-- CADA TAREFA -->
-                  <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id" >
-                    <div class="tarefa"
+                  <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
+
+                    <div class="tarefa" 
                       :class="{ 'tarefaSelected' : tarefa.selected, 'clickableTarefa' : showBulkActionTarefa }"
                       @click="toggleTarefaSelected(tarefa)"
                       v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       
                       <div class="flex-column">
 
-                        <div class="" :class="{
-                          'flex-wrap': !isSmallScreen,
-                          'flex-column' : isSmallScreen
-                        }">
+                        <div class="flex-wrap">
 
-                          <div class="flex-wrap flex-center-combo ml-5 mr-5">
+                          <div class="col-completa flex-wrap flex-center-combo justify-center">
                             <div class="iconBigTarefa flex flex-center-combo" >
                               <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
                               <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-rr-checkbox"></i></span>
                               <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                             </div>
-                            <!-- <div>
-                              <span class="ml-5 iconBigTarefa flex flex-center-combo" v-if="showBulkActionTarefa">
-                                <i v-if="!tarefa.selected" class="fi fi-rs-horizontal-rule"></i>
-                                <i v-if="tarefa.selected" class="fi fi-rs-check"></i>
-                              </span>
-                            </div> -->
                           </div>
                           
-                          <div class="mr-5 flex flex-center-combo">
+                          <div class="mr-5 col-prioridade flex-wrap flex-center-combo justify-center">
                             <span :class="{
                               'prioridade semPrioridade' : tarefa.prioridade == null,
                               'prioridade p1' : tarefa.prioridade == 1,
@@ -706,23 +744,29 @@ section.projetoShow {
                               'prioridade p3' : tarefa.prioridade == 3,
                               'prioridade p4' : tarefa.prioridade == 4,
                               'prioridade p5' : tarefa.prioridade == 5
-                            }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : 'Não possui' }}</span>
+                            }">{{ tarefa.prioridade != null ? 'P'+ tarefa.prioridade : 'ND' }}</span>
                           </div>
 
-                          <div :class="{'mt-10 mb-10': isSmallScreen}">
+
+                          <div class="ml-10 col-acoes flex-wrap flex-center-combo justify-start" style="gap: 10px;">
 
                             <button class="btn btn-sm btn-clear sbtn_tarefa_concluida" type="button" 
                               @click="toggleModalEditarTarefa(tarefa,projetoExibir)" >
-                              Editar
+                              <i class="fi fi-rr-edit"></i>
                             </button>
 
-                            <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida ml-10 mr-10" type="button" 
+                            <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
                               :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                               @click="togglePrioridadesTarefa(tarefa)">
                                 <i class="fi fi-sr-priority-importance"></i>
                             </button>
 
-                            <span v-if="tarefa.showMenuPrioridades">
+                            <div class="menu-propriedades-container">
+                            <span v-if="tarefa.showMenuPrioridades" class="menu-prioridades div_border_gray px-5 py-5">
+                              <!-- <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
+                                :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
+                                @click="togglePrioridadesTarefa(tarefa)">x
+                              </button> -->
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p1 mr-10" type="button"
                                 :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                                 @click="updatePrioridade(tarefa, 1)">P1
@@ -745,10 +789,24 @@ section.projetoShow {
                               </button>
                               <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
                                 :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
-                                @click="updatePrioridade(tarefa, null)">x
+                                @click="updatePrioridade(tarefa, null)">ND
                               </button>
                             </span>
+                            </div>
 
+                          </div>
+
+                          <div class="flex-column col-texto">
+                            <span class="data_com_tarefa">
+                              {{
+                                tarefa.datahoraFormatted != null ?
+                                `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` :
+                                '___ __/__/__ __:__'
+                              }}
+                            </span>
+                            <span>
+                              {{ tarefa.descricao }}
+                            </span>
                           </div>
 
                           <InlineLoader class="ml-20"
@@ -759,23 +817,7 @@ section.projetoShow {
 
                         </div>
 
-                        <div class="">
-                          <div class="mt-10">
-                            <span class="data_com_tarefa">
-                              {{
-                                tarefa.datahoraFormatted != null ?
-                                `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` :
-                                '___ __/__/__ __:__'
-                              }}
-                            </span>
-                            <span class="mr-5 ml-5">
-                              <i class="fi fi-rr-arrow-small-right"></i>
-                            </span>
-                            <span>
-                              {{ tarefa.descricao }}
-                            </span>
-                          </div>
-                        </div>
+                        
 
                       </div>
                     </div>
@@ -850,7 +892,6 @@ section.projetoShow {
       @updatedProjetofotoEvent="guardarProjetofotoAtualizado">
     </ModalEditarProjetofoto>
 
-  </div>
 </template>
 
 <script>

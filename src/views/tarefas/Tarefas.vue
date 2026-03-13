@@ -1,233 +1,262 @@
 <style scoped>
 
+.col-completa {
+  width: 30px;
+}
+.col-prioridade {
+  width: 40px;
+}
+.col-projeto {
+  width: 200px;
+}
+.col-texto {
+  width: 600px;
+}
+.col-acoes {
+  width: 60px;
+}
+
+.menu-propriedades-container {
+  position: relative;
+  top: -16px;
+}
+.menu-prioridades{
+  position: absolute;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+}
+
+.tarefasScroll {
+  overflow-x: scroll;
+  max-width: 95vw;
+}
+
+@media only screen and (min-width: 800px) {
+  .tarefasScroll {
+    overflow-x: scroll;
+    max-width: calc(95vw - 200px);
+  }
+}
+
+.tarefasScroll > div {
+  width: 860px;
+}
+
 
 </style>
 
 <template>
-  <div>
-    <div class="container darkmodeBgBlack">
-      
-      <div class="position_sticky div_border_bottom_gray darkmodeBgBlack">
-        <section class="mb-10 p-10 pb-15">
-          <!-- style="min-height: 11vh" -->
-          <div class="flex-wrap">
-            <h1 class="titulo">Tarefas</h1>
-            <div class="mt-5">
-              <button type="button" class="ml-5 btn btn-sm btn-clear"
-                @click="toggleShowMotivoTodasTarefas()">Motivos
-              </button>
-              <button type="button" class="ml-5 btn btn-sm btn-clear"
-                @click="toggleModalCriarTarefa()">Criar
-              </button>
+  <div class="containerLarge darkmodeBgBlack">
+    
+    <div class="position_sticky div_border_bottom_gray darkmodeBgBlack">
+      <section class="mb-10 p-10 pb-15">
+        <!-- style="min-height: 11vh" -->
+        <div class="flex-wrap">
+          <h1 class="titulo">Tarefas</h1>
+          <div class="mt-5">
+            <button type="button" class="ml-5 btn btn-sm btn-clear"
+              @click="toggleShowMotivoTodasTarefas()">Motivos
+            </button>
+            <button type="button" class="ml-5 btn btn-sm btn-clear"
+              @click="toggleModalCriarTarefa()">Criar
+            </button>
+          </div>
+          <div class="mt-5">
+            <button type="button" class="ml-5 btn btn-sm btn-clear"
+              @click="ordenarPorData()">
+                {{ deveOrdenarPorData ? 'Restaurar' : 'Ordenar' }}
+            </button>
+            <button v-if="deveOrdenarPorData" type="button" class="ml-5 btn btn-sm btn-clear"
+              @click="inverterOrdem()">
+                Inverter
+            </button>
+          </div>
+        </div>
+        <div class="flex-column  mt-10">
+
+          <!-- <span class="mr-5">Filtros:</span> -->
+
+          <div class="flex-wrap" style="align-items: center;">
+
+            <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
+              <option value="0">Todos</option>
+              <option value="1">Prioridade 1</option>
+              <option value="2">Prioridade 2</option>
+              <option value="3">Prioridade 3</option>
+              <option value="4">Prioridade 4</option>
+              <option value="5">Prioridade 5</option>
+            </select>
+
+            <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
+              <option value="0">Todos</option>
+              <option value="1">Pendente</option>
+              <option value="2">Completa</option>
+              <option value="3">Falha</option>
+            </select>
+
+            <div class="flex alignitens-center" :class="{ 'mt-10': isSmallScreen, 'ml-10': !isSmallScreen,  }" >
+              <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
+              <span class="mr-5">até</span>
+              <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
             </div>
-            <div class="mt-5">
-              <button type="button" class="ml-5 btn btn-sm btn-clear"
-                @click="ordenarPorData()">
-                  {{ deveOrdenarPorData ? 'Restaurar' : 'Ordenar' }}
+            
+            <div class="flex" :class="{ 'mt-10': isSmallScreen }">
+              <button type="button" class="ml-10 btn btn-sm btn-clear"
+                @click="filtraListaTarefas()">Filtrar
               </button>
-              <button v-if="deveOrdenarPorData" type="button" class="ml-5 btn btn-sm btn-clear"
-                @click="inverterOrdem()">
-                  Inverter
+              <button type="button" class="ml-10 btn btn-sm btn-clear"
+                @click="limparFiltroDatas()">Limpar datas
               </button>
             </div>
           </div>
-          <div class="flex-column  mt-10">
-
-            <!-- <span class="mr-5">Filtros:</span> -->
-
-            <div class="flex-wrap" style="align-items: center;">
-
-              <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
-                <option value="0">Todos</option>
-                <option value="1">Prioridade 1</option>
-                <option value="2">Prioridade 2</option>
-                <option value="3">Prioridade 3</option>
-                <option value="4">Prioridade 4</option>
-                <option value="5">Prioridade 5</option>
-              </select>
-
-              <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
-                <option value="0">Todos</option>
-                <option value="1">Pendente</option>
-                <option value="2">Completa</option>
-                <option value="3">Falha</option>
-              </select>
-
-              <div class="flex alignitens-center" :class="{ 'mt-10': isSmallScreen, 'ml-10': !isSmallScreen,  }" >
-                <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
-                <span class="mr-5">até</span>
-                <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
-              </div>
-              
-              <div class="flex" :class="{ 'mt-10': isSmallScreen }">
-                <button type="button" class="ml-10 btn btn-sm btn-clear"
-                  @click="filtraListaTarefas()">Filtrar
-                </button>
-                <button type="button" class="ml-10 btn btn-sm btn-clear"
-                  @click="limparFiltroDatas()">Limpar datas
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
+    </div>
 
 
-      <!-- LISTA TAREFAS -->
-      <div class="pt-10 px-10">
-        <!-- LOADER -->
-        <InlineLoader
-          :textoAguarde="true"
-          :busy="busyTarefasLoad || busyTarefasDelete"
-          :center="true">
-        </InlineLoader>
+    <!-- LISTA TAREFAS -->
+    <div class="pt-10 px-10">
+      <!-- LOADER -->
+      <InlineLoader
+        :textoAguarde="true"
+        :busy="busyTarefasLoad || busyTarefasDelete"
+        :center="true">
+      </InlineLoader>
 
-        <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete">
-          <div v-for="tarefa in tarefas" :key="tarefa.id">
+      <div v-if="tarefas != [] && !busyTarefasLoad && !busyTarefasDelete"  class="tarefasScroll">
+        <div v-for="tarefa in tarefas" :key="tarefa.id">
+          <div class="flex">
+          <div v-if="tarefa.filtroNaoExibe == false" class="tarefa shadow-1">
 
-            <div v-if="tarefa.filtroNaoExibe == false" class="tarefa shadow-1" >
+            <!-- <div class="flex-column"> -->
+            <div class="flex">
 
-              <div class="flex-column">
+              <div class="" :class="{'flex alignitens-center' : !isSmallScreen, 'flex-column' : isSmallScreen}">
 
-                <div class="" :class="{'flex alignitens-center' : !isSmallScreen, 'flex-column' : isSmallScreen}">
-
-                  <!-- LINHA 1 -->
-                  <div class="flex-wrap alignitens-center">
-                    <div class="">
-                      <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
-                      <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-rr-checkbox"></i></span>
-                      <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
-                    </div>
-                    <div class="">
-                      <span class="mr-10 iconBig" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
-                      <span class="mr-10 iconBig" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
-                    </div>
-                    <div class="ycenter mr-10">
-                      <span :class="{
-                        'prioridade semPrioridade' : tarefa.prioridade == null,
-                        'prioridade p1' : tarefa.prioridade == 1,
-                        'prioridade p2' : tarefa.prioridade == 2,
-                        'prioridade p3' : tarefa.prioridade == 3,
-                        'prioridade p4' : tarefa.prioridade == 4,
-                        'prioridade p5' : tarefa.prioridade == 5
-                      }">{{ tarefa.prioridade != null ? 'Prioridade '+ tarefa.prioridade : 'Não possui' }}</span>
-                    </div>
+                <!-- LINHA 1 -->
+                <div class="col-completa flex-wrap">
+                  <div class="">
+                    <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
+                    <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-rr-checkbox"></i></span>
+                    <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                   </div>
-
-                  <!-- LINHA 1 BUTTONS -->
-                  <div class="" :class="{'flex-column' : isSmallScreen, 'flex alignitens-center': !isSmallScreen}">
-
-                    <div class="flex alignitens-center" :class="{'mt-10' : isSmallScreen, '': !isSmallScreen}">
-
-                      <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida mr-10" type="button" 
-                        :disabled="tarefa.busyTarefasUpdate"
-                        @click="toggleModalEditarTarefa(tarefa)">
-                          <i class="fi fi-rr-edit"></i>
-                      </button>
-
-                      <button v-if="!tarefa.editMode" class="my-10 btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
-                        :disabled="tarefa.busyTarefasUpdate"
-                        @click="togglePrioridadesTarefa(tarefa)">
-                          <i class="fi fi-sr-priority-importance"></i>
-                      </button>
-
-                      <div class="div_border_gray px-5 py-5 ml-10" v-if="tarefa.showMenuPrioridades" :class="{'': !isSmallScreen}">
-                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade mr-10" type="button"
-                          :disabled="tarefa.busyTarefasUpdate"
-                          @click="updatePrioridade(tarefa, null)">x
-                        </button>
-                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p1 mr-10" type="button"
-                          :disabled="tarefa.busyTarefasUpdate"
-                          @click="updatePrioridade(tarefa, 1)">P1
-                        </button>
-                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p2 mr-10" type="button"
-                          :disabled="tarefa.busyTarefasUpdate"
-                          @click="updatePrioridade(tarefa, 2)">P2
-                        </button>
-                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p3 mr-10" type="button"
-                          :disabled="tarefa.busyTarefasUpdate"
-                          @click="updatePrioridade(tarefa, 3)">P3
-                        </button>
-                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p4 mr-10" type="button"
-                          :disabled="tarefa.busyTarefasUpdate"
-                          @click="updatePrioridade(tarefa, 4)">P4
-                        </button>
-                        <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p5" type="button"
-                          :disabled="tarefa.busyTarefasUpdate"
-                          @click="updatePrioridade(tarefa, 5)">P5
-                        </button>
-                      </div>
-                    </div>
-                    
-                    <div class="ycenter" :class="{'mt-10' : isSmallScreen, 'ml-10': !isSmallScreen}">
-                      <router-link class="mr-10 btn btn-sm btn-clear projetoNaTarefa p-5" :to='getProjetoUrl(tarefa.projeto)'>
-                        {{ tarefa.projeto.nome }}
-                      </router-link>
-                    </div>
-
+                  <div class="">
+                    <span class="mr-10 iconBig" v-if="tarefa.meuDia !== null && tarefa.meuDiaHoje"><i class="fi fi-sr-parking"></i></span>
+                    <span class="mr-10 iconBig" v-if="tarefa.meuDia !== null && !tarefa.meuDiaHoje"><i class="fi fi-rr-parking"></i></span>
                   </div>
-                  
                 </div>
 
-                <div>
-
-                  <!-- LINHA 2 -->
-                  <div class="mt-5 p-5">
-                    <span class="data_com_tarefa">
-                      {{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '___ __/__/__ __:__' }}
-                    </span>
-                    <!-- <span class="mr-5 ml-5">
-                      <i style="line-height: 0; font-size: 1.2rem;" class="fi fi-rr-arrow-small-right"></i>
-                    </span> -->
-                    <span class="mr-5 ml-5">
-                      -
-                    </span>
-                    <span class="">
-                      {{ tarefa.descricao }}
-                    </span>
+                <div class="col-prioridade">
+                  <div class="pb-5">
+                    <span :class="{
+                      'prioridade semPrioridade' : tarefa.prioridade == null,
+                      'prioridade p1' : tarefa.prioridade == 1,
+                      'prioridade p2' : tarefa.prioridade == 2,
+                      'prioridade p3' : tarefa.prioridade == 3,
+                      'prioridade p4' : tarefa.prioridade == 4,
+                      'prioridade p5' : tarefa.prioridade == 5
+                    }">{{ tarefa.prioridade != null ? 'P'+ tarefa.prioridade : 'ND' }}</span>
                   </div>
+                </div>
 
-                  <!-- LINHA 2 MOTIVO -->
+                <div class="col-acoes flex justify-start alignitems-center ml-5" style="gap: 5px;">
+                  <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
+                    :disabled="tarefa.busyTarefasUpdate"
+                    @click="toggleModalEditarTarefa(tarefa)">
+                      <i class="fi fi-rr-edit"></i>
+                  </button>
+
+                  <button v-if="!tarefa.editMode" class="my-10 btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
+                    :disabled="tarefa.busyTarefasUpdate"
+                    @click="togglePrioridadesTarefa(tarefa)">
+                      <i class="fi fi-sr-priority-importance"></i>
+                  </button>
+
+                  <div class="menu-propriedades-container">
+                    <div class="menu-prioridades div_border_gray px-5 py-5" v-if="tarefa.showMenuPrioridades">
+                      <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p1 mr-10" type="button"
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="updatePrioridade(tarefa, 1)">P1
+                      </button>
+                      <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p2 mr-10" type="button"
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="updatePrioridade(tarefa, 2)">P2
+                      </button>
+                      <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p3 mr-10" type="button"
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="updatePrioridade(tarefa, 3)">P3
+                      </button>
+                      <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p4 mr-10" type="button"
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="updatePrioridade(tarefa, 4)">P4
+                      </button>
+                      <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm p5 mr-10" type="button"
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="updatePrioridade(tarefa, 5)">P5
+                      </button>
+                      <button v-if="tarefa.showMenuPrioridades" class="btn btn-sm semPrioridade" type="button"
+                        :disabled="tarefa.busyTarefasUpdate"
+                        @click="updatePrioridade(tarefa, null)">ND
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-projeto mx-10">
+                  <router-link class="mr-10 btn btn-sm btn-clear projetoNaTarefa p-5"
+                    style="width: 100%;"
+                    :to='getProjetoUrl(tarefa.projeto)'>
+                    {{ tarefa.projeto.nome }}
+                  </router-link>
+                </div>
+
+                <div class="flex-column col-texto ml-10 ">
+                  <span class="data_com_tarefa">
+                    {{ tarefa.datahoraFormatted != null ? `${tarefa.datahoraWeekday}, ${tarefa.datahoraFormatted}` : '___ __/__/__ __:__' }}
+                  </span>
+                  <span class="">
+                    {{ tarefa.descricao }}
+                  </span>
                   <div class="mt-5 mb-5" v-if="showMotivo[tarefa.id]">
                     <span class="mr-5 p-5 pl-10 italicoSutil motivo_tarefa" >
                       "{{ tarefa.motivo ?? 'sem motivo cadastrado' }}"
                     </span>
                   </div>
-
                 </div>
-
               </div>
 
-              <div> <!-- LINHA INFERIOR -->
-                <InlineLoader
-                  :textoAguarde="true"
-                  :busy="tarefa.busyTarefasUpdate"
-                  :center="true">
-                </InlineLoader>
-              </div>
             </div>
 
+            <div> <!-- LINHA INFERIOR -->
+              <InlineLoader
+                :textoAguarde="true"
+                :busy="tarefa.busyTarefasUpdate"
+                :center="true">
+              </InlineLoader>
+            </div>
+          </div>
           </div>
         </div>
       </div>
-
-      
-    <ModalCriarTarefa
-      v-model:exibirModal="exibirModalCriarTarefa"
-      :projeto="null">
-    </ModalCriarTarefa>
-    
-    <ModalEditarTarefa
-      v-model:exibirModal="exibirModalEditarTarefa"
-      :tarefa="tarefaModalEditarTarefa"
-      :projeto="projetoModalEditarTarefa"
-      @updateTaskEvent="guardarTarefaAtualizada"
-      @deletedTaskEvent="removeTarefaExcluida">
-    </ModalEditarTarefa>
-
-    <Notifier ref="notifier"></Notifier>
-
     </div>
+
+    
+  <ModalCriarTarefa
+    v-model:exibirModal="exibirModalCriarTarefa"
+    :projeto="null">
+  </ModalCriarTarefa>
+  
+  <ModalEditarTarefa
+    v-model:exibirModal="exibirModalEditarTarefa"
+    :tarefa="tarefaModalEditarTarefa"
+    :projeto="projetoModalEditarTarefa"
+    @updateTaskEvent="guardarTarefaAtualizada"
+    @deletedTaskEvent="removeTarefaExcluida">
+  </ModalEditarTarefa>
+
+  <Notifier ref="notifier"></Notifier>
+
   </div>
 </template>
 

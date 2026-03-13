@@ -5,34 +5,38 @@
     font-size: 0.8rem;
 }
 .p1, button.p1 {
-    background-color: rgb(146, 0, 0);
     background-color: var(--prioridade1);
-    color: rgb(255, 255, 255);
+    color: var(--prioridade1text);
+    border: var(--prioridade1-border);
+    text-shadow: var(--prioridade1-textshadow);
     font-size: 0.8rem;
 }
 .p2, button.p2{
-    background-color: red;
     background-color: var(--prioridade2);
-    color: rgb(255, 255, 255);
+    color: var(--prioridade2text);
+    border: var(--prioridade2-border);
+    text-shadow: var(--prioridade2-textshadow);
     font-size: 0.8rem;
 }
 .p3, button.p3{
-    background-color: orange;
     background-color: var(--prioridade3);
-    color: rgb(19, 19, 19);
+    color: var(--prioridade3text);
+    border: var(--prioridade3-border);
+    text-shadow: var(--prioridade3-textshadow);
     font-size: 0.8rem;
 }
 .p4, button.p4{
-    background-color: yellow;
     background-color: var(--prioridade4);
-    color: rgb(19, 19, 19);
+    color: var(--prioridade4text);
+    border: var(--prioridade4-border);
+    text-shadow: var(--prioridade4-textshadow);
     font-size: 0.8rem;
 }
 .p5, button.p5{
-    background-color: green;
     background-color: var(--prioridade5);
-    color: rgb(255, 255, 255);
-    color: rgb(19, 19, 19);
+    color: var(--prioridade5text);
+    border: var(--prioridade5-border);
+    text-shadow: var(--prioridade5-textshadow);
     font-size: 0.8rem;
 }
 .semPrioridade, button.semPrioridade {
@@ -42,6 +46,6 @@
     font-size: 0.8rem;
     /* novo estilo */
     border: 1px solid #eeeeee;
-    background-color: #eeeeee;
+    background-color: #dddddd;
     color: black;
 }
