@@ -249,8 +249,7 @@ export default {
     ModalCriarTarefa,
     ModalEditarTarefa,
     Notifier,
-  },
-  inject: ['configuracoes'],
+  },  emits: ['redirectAfterLogin'],  inject: ['configuracoes'],
   data: () => {
     return {
       deveOrdenarPorData: false,

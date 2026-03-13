@@ -265,6 +265,7 @@ export default {
     Notifier,
   },
   inject: ['configuracoes'],
+  emits: ['redirectAfterLogin'],
   data: () => {
     return {
       configs: {

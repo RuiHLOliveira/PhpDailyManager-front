@@ -98,6 +98,7 @@ export default {
     Loader,
     Notifier
   },
+  emits: ['redirectAfterLogin'],
   data: () => {
     return {
       busy: false,

@@ -150,6 +150,8 @@ import ClassesEspecializacoesTalentos from '@/views/Personagem/ClassesEspecializ
 import { PersonagensStorage } from '@/core/storage/PersonagensStorage.js'
 import { ref, onMounted, onUnmounted } from 'vue';
 
+defineEmits(['redirectAfterLogin']);
+
 onMounted( () => {
     window.addEventListener('resize', getDimensions());
     getDimensions()

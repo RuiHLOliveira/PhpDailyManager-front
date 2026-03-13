@@ -76,6 +76,7 @@ export default {
     InlineLoader,
     Notifier
   },
+  emits: ['redirectAfterLogin'],
   data: () => {
     return {
       busy: false,

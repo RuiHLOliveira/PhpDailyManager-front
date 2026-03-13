@@ -176,6 +176,7 @@ export default {
     ModalEditarInboxItem,
     Notifier,
   },
+  emits: ['redirectAfterLogin'],
   inject: ['configuracoes'],
   data: () => {
     return {

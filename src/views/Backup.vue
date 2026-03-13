@@ -70,6 +70,7 @@ export default {
     Notifier,
     InlineLoader
   },
+  emits: ['redirectAfterLogin'],
   data: () => {
     return {
       busyExportProjetos: false,

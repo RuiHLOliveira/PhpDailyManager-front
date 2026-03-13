@@ -81,6 +81,8 @@ import { HabitosStorage } from '@/core/storage/HabitosStorage.js'
 
 import { ref, onMounted, onUnmounted } from 'vue';
 
+defineEmits(['redirectAfterLogin']);
+
 onMounted( () => {
     window.addEventListener('resize', getDimensions());
     getDimensions()

@@ -204,6 +204,7 @@ import InlineLoader from '@/components/InlineLoader.vue';
 import Notifier from '@/components/Notifier.vue';
 import ModalCriarEditarHabito from '@/views/habitos/ModalCriarEditarHabito.vue';
 import ModalCompletarHabito from './ModalCompletarHabito.vue';
+import geradorDeMes from '../../core/geradorDeMes.js';
 
 export default {
   name: 'Habitos',
@@ -215,6 +216,7 @@ export default {
     Notifier,
   },
   inject: ['configuracoes'],
+  emits: ['redirectAfterLogin'],
   data: () => {
     return {
       busy: false,
@@ -473,6 +475,7 @@ export default {
   },
   created () {
     this.buscaHabitos();
+    console.log('novembro', geradorDeMes.geradorDeMes(11,2025));
   },
   mounted() {
     window.addEventListener('resize', this.getDimensions);

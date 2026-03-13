@@ -885,6 +885,7 @@ export default {
     Notifier,
     RecompensaPopup,
   },
+  emits: ['redirectAfterLogin'],
   inject: ['configuracoes'],
   data: () => {
     return {
