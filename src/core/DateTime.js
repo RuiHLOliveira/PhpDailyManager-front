@@ -96,6 +96,31 @@ const DateTime = {
 
     convertStringToDateObject(string){
         return new Date(string.replace(" ", "T") + "Z");
+    },
+
+    convertUTCStringToTimezone(utcDateString, timezoneString) {
+
+        const dateObj = new Date(utcDateString.replace(" ", "T") + "Z");
+        const tzOffset = this.getTimezoneOffset(timezoneString);
+        const totalOffset = tzOffset * 60 * 1000;
+        const adjustedDate = new Date(dateObj.getTime() + totalOffset);
+        return adjustedDate;
+    },
+
+    getTimezoneOffset(timezoneString) {
+        const timezoneMap = {
+            'UTC': 0,
+            'America/Sao_Paulo': -3,
+            'America/Fortaleza': -3,
+            'America/Manaus': -4,
+            'America/Cuiaba': -4,
+            'America/Porto_Velho': -4,
+            'America/Boa_Vista': -4,
+            'America/Araguaina': -3,
+            'America/Belem': -3,
+            'America/Maceio': -3,
+        };
+        return timezoneMap[timezoneString] ?? 0;
     }
 
 }

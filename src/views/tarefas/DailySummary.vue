@@ -438,7 +438,20 @@ export default {
           data.forEach(habito => {
             if (habito.habitoRealizados && Array.isArray(habito.habitoRealizados)) {
               habito.habitoRealizados.forEach(hr => {
-                if (hr.realizadoEm && hr.realizadoEm.startsWith(selectedDate)) {
+                
+                // Convert hr.realizadoEm from UTC to the correct timezone before comparing
+                let realizadoEmToCompare = hr.realizadoEm;
+                if (habito.createdAt && habito.createdAt.timezone) {
+                  const convertedDate = DateTime.convertUTCStringToTimezone(hr.realizadoEm, habito.createdAt.timezone);
+                  realizadoEmToCompare = DateTime.formatDevDateTime(convertedDate);
+                }
+
+                if(hr.realizadoEm.startsWith('2026-03-14')) {
+                  console.log('hr.realizadoEm',hr.realizadoEm)
+                  console.log('realizadoEmToCompare',realizadoEmToCompare)
+                }
+                
+                if (hr.realizadoEm && realizadoEmToCompare.startsWith(selectedDate)) {
                   // parse any evaluation JSON stored on the realization
                   try {
                     const evalJson = JSON.parse(hr.avaliacaoJson ?? '{}');
