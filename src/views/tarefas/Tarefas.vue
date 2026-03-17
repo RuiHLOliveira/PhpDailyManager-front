@@ -43,72 +43,283 @@
   width: 860px;
 }
 
+/* MODERN FILTER STYLES */
+.filter-section-container {
+  background: linear-gradient(135deg, rgba(50, 50, 50, 0.08) 0%, rgba(50, 50, 50, 0.04) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(100, 100, 100, 0.2);
+  padding: 15px;
+  margin-top: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filter-columns-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.filter-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 250px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-label {
+  margin-top: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #b0b0b0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-select,
+.filter-input {
+  background-color: rgb(32, 32, 32);
+  border: 1px solid rgba(100, 100, 100, 0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #dfdfdf;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23B0B0B0' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+.filter-select:hover,
+.filter-input:hover {
+  border-color: rgba(100, 100, 100, 0.3);
+  background-color: rgb(20, 20, 20);
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  outline: none;
+  background-color: rgb(20, 20, 20);
+}
+
+.filter-select:active {
+  outline: none;
+  background-color: rgb(20, 20, 20);
+  border-color: rgba(100, 100, 100, 0.5);
+}
+
+.filter-select option {
+  background-color: rgb(20, 20, 20);
+  color: #dfdfdf;
+  padding: 8px;
+}
+
+.filter-select option:checked {
+  background-color: rgb(20, 20, 20);
+  color: #dfdfdf;
+}
+
+.filter-date-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-date-separator {
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.sort-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sort-btn {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgba(32,32,32);
+  border: 1px solid rgba(100, 100, 100, 0.2);
+  color: #b0b0b0;
+  transition: all 0.2s ease;
+}
+
+.sort-btn:hover {
+  background: rgba(32,32,32,0.5);
+  border-color: rgba(100, 100, 100, 0.4);
+  color: #dfdfdf;
+}
+
+.sort-btn-active {
+  background: rgba(32,32,32);
+  border-color: rgba(100, 100, 100, 0.5);
+  color: #dfdfdf;
+  font-weight: 500;
+}
+
+.filter-btn-secondary {
+  background: rgba(32,32,32);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 8px 14px;
+  color: #b0b0b0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.filter-btn-secondary:hover {
+  background: rgba(32,32,32,0.5);
+  color: #dfdfdf;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.full-width {
+  width: 100%;
+}
+
+@media only screen and (max-width: 1200px) {
+  .filter-column {
+    flex: 1;
+    min-width: 220px;
+  }
+}
+
+@media only screen and (max-width: 799px) {
+  .filter-column {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+  
+  .filter-date-range {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-date-range input {
+    width: 100%;
+  }
+}
 
 </style>
 
 <template>
   <div class="containerLarge darkmodeBgBlack">
     
-    <div class="position_sticky div_border_bottom_gray darkmodeBgBlack">
+    <div class="div_border_bottom_gray darkmodeBgBlack">
       <section class="mb-10 p-10 pb-15">
-        <!-- style="min-height: 11vh" -->
-        <div class="flex-wrap">
-          <h1 class="titulo">Tarefas</h1>
-          <div class="mt-5">
-            <button type="button" class="ml-5 btn btn-sm btn-clear"
-              @click="toggleShowMotivoTodasTarefas()">Motivos
+        <!-- HEADER COM TÍTULO E AÇÕES RÁPIDAS -->
+        <div class="flex-wrap justify-spacebetween alignitems-center gap-10">
+          <div class="flex alignitems-center gap-5">
+            <h1 class="titulo">Tarefas</h1>
+            <button type="button" class="btn btn-sm btn-clear"
+              @click="toggleShowMotivoTodasTarefas()">
+              <i class="fi fi-rr-note"></i> Motivos
             </button>
-            <button type="button" class="ml-5 btn btn-sm btn-clear"
-              @click="toggleModalCriarTarefa()">Criar
-            </button>
-          </div>
-          <div class="mt-5">
-            <button type="button" class="ml-5 btn btn-sm btn-clear"
-              @click="ordenarPorData()">
-                {{ deveOrdenarPorData ? 'Restaurar' : 'Ordenar' }}
-            </button>
-            <button v-if="deveOrdenarPorData" type="button" class="ml-5 btn btn-sm btn-clear"
-              @click="inverterOrdem()">
-                Inverter
+            <button type="button" class="btn btn-sm btn-clear"
+              @click="toggleModalCriarTarefa()">
+              <i class="fi fi-rr-plus"></i> Criar
             </button>
           </div>
         </div>
-        <div class="flex-column  mt-10">
 
-          <!-- <span class="mr-5">Filtros:</span> -->
+        <!-- SEÇÃO MODERN DE FILTROS -->
+        <div class="filter-section-container">
+          <div class="filter-group">
+            <!-- 3 COLUNAS -->
+            <div class="filter-columns-row">
+              <!-- COLUNA 1: Prioridade e Status -->
+              <div class="filter-column">
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fi fi-rr-priority-importance"></i> Prioridade
+                  </label>
+                  <select class="filter-select" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
+                    <option value="0">Todos</option>
+                    <option value="1">🔴 Prioridade 1</option>
+                    <option value="2">🟠 Prioridade 2</option>
+                    <option value="3">🟡 Prioridade 3</option>
+                    <option value="4">🟢 Prioridade 4</option>
+                    <option value="5">🔵 Prioridade 5</option>
+                  </select>
+                </div>
 
-          <div class="flex-wrap" style="align-items: center;">
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fi fi-rr-list-check"></i> Status
+                  </label>
+                  <select class="filter-select" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
+                    <option value="0">Todos</option>
+                    <option value="1">⏳ Pendente</option>
+                    <option value="2">✓ Completa</option>
+                    <option value="3">✗ Falha</option>
+                  </select>
+                </div>
+              </div>
 
-            <select class="smallSelect mr-5" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
-              <option value="0">Todos</option>
-              <option value="1">Prioridade 1</option>
-              <option value="2">Prioridade 2</option>
-              <option value="3">Prioridade 3</option>
-              <option value="4">Prioridade 4</option>
-              <option value="5">Prioridade 5</option>
-            </select>
+              <!-- COLUNA 2: Período -->
+              <div class="filter-column">
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fi fi-rr-calendar"></i> Período
+                  </label>
+                  <div class="filter-date-range">
+                    <input type="date" class="filter-input" v-model="filtroDataInicio" @change="filtraListaTarefas()">
+                    <span class="filter-date-separator">até</span>
+                    <input type="date" class="filter-input" v-model="filtroDataFim" @change="filtraListaTarefas()">
+                  </div>
+                </div>
 
-            <select class="smallSelect mr-5" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
-              <option value="0">Todos</option>
-              <option value="1">Pendente</option>
-              <option value="2">Completa</option>
-              <option value="3">Falha</option>
-            </select>
+                <button type="button" class="mt-20 filter-btn-secondary full-width"
+                  @click="limparFiltroDatas(); filtraListaTarefas()">
+                  <i class="fi fi-rr-refresh"></i> Limpar Datas
+                </button>
+              </div>
 
-            <div class="flex alignitens-center" :class="{ 'mt-10': isSmallScreen, 'ml-10': !isSmallScreen,  }" >
-              <input type="date" class="normalSizeInput mx-5" v-model="filtroDataInicio">
-              <span class="mr-5">até</span>
-              <input type="date" class="normalSizeInput ml-5" v-model="filtroDataFim">
+              <!-- COLUNA 3: Ordenação -->
+              <div class="filter-column">
+                <div class="sort-controls">
+                  <label class="filter-label">
+                    <i class="fi fi-rr-arrow-sort"></i> Ordenação
+                  </label>
+                  <button type="button" class="btn btn-sm btn-clear sort-btn"
+                    @click="ordenarPorData()"
+                    :class="{ 'sort-btn-active': deveOrdenarPorData }">
+                    <i :class="deveOrdenarPorData ? 'fi fi-sr-calendar-check' : 'fi fi-rr-calendar'"></i>
+                    {{ deveOrdenarPorData ? 'Data Ativa' : 'Por Data' }}
+                  </button>
+                  <button v-if="deveOrdenarPorData" type="button" class="btn btn-sm btn-clear sort-btn"
+                    @click="inverterOrdem()">
+                    <i :class="ordemCrescente ? 'fi fi-sr-arrow-down' : 'fi fi-sr-arrow-up'"></i>
+                    {{ ordemCrescente ? '↓' : '↑' }}
+                  </button>
+                </div>
+              </div>
             </div>
-            
-            <div class="flex" :class="{ 'mt-10': isSmallScreen }">
-              <button type="button" class="ml-10 btn btn-sm btn-clear"
-                @click="filtraListaTarefas()">Filtrar
-              </button>
-              <button type="button" class="ml-10 btn btn-sm btn-clear"
-                @click="limparFiltroDatas()">Limpar datas
-              </button>
-            </div>
+
           </div>
         </div>
       </section>
