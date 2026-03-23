@@ -16,7 +16,7 @@ nav.leftNav {
     min-height: 100svh;
     max-height: 100svh;
     background-color: var(--darkmode-bg-color);
-    font-size: 1.1rem;
+    font-size: 1.0rem;
     .leftNavTitle {
         padding: 0 10px;
         text-align: center;
@@ -33,6 +33,12 @@ nav.leftNav {
         text-decoration: none;
         cursor: pointer;
         color: var(--darkmode-font-color);
+        i {
+            font-size: 0.9rem;
+            position: relative;
+            top: 2px;
+            margin-right: 5px;
+        }
     }
     .menuItem:hover {
     background-color: var(--darkmode-dark-hover-button-color-background);
