@@ -17,8 +17,8 @@ section.projetoList {
   flex-shrink: 0;
   div.projeto {
     justify-content: space-between;
-    background-color: var(--darkmode-bg-color);
-    color: var(--darkmode-font-color);
+    background-color: white;
+    color: black;
     /* border-radius: 5px; */
     button.situacaoFixedWidth {
       min-width: 100px;
@@ -88,12 +88,12 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container darkmodeBgBlack">
+    <div class="container ">
 
       
-      <div class="position_sticky darkmodeBgBlack pb-10 div_border_bottom_gray">
+      <div class="position_sticky  pb-10 div_border_bottom_gray">
         <!-- HEADER -->
-        <section class="darkmodeBgBlack div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
+        <section class=" div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">
             <h1>OBJETIVOS e FOTOS</h1>
           </div>
@@ -101,7 +101,7 @@ section.projetoShow {
 
         <div>
           <!-- FILTER -->
-          <div class="mt-10 p-5 darkmodeBgBlack flex-wrap" v-if="projetoExibir.id == null">
+          <div class="mt-10 p-5  flex-wrap" v-if="projetoExibir.id == null">
             <div class="mr-15">
               <input @keyup="filtraListaProjeto()" name="filtroNomeProjeto" placeholder="filtro nome do projeto" type="text" v-model="filtroNomeProjeto">
             </div>
@@ -141,7 +141,7 @@ section.projetoShow {
 
               <div v-if="projeto.nome.includes('OBJ - ')" class="div_border_gray">
 
-                <div class="projeto darkmodeBgBlack my-10 ml-5 mr-15"
+                <div class="projeto  my-10 ml-5 mr-15"
                 :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                   <!-- PROJETO NOME -->
                   <span class="py-10 px-10">
@@ -213,7 +213,7 @@ section.projetoShow {
           </div>
         </section>
 
-        <div class="darkmodeBgBlack my-5 py-5" v-if="busyProjetosLoad">
+        <div class=" my-5 py-5" v-if="busyProjetosLoad">
           <InlineLoader
             :textoAguarde="true"
             :busy="busyProjetosLoad"

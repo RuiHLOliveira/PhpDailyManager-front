@@ -9,30 +9,30 @@
 .box {
   border-radius: 5px;
   padding: 5px;
-  background-color: var(--darkGray);
+  background-color: #dddddd;
 }
 
 .boxButton:hover {
   cursor: pointer;
 }
 .boxButton:hover {
-  background-color: #424242;
+  background-color: #cccccc;
 }
 
 .boxHabilidade{
   border-radius: 5px;
   padding: 5px;
-  background-color: var(--darkGray);
+  background-color: #dddddd;
   cursor: pointer;
   width: 200px;
 }
 .boxHabilidade:hover {
-  background-color: #424242;
+  background-color: #cccccc;
 }
 
 .tituloHabilidade{
   font-size: 1.3rem;
-  border-bottom: 2px solid var(--darkmode-border-gray);
+  border-bottom: 2px solid var(--form-border-color);
   width: 100%;
   height: 50px;
   text-align: center;
@@ -44,7 +44,7 @@
   padding-bottom: 10px;
 }
 .escolhida{
-  border: 2px solid var(--darkmode-default-button-color);
+  border: 2px solid var(--default-button-color);
 }
 
 </style>

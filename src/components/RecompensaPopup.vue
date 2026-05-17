@@ -15,10 +15,10 @@
 }
 
 .modalRecompensa {
-  border: 2px solid #00000070;
+  border: 2px solid var(--default-button-color);
   border-radius: 3px;
 
-  background-color: #333333;
+  background-color: #ffffff;
 
   width: 300px;
   height: 300px;

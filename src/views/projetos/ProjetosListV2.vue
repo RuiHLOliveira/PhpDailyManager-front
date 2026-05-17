@@ -38,19 +38,19 @@ section.projetoList {
   border-radius: 50px;
 }
 .btnBgOnly{
-  background-color: var(--darkmode-dark-button-color);
-  color: var(--darkmode-font-color);
+  background-color: white;
+  color: black;
   padding: 5px 10px;
   border-radius: 50px;
 }
 .btnBgOnly:hover{
-  background-color: var(--darkmode-dark-hover-button-color-background);
+  background-color: #dddddd;
 }
 
 
 .projeto {
-  background-color: #1f1c20;
-  border-left: 4px solid #1f1c20;
+  background-color: #eeeeee;
+  border-left: 4px solid #5a7a61;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
@@ -98,8 +98,8 @@ section.projetoList {
 }
 
 .projetoSelected{
-  background-color: #2f2c30 !important;
-  border-left: 4px solid #c4c4c4;
+  background-color: #b3e2be !important;
+  border-left: 4px solid #5a7a61;
 }
 
 .col-completa {
@@ -163,7 +163,7 @@ section.projetoShow {
     /* text-decoration: underline; */
     font-size: 1.3rem;
     /* font-weight: bold; */
-    color: var(--darkmode-font-color);
+    color: black;
   }
 }
 @media only screen and (min-width: 800px) {
@@ -175,9 +175,9 @@ section.projetoShow {
 .linhaBox {
   padding: 10px;
   border-radius: 5px;
-  color: var(--darkmode-font-color);
-  background-color: var(--darkmode-bg-color);
-  border: 1px solid var(--darkmode-border-gray);
+  color: black;
+  background-color: white;
+  border: 1px solid var(--gray1);
 }
 /* .linhaBox:hover {
   border: 1px solid #939393;
@@ -192,7 +192,7 @@ section.projetoShow {
       'maxViewportWidth': isSmallScreen
     }">
 
-      <div class="position_sticky py-10 div_border_bottom_gray darkmodeBgBlack">
+      <div class="position_sticky py-10 div_border_bottom_gray bg-white">
         <!-- HEADER -->
         <section class="my-5 py-5 px-10 flex justify-spacebetween alignitens-center">
           <div class="flex alignitens-center">

@@ -1,6 +1,5 @@
 <style>
 .gameDiv{
-  /* border: 3px solid var(--darkmode-dark-button-color); */
   width: 100%;
   padding: 10px;
 }
@@ -8,7 +7,7 @@
   
 }
 .masmorra{
-  background-color: var(--darkGray);
+  background-color: #dddddd;
   padding: 10px;
   border-radius: 5px;
 }
@@ -65,7 +64,7 @@
   font-family: sans-serif;
   padding: 5px;
   margin: 5px 0;
-  color: white;
+  color: black;
   text-shadow: 1px 1px 2px black;
   animation: surgir 1s ease-out forwards;
   transition: opacity 1s, transform 1s;
@@ -80,6 +79,12 @@
 
 .log-dano.sumindo.displayNone {
   display: none;
+}
+
+.ataqueRecebido, .ataqueFeito {
+  color: red;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 @keyframes surgir {
@@ -223,7 +228,7 @@
               :class="{ 'sumindo': !animacao.mostrar, 'displayNone': !animacao.mostrar2 }"
             >
               <span v-if="animacao.alvo == personagem.nome && animacao.oque == 'atacou'"
-                style="color: red; font-weight: bold; font-size: 1.2rem;">
+                class="ataqueRecebido">
                 &lt;
               </span>
 
@@ -233,7 +238,7 @@
               </span>
               
               <span v-if="animacao.alvo == chefaoSelecionado.nome && animacao.oque == 'atacou'"
-                style="color: red; font-weight: bold; font-size: 1.2rem;">
+                class="ataqueFeito">
                 &gt;
               </span>
 

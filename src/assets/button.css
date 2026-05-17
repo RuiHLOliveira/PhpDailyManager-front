@@ -55,7 +55,7 @@ button.btn {
     padding: 5px 10px;
     border-radius: 3px;
     
-    background-color: var(--darkmode-default-button-color);
+    background-color: var(--default-button-color);
     color: #ffffff;
 
     /* link */
@@ -69,7 +69,7 @@ button.btn {
 }
 a.btn:hover,
 button:hover {
-    background-color: var(--darkmode-default-hover-button-color-background);
+    background-color: var(--default-hover-button-color);
 }
 
 
@@ -111,12 +111,12 @@ button.btn-red {
 a.btn-clear,
 button.btn-clear {
     border: 1px solid #575757;
-    background-color: var(--darkmode-dark-button-color);
-    color: var(--darkmode-font-color);
+    background-color: white;
+    color: black;
 }
 a.btn-clear:hover,
 button.btn-clear:hover {
-    background-color: var(--darkmode-dark-hover-button-color-background);
+    background-color: #eeeeee;
 }
 
 /* CLEAR BUTTON */
@@ -328,7 +328,7 @@ a.smallSituacaoPendente,
 button.smallSituacaoPendente {
     background-color: #20c920;
 
-    background-color: var(--darkmode-bg-color);
+    background-color: white;
     border: 1px solid #20c920;
     color: #20c920;
 }
@@ -338,7 +338,7 @@ a.smallSituacaoPendente:hover,
 button.smallSituacaoPendente:hover {
     background-color: #20c920;
 
-    background-color: var(--darkmode-bg-color);
+    background-color: white;
     border: 1px solid #20c920;
     color: #20c920;
 }
@@ -347,8 +347,8 @@ button.situacaoAguardandoResposta,
 a.smallSituacaoAguardandoResposta,
 button.smallSituacaoAguardandoResposta {
     background-color: #0099ff;
-
-    background-color: var(--darkmode-bg-color);
+    
+    background-color: white;
     border: 1px solid #0099ff;
     color: #0099ff;
 }
@@ -357,8 +357,8 @@ button.situacaoAguardandoResposta:hover,
 a.smallSituacaoAguardandoResposta:hover,
 button.smallSituacaoAguardandoResposta:hover {
     background-color: #0099ff;
-
-    background-color: var(--darkmode-bg-color);
+    
+    background-color: white;
     border: 1px solid #0099ff;
     color: #0099ff;
 }
@@ -368,7 +368,7 @@ a.smallSituacaoPausado,
 button.smallSituacaoPausado {
     background-color: #575757;
     
-    background-color: var(--darkmode-bg-color);
+    background-color: white;
     border: 1px solid #575757;
     color: #575757;
 }
@@ -377,8 +377,8 @@ button.situacaoPausado:hover,
 a.smallSituacaoPausado:hover,
 button.smallSituacaoPausado:hover {
     background-color: #757575;
-
-    background-color: var(--darkmode-bg-color);
+    
+    background-color: white;
     border: 1px solid #575757;
     color: #575757;
 }
@@ -390,7 +390,7 @@ button.smallSituacaoConcluido {
     color: #444444;
     text-decoration: line-through;
     
-    background-color: var(--darkmode-bg-color);
+    background-color: white;
     border: 1px solid #8d8d8d;
     color: #8d8d8d;
 }
@@ -399,8 +399,8 @@ button.situacaoConcluido:hover,
 a.smallSituacaoConcluido:hover,
 button.smallSituacaoConcluido:hover {
     background-color: #b1b1b1;
-
-    background-color: var(--darkmode-bg-color);
+    
+    background-color: white;
     border: 1px solid #8d8d8d;
     color: #8d8d8d;
 }

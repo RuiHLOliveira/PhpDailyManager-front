@@ -2,7 +2,7 @@
 
 .personagem {
   padding: 20px;
-  background-color: var(--darkmode-border-gray);
+  background-color: #dddddd;
   border-radius: 5px;
   max-width: 700px;
 }

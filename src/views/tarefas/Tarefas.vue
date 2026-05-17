@@ -45,7 +45,8 @@
 
 /* MODERN FILTER STYLES */
 .filter-section-container {
-  background: linear-gradient(135deg, rgba(50, 50, 50, 0.08) 0%, rgba(50, 50, 50, 0.04) 100%);
+  /* background: linear-gradient(135deg, rgba(50, 50, 50, 0.08) 0%, rgba(50, 50, 50, 0.04) 100%); */
+  background: white;
   border-radius: 8px;
   border: 1px solid rgba(100, 100, 100, 0.2);
   padding: 15px;
@@ -82,18 +83,18 @@
   margin-top: 5px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #b0b0b0;
+  color: #303030;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .filter-select,
 .filter-input {
-  background-color: rgb(32, 32, 32);
+  background-color: #ffffff;
   border: 1px solid rgba(100, 100, 100, 0.3);
   border-radius: 6px;
   padding: 8px 12px;
-  color: #dfdfdf;
+  color: #303030;
   font-size: 0.9rem;
   transition: all 0.2s ease;
 }
@@ -110,31 +111,29 @@
 
 .filter-select:hover,
 .filter-input:hover {
-  border-color: rgba(100, 100, 100, 0.3);
-  background-color: rgb(20, 20, 20);
+  background-color: #eeeeee;
 }
 
 .filter-select:focus,
 .filter-input:focus {
   outline: none;
-  background-color: rgb(20, 20, 20);
+  background-color: #eeeeee;
 }
 
 .filter-select:active {
   outline: none;
-  background-color: rgb(20, 20, 20);
+  background-color: #eeeeee;
   border-color: rgba(100, 100, 100, 0.5);
 }
 
 .filter-select option {
-  background-color: rgb(20, 20, 20);
-  color: #dfdfdf;
+  background-color: #eeeeee;
+  color: #303030;
   padding: 8px;
 }
 
 .filter-select option:checked {
-  background-color: rgb(20, 20, 20);
-  color: #dfdfdf;
+  background-color: #eeeeee;
 }
 
 .filter-date-range {
@@ -159,31 +158,31 @@
   font-size: 0.85rem;
   padding: 6px 10px;
   border-radius: 4px;
-  background: rgba(32,32,32);
+  background-color: #ffffff;
   border: 1px solid rgba(100, 100, 100, 0.2);
-  color: #b0b0b0;
+  color: #303030;
   transition: all 0.2s ease;
 }
 
 .sort-btn:hover {
-  background: rgba(32,32,32,0.5);
+  background-color: #eeeeee;
   border-color: rgba(100, 100, 100, 0.4);
-  color: #dfdfdf;
+  color: #303030;
 }
 
 .sort-btn-active {
-  background: rgba(32,32,32);
+  background-color: #ffffff;
   border-color: rgba(100, 100, 100, 0.5);
-  color: #dfdfdf;
+  color: #303030;
   font-weight: 500;
 }
 
 .filter-btn-secondary {
-  background: rgba(32,32,32);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #ffffff;
+  border: 1px solid rgba(100, 100, 100, 0.2);
   border-radius: 6px;
   padding: 8px 14px;
-  color: #b0b0b0;
+  color: #303030;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -192,9 +191,7 @@
 }
 
 .filter-btn-secondary:hover {
-  background: rgba(32,32,32,0.5);
-  color: #dfdfdf;
-  border-color: rgba(255, 255, 255, 0.2);
+  background-color: #eeeeee;
 }
 
 .full-width {
@@ -227,9 +224,9 @@
 </style>
 
 <template>
-  <div class="containerLarge darkmodeBgBlack">
+  <div class="containerLarge ">
     
-    <div class="div_border_bottom_gray darkmodeBgBlack">
+    <div class="div_border_bottom_gray ">
       <section class="mb-10 p-10 pb-15">
         <!-- HEADER COM TÍTULO E AÇÕES RÁPIDAS -->
         <div class="flex-wrap justify-spacebetween alignitems-center gap-10">

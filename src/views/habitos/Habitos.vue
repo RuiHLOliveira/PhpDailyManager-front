@@ -1,7 +1,7 @@
 <style scoped>
 
 .boxHabito{
-  background-color: #252525;
+  background-color: #eeeeee;
   padding: 10px 5px;
   margin: 5px;
   display: flex;
@@ -93,7 +93,7 @@
   <div>
     <div class="container">
 
-      <div class="darkmodeBgBlack"> <!-- HABITOS -->
+      <div class=""> <!-- HABITOS -->
         
         <div class="flex justify-spacebetween py-5 px-15"> <!-- TITLE -->
           <div class="flex justify-spacebetween alignitens-center"> <!-- left side -->

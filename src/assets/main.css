@@ -36,7 +36,6 @@
 @import url('./prioridades.css');
 @import url('./tarefas.css');
 
-@import url('./darkmode.css');
 @import url('./fiIcons.css');
 
 
@@ -94,7 +93,8 @@ body {
 
 .italicoSutil{
     font-style: italic;
-    color: #757575;
+    /* color: #757575; */
+    color: #4b4b4b;
 }
 
 
@@ -106,13 +106,17 @@ body {
     padding: 5px;
 }
 
+.bg-white {
+    background-color: white;
+}
+
 .mainBackground {
-    background-color: var(--darkmode-bg-color);
+    background-color: white;
     min-height: 100svh;
 }
 
 nav.topNav {
-    border-bottom: 1px solid var(--darkmode-border-gray);
+    border-bottom: 1px solid var(--form-border-color);
     position: absolute;
     min-width: 100svw;
     background-color: #eeeeee;
@@ -155,10 +159,9 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 section.sectionBorder {
-    border-top: 1px solid var(--darkmode-border-gray);
+    border-top: 1px solid var(--gray1);
     margin-top: 20px;
     padding-bottom: 20px;
-    /* background-color: beige; */
 }
 
 .textCenter {

@@ -1,6 +1,6 @@
 
 nav.topNav {
-    border-bottom: 1px solid var(--darkmode-border-gray);
+    border-bottom: 1px solid var(--form-border-color);
     position: absolute;
     min-width: 100svw;
     background-color: #eeeeee;
@@ -10,29 +10,29 @@ nav.topNav {
 nav.leftNav {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--darkmode-border-gray);
+    border-right: 1px solid var(--gray1);
     min-width: 100svw;
     max-width: 100svw;
     min-height: 100svh;
     max-height: 100svh;
-    background-color: var(--darkmode-bg-color);
+    background-color: white;
     font-size: 1.0rem;
     .leftNavTitle {
         padding: 0 10px;
         text-align: center;
         font-size: 1.5rem;
-        color: var(--darkmode-font-color);
+        color: black;
     }
     .leftNavText {
         padding: 0 10px;
         text-align: center;
-        color: var(--darkmode-font-color);
+        color: black;
     }
     .menuItem {
         padding: 10px 15px;
         text-decoration: none;
         cursor: pointer;
-        color: var(--darkmode-font-color);
+        color: black;
         i {
             font-size: 0.9rem;
             position: relative;
@@ -41,7 +41,7 @@ nav.leftNav {
         }
     }
     .menuItem:hover {
-    background-color: var(--darkmode-dark-hover-button-color-background);
+        background-color: #c5c5c5;
     }
 }
 

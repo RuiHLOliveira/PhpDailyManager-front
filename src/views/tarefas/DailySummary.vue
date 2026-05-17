@@ -16,7 +16,7 @@
   text-align: center;
   font-weight: bold;
   padding: 5px;
-  background: var(--darkmode-default-button-color);
+  background: var(--default-button-color);
   color: white;
   border-radius: 5px;
 }
@@ -40,19 +40,19 @@
   width: 100%;
   height: 100%;
   padding: 10px;
-  border: 0px solid var(--darkmode-default-button-color);
+  border: 0px;
   border-radius: 5px;
-  background: var(--darkmode-default-hover-button-color-background);
+  background-color: var(--default-button-color);
   color: white;
   cursor: pointer;
   font-size: 0.85em;
   transition: background-color 0.2s;
 }
 .day-cell button:hover {
-  background: #7a3fb8;
+  background: var(--default-hover-button-color);
 }
 .day-cell button.selected {
-  background: #462077;
+  background: #055739;
   font-weight: bold;
 }
 .tasks-habits {
@@ -61,9 +61,9 @@
 .task {
   margin-bottom: 15px;
   padding: 15px;
-  border: 0px solid #ddd;
+  border: 0px;
   border-radius: 5px;
-  background: #383838;
+  background: #dddddd;
 }
 .task h3 {
   margin-top: 0;
@@ -73,6 +73,9 @@
 }
 .task-view-item {
   margin-bottom: 10px;
+}
+.dataTaskConcluidaAt{
+  color: #555555;
 }
 .task-view-label {
   font-weight: bold;
@@ -192,7 +195,7 @@ textarea {
       </h2>
       <div v-for="task in completedTasks" :key="task.id" class="task" :class="{ editing: editingTaskId === task.id }">
         <h3>{{ task.descricao }}</h3>
-        <small style="color: #999;">{{ task.concluidaAtFormatted }}</small>
+        <small class="dataTaskConcluidaAt">{{ task.concluidaAtFormatted }}</small>
         
         <!-- View Mode -->
         <div class="task-view">

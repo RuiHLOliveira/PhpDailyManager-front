@@ -107,10 +107,10 @@ section.projetoShow {
 
 <template>
   <div>
-    <div class="container darkmodeBgBlack">
+    <div class="container ">
 
       <!-- HEADER -->
-      <section class="darkmodeBgBlack div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
+      <section class=" div_border_gray my-5 py-5 px-10 header flex justify-spacebetween alignitens-center">
         <div class="flex alignitens-center">
           <h1>Primeira Página</h1>
         </div>
@@ -128,7 +128,7 @@ section.projetoShow {
 
             <div v-for="projeto in projetos" :key="projeto.id">
               <!-- TITLE -->
-              <div class="projeto darkmodeBgBlack div_border_gray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
+              <div class="projeto  div_border_gray my-10 ml-5 mr-15" :class="{ 'flex' : !isSmallScreen, 'flex-column' : isSmallScreen}">
                 
                 <!-- PROJETO NOME -->
                 <span class="py-10 px-10">
@@ -180,7 +180,7 @@ section.projetoShow {
           </div>
         </section>
 
-        <div class="darkmodeBgBlack my-5 py-5" v-if="busyProjetosLoad">
+        <div class=" my-5 py-5" v-if="busyProjetosLoad">
           <InlineLoader
             :textoAguarde="true"
             :busy="busyProjetosLoad"
@@ -189,7 +189,7 @@ section.projetoShow {
         </div>
 
         <!-- PROJETO SHOW -->
-        <section class="projetoShow darkmodeBgBlack my-10 p-10 mx-5" v-if="projetoExibir.id != null">
+        <section class="projetoShow  my-10 p-10 mx-5" v-if="projetoExibir.id != null">
         <!-- <div v-if="projetoExibir != [] && !busyProjetosLoad && !busyProjetosDelete"> -->
         <div v-if="projetoExibir.id != null">
 

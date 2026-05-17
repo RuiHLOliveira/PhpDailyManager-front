@@ -84,7 +84,7 @@
   <div>
     <div class="container">
 
-      <div class="darkmodeBgBlack"> <!-- HABITOS -->
+      <div class=""> <!-- HABITOS -->
         
         <div class="flex justify-spacebetween py-5 px-15"> <!-- TITLE -->
           <div class="flex justify-spacebetween alignitens-center"> <!-- left side -->

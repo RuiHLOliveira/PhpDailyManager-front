@@ -4,22 +4,21 @@ h1.titulo {
 
 }
 .inboxItem {
-  /* border-bottom: 2px solid rgb(194, 194, 194); */
   border-radius: 5px;
-  background-color: var(--darkmode-bg-color);
-  color: var(--darkmode-font-color);
+  background-color: white;
+  color: black;
   min-width: 285px;
   max-width: 285px;
 }
 .inboxItem:hover {
-  background-color: var(--darkmode-bg-color);
-  color: var(--darkmode-font-color);
+  background-color: #eeeeee;
+  color: #black;
   cursor: pointer;
 }
 .additionalTag {
     font-size: 0.8rem;
-    background-color: rgb(51, 51, 51);
-    color: var(--darkmode-font-color);
+    background-color: rgb(192, 192, 192);
+    color: black;
     border-radius: 5px;
 }
 a.link{
@@ -35,8 +34,8 @@ a.link:visited {
   <div>
     <div class="container">
       
-      <div class="position_sticky darkmodeBgBlack pb-10 div_border_bottom_gray">
-        <section class="flex alignitens-center darkmodeBgBlack div_border_gray my-5 py-5 px-10 flex justify-spacebetween">
+      <div class="position_sticky  pb-10 div_border_bottom_gray">
+        <section class="flex alignitens-center  div_border_gray my-5 py-5 px-10 flex justify-spacebetween">
           <h1 class="titulo">Inbox</h1>
           <div>
             <button class="btn mx-5 btn-sm" type="button" @click="toggleModalCriarInboxItem()">Criar +</button>
@@ -46,7 +45,7 @@ a.link:visited {
       </div>
 
       <!-- CATEGORIAS -->
-      <section class="flex-column my-10 p-10 darkmodeBgBlack div_border_gray">
+      <section class="flex-column my-10 p-10  div_border_gray">
         <div>
           <h3>Categoria: {{ categoriaEscolhida.categoria }}</h3>
         </div>
@@ -87,7 +86,7 @@ a.link:visited {
       <div class="flex-wrap" v-if="inboxItems != [] && !busyInboxLoad && !busyInboxDelete">
         <div v-for="inboxItem in inboxItems" :key="inboxItem.id">
 
-          <div class="inboxItem darkmodeBgBlack div_border_gray mb-10 mx-5 py-10 px-10" @click="toggleModalEditarInboxItem(inboxItem)">
+          <div class="inboxItem  div_border_gray mb-10 mx-5 py-10 px-10" @click="toggleModalEditarInboxItem(inboxItem)">
 
             <div class="flex justify-spacebetween"> <!-- LINHA SUPERIOR -->
 

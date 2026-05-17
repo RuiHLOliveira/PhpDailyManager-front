@@ -18,9 +18,9 @@
   border-radius: 5px;
   width: 120px;
   height: 40px;
-  background: var(--darkmode-bg-color);
-  color: var(--darkmode-font-color);
-  border: 1px solid var(--gray-button-border);
+  background: white;
+  color: black;
+  border: 1px solid var(--form-border-color);
   /* border: 1px solid; */
   /* border-color: #f1f1f1; */
   /* display: inline-block; */
