@@ -26,7 +26,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #0000008f;
+  background-color: #0000008f;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,10 +1,11 @@
 <style>
 
 .personagem {
-  padding: 20px;
-  background-color: #dddddd;
+  padding: 10px;
+  background-color: var(--bg-color);
   border-radius: 5px;
   max-width: 700px;
+  border: 1px solid var(--border-color);
 }
 .personagem__titulo{
   font-weight: bold;
@@ -15,10 +16,10 @@
 .historicoPersonagem {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgb(180, 180, 180);
+  border-bottom: 1px solid var(--border-color);
   /* border-radius: 10px; */
-  margin-top: 20px;
-  padding-top: 10px
+  margin-bottom: 10px;
+  padding: 20px
 }
 
 .boxImgInline {

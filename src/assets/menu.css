@@ -1,38 +1,39 @@
 
 nav.topNav {
+    background-color: var(--bg-color);
     border-bottom: 1px solid var(--form-border-color);
     position: absolute;
     min-width: 100svw;
-    background-color: #eeeeee;
     z-index: 60;
 }
 
 nav.leftNav {
+    border-right: 1px solid var(--gray1);
+    background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--gray1);
     min-width: 100svw;
     max-width: 100svw;
     min-height: 100svh;
     max-height: 100svh;
-    background-color: white;
     font-size: 1.0rem;
     .leftNavTitle {
+        color: var(--font-color);
         padding: 0 10px;
         text-align: center;
         font-size: 1.5rem;
-        color: black;
     }
     .leftNavText {
+        color: var(--font-color);
         padding: 0 10px;
         text-align: center;
-        color: black;
     }
     .menuItem {
+        color: var(--font-color);
+        background-color: var(--bg-color);
         padding: 10px 15px;
         text-decoration: none;
         cursor: pointer;
-        color: black;
         i {
             font-size: 0.9rem;
             position: relative;
@@ -41,7 +42,7 @@ nav.leftNav {
         }
     }
     .menuItem:hover {
-        background-color: #c5c5c5;
+        background-color: var(--bg-color-variant);
     }
 }
 

@@ -110,26 +110,15 @@ button.btn-red {
 /* CLEAR BUTTON */
 a.btn-clear,
 button.btn-clear {
+    background-color: var(--bg-color);
+    color: var(--font-color);
     border: 1px solid #575757;
-    background-color: white;
-    color: black;
 }
 a.btn-clear:hover,
 button.btn-clear:hover {
-    background-color: #eeeeee;
+    background-color: var(--bg-color-variant);
 }
 
-/* CLEAR BUTTON */
-a.btn-gray,
-button.btn-gray {
-    border: 1px solid #eeeeee;
-    background-color: #eeeeee;
-    color: black;
-}
-a.btn-gray:hover,
-button.btn-gray:hover {
-    background-color: #dddddd;
-}
 
 /* CIRCLE BUTTON */
 a.btn-circle,
@@ -327,8 +316,7 @@ button.situacaoPendente,
 a.smallSituacaoPendente,
 button.smallSituacaoPendente {
     background-color: #20c920;
-
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #20c920;
     color: #20c920;
 }
@@ -337,8 +325,7 @@ button.situacaoPendente:hover,
 a.smallSituacaoPendente:hover,
 button.smallSituacaoPendente:hover {
     background-color: #20c920;
-
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #20c920;
     color: #20c920;
 }
@@ -347,8 +334,7 @@ button.situacaoAguardandoResposta,
 a.smallSituacaoAguardandoResposta,
 button.smallSituacaoAguardandoResposta {
     background-color: #0099ff;
-    
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #0099ff;
     color: #0099ff;
 }
@@ -357,8 +343,7 @@ button.situacaoAguardandoResposta:hover,
 a.smallSituacaoAguardandoResposta:hover,
 button.smallSituacaoAguardandoResposta:hover {
     background-color: #0099ff;
-    
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #0099ff;
     color: #0099ff;
 }
@@ -367,8 +352,7 @@ button.situacaoPausado,
 a.smallSituacaoPausado,
 button.smallSituacaoPausado {
     background-color: #575757;
-    
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #575757;
     color: #575757;
 }
@@ -377,8 +361,7 @@ button.situacaoPausado:hover,
 a.smallSituacaoPausado:hover,
 button.smallSituacaoPausado:hover {
     background-color: #757575;
-    
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #575757;
     color: #575757;
 }
@@ -389,8 +372,7 @@ button.smallSituacaoConcluido {
     background-color: #d8d8d8;
     color: #444444;
     text-decoration: line-through;
-    
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #8d8d8d;
     color: #8d8d8d;
 }
@@ -399,8 +381,7 @@ button.situacaoConcluido:hover,
 a.smallSituacaoConcluido:hover,
 button.smallSituacaoConcluido:hover {
     background-color: #b1b1b1;
-    
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #8d8d8d;
     color: #8d8d8d;
 }

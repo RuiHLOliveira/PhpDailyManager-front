@@ -64,6 +64,7 @@ html {
 body {
     margin: 0px;
     padding: 0px;
+    color: var(--font-color);
 }
 
 .displayNone {
@@ -74,7 +75,7 @@ body {
     flex-grow: 1;
 }
 @media only screen and (min-width: 800px) {
-    .mainPageDiv {
+    .mainPageMenuMargin {
         /* para ajustar em relacao ao menu lateral */
         margin-left: 200px;
     }
@@ -93,7 +94,6 @@ body {
 
 .italicoSutil{
     font-style: italic;
-    /* color: #757575; */
     color: #4b4b4b;
 }
 
@@ -106,20 +106,20 @@ body {
     padding: 5px;
 }
 
-.bg-white {
-    background-color: white;
+.bg-color-force {
+    background-color: var(--bg-color);
 }
 
 .mainBackground {
-    background-color: white;
+    background-color: var(--bg-color);
     min-height: 100svh;
 }
 
 nav.topNav {
+    background-color: var(--bg-color);
     border-bottom: 1px solid var(--form-border-color);
     position: absolute;
     min-width: 100svw;
-    background-color: #eeeeee;
     z-index: 60;
 }
 

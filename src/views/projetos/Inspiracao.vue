@@ -17,8 +17,8 @@ section.projetoList {
   flex-shrink: 0;
   div.projeto {
     justify-content: space-between;
-    background-color: white;
-    color: black;
+    background-color: var(--bg-color);
+    color: var(--font-color);
     /* border-radius: 5px; */
     button.situacaoFixedWidth {
       min-width: 100px;
@@ -75,7 +75,7 @@ section.projetoShow {
     /* text-decoration: underline; */
     font-size: 1.3rem;
     /* font-weight: bold; */
-    color: #000000;
+    color: var(--font-color);
   }
 }
 @media only screen and (min-width: 800px) {

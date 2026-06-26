@@ -16,7 +16,7 @@
   text-align: center;
   font-weight: bold;
   padding: 5px;
-  background: var(--default-button-color);
+  background-color: var(--default-button-color);
   color: white;
   border-radius: 5px;
 }
@@ -49,10 +49,10 @@
   transition: background-color 0.2s;
 }
 .day-cell button:hover {
-  background: var(--default-hover-button-color);
+  background-color: var(--default-hover-button-color);
 }
 .day-cell button.selected {
-  background: #055739;
+  background-color: #055739;
   font-weight: bold;
 }
 .tasks-habits {
@@ -63,7 +63,7 @@
   padding: 15px;
   border: 0px;
   border-radius: 5px;
-  background: #dddddd;
+  background-color: var(--bg-color-variant);
 }
 .task h3 {
   margin-top: 0;
@@ -105,7 +105,7 @@ textarea {
 .completion-message {
   margin-top: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 10px;
   color: white;
   text-align: center;
@@ -450,8 +450,8 @@ export default {
                 }
 
                 if(hr.realizadoEm.startsWith('2026-03-14')) {
-                  console.log('hr.realizadoEm',hr.realizadoEm)
-                  console.log('realizadoEmToCompare',realizadoEmToCompare)
+                  // console.log('hr.realizadoEm',hr.realizadoEm)
+                  // console.log('realizadoEmToCompare',realizadoEmToCompare)
                 }
                 
                 if (hr.realizadoEm && realizadoEmToCompare.startsWith(selectedDate)) {
@@ -499,6 +499,7 @@ export default {
         });
         this.completedTasks = taskfiltered;
         console.log(this.completedTasks);
+        this.checkAllTasksComplete();
         this.busyTarefasLoad = false;
       })
       .catch((error) => {
@@ -557,6 +558,7 @@ export default {
     checkAllTasksComplete() {
       if (this.completedTasks.length === 0) {
         this.allTasksCompleted = false;
+        console.log('retornou vazio');
         return;
       }
       const allComplete = this.completedTasks.every(task => 
@@ -565,6 +567,7 @@ export default {
         task.nota !== null && 
         task.nota !== ''
       );
+      console.log('allcomplete',allComplete);
       this.allTasksCompleted = allComplete;
     },
     startEditing(taskId) {

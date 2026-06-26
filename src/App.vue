@@ -14,7 +14,12 @@
 
         <nav class="leftNav shadow-1" v-if="loggedIn && (!isSmallScreen || showMenu)">
           <span class="leftNavTitle my-15">Daily Manager R</span>
-          <span class="leftNavText my-15">Olá, usuario!</span>
+          <span class="leftNavText my-15">
+            Olá, usuario!
+            <button type="button" class="btn btn-sm btn-clear" @click="changeMode">
+              {{ darkmode ? 'Light' : 'Dark' }}
+            </button>
+          </span>
           <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/">Login</router-link> -->
           <!-- <router-link v-if="!loggedIn" class="btn mx-5 my-5" to="/register">Register</router-link> -->
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/personagem">
@@ -53,7 +58,8 @@
           <span class="menuItem" v-if="loggedIn" @click="logout()"><i class="fi fi-rs-sign-out-alt"></i> Logout</span>
         </nav>
 
-        <div class="mainPageDiv mainBackground">
+        <div class="mainPageDiv mainBackground"
+          :class="{ 'mainPageMenuMargin' : loggedIn }">
           <div :class="{ 'displayNone' : showMenu }">
             <router-view
               @redirectAfterLogin="redirectAfterLogin()"
@@ -78,6 +84,8 @@ import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import Loader from '@/components/Loader.vue';
 import Notifier from '@/components/Notifier.vue';
+import darkThemeUrl from '@/assets/darkmode.css?url';
+import whiteThemeUrl from '@/assets/whitemode.css?url';
 import { computed } from 'vue'
 
 export default {
@@ -95,6 +103,7 @@ export default {
     return {
       busy: false,
       loggedIn: AuthManager.isLoggedIn(),
+      darkmode: false,
       configuracoesArray: [],
       configuracoes: {},
       appLoaded: false,
@@ -109,6 +118,39 @@ export default {
     },
   },
   methods: {
+    getThemeStylesheetUrl() {
+      return this.darkmode ? darkThemeUrl : whiteThemeUrl;
+    },
+
+    applyTheme() {
+      const themeHref = this.getThemeStylesheetUrl();
+      let themeLink = document.getElementById('theme-stylesheet');
+
+      if (!themeLink) {
+        themeLink = document.createElement('link');
+        themeLink.id = 'theme-stylesheet';
+        themeLink.rel = 'stylesheet';
+        document.head.appendChild(themeLink);
+      }
+
+      themeLink.href = themeHref;
+    },
+
+    loadThemePreference() {
+      this.darkmode = window.localStorage.getItem('darkmode') === 'true';
+    },
+
+    syncThemeFromStorage() {
+      this.loadThemePreference();
+      this.applyTheme();
+    },
+
+    changeMode() {
+      this.darkmode = !this.darkmode;
+      window.localStorage.setItem('darkmode', String(this.darkmode));
+      this.applyTheme();
+    },
+
     toggleMenu() {
       if(this.isSmallScreen) {
         this.showMenu = !this.showMenu;
@@ -189,12 +231,16 @@ export default {
   },
   mounted() {
     window.addEventListener('resize', this.getDimensions);
+    window.addEventListener('theme-changed', this.syncThemeFromStorage);
     this.getDimensions()
   },
   unmounted() {
     window.removeEventListener('resize', this.getDimensions);
+    window.removeEventListener('theme-changed', this.syncThemeFromStorage);
   },
   async created () {
+    this.loadThemePreference();
+    this.applyTheme();
     this.loadApp();
   },
 };

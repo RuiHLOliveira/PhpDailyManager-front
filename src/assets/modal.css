@@ -13,21 +13,21 @@
 }
 
 .modal {
-    background-color: white;
+    background-color: var(--bg-color);
     width: 100%;
     max-width: 700px;
     padding: 20px;
 }
 
 .modal-small {
-    background-color: white;
+    background-color: var(--bg-color);
     width: 100%;
     max-width: 700px;
     padding: 20px;
 }
 
 .modal-extra-small {
-    background-color: white;
+    background-color: var(--bg-color);
     width: 100%;
     max-width: 700px;
     padding: 20px;

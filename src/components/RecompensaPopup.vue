@@ -7,7 +7,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #0000008f;
+  background-color: #0000008f;
   display: flex;
   justify-content: center;
   align-items: top;
@@ -15,10 +15,9 @@
 }
 
 .modalRecompensa {
+  background-color: var(--bg-color);
   border: 2px solid var(--default-button-color);
   border-radius: 3px;
-
-  background-color: #ffffff;
 
   width: 300px;
   height: 300px;

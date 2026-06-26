@@ -1,0 +1,17 @@
+:root {
+    --font-color: #292929;
+    --font-color-variant: #191919;
+    
+    --bg-color: #ffffff;
+    --bg-color-variant: #f5f5f5;
+
+    --bg-color-gray: #b0b0b0;
+
+    --border-color: #292929;
+
+    --border-color-onlydark: #00000000;
+
+    --bg-projeto-selected: #b3e2be;
+
+    --bg-color-invert: #000000;
+}

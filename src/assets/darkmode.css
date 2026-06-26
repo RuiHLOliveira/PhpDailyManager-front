@@ -1,0 +1,15 @@
+:root {
+    --font-color: #dfdfdf;
+    --font-color-variant: #efefef;
+    
+    --bg-color: #101010;
+    --bg-color-variant: #202020;
+
+    --bg-color-gray: #575757;
+
+    --border-color: #dfdfdf;
+
+    --border-color-onlydark: #dfdfdf;
+    --bg-projeto-selected: #425546;
+    --bg-color-invert: #ffffff;
+}

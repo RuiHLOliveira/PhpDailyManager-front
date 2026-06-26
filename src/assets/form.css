@@ -1,28 +1,25 @@
 
 
 label {
+    color: var(--font-color);
     font-size: 1rem;
-    /* color: #ffffff; */
-    color: #000000;
     margin-top: 20px;
 }
 
 .inputlikeDiv {
-    /* color: #ffffff; */
-    color: #000000;
+    color: var(--font-color);
     border: 0px;
 
     border: 1px solid var(--gray1);
-    /* border: 2px solid #7da3ce; */
     padding: 5px;
     border-radius: 3px;
 }
 
 textarea.textarea {
+    color: var(--font-color);
     font-size: 1rem;
     font-weight: normal;
-    color: black;
-    background-color: white;
+    background-color: var(--bg-color);
     border: 1px solid var(--gray1);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
@@ -46,14 +43,14 @@ input[type=time].inlineInput,
 input[type=password].inlineInput,
 input[type=date].inlineInput
 {
-    background-color: white;
+    background-color: var(--bg-color);
     width: inherit;
     display: inline-block;
 }
 
 input[type=color].inlineInput
 {
-    background-color: white;
+    background-color: var(--bg-color);
     width: 50px;
     display: inline-block;
 }
@@ -64,16 +61,16 @@ input[type=time].normalSizeInput,
 input[type=password].normalSizeInput,
 input[type=date].normalSizeInput
 {
+    background-color: var(--bg-color);
     width: inherit;
     display: block;
-    background-color: white;
 }
 
 input[type=color].normalSizeInput
 {
+    background-color: var(--bg-color);
     width: 50px;
     display: block;
-    background-color: white;
 }
 
 input[type=text],
@@ -83,9 +80,9 @@ input[type=time],
 input[type=password],
 input[type=date]
 {
-    background-color: white;
+    color: var(--font-color);
+    background-color: var(--bg-color);
     font-size: 1rem;
-    color: black;
     border: 0px;
 
     border: 1px solid var(--form-border-color);
@@ -107,7 +104,7 @@ input[type=time].defaultInput,
 input[type=password].defaultInput,
 input[type=date].defaultInput
 {
-    background-color: white;
+    background-color: var(--bg-color);
     margin-bottom: 20px; /* ajustado */
 }
 
@@ -119,7 +116,7 @@ input[type=password]:focus,
 input[type=date]:focus,
 textarea.textarea:focus {
     outline: 2px solid #7da3ce;
-    background-color: white;
+    background-color: var(--bg-color);
     /* outline: none; */
 }
 
@@ -131,17 +128,16 @@ input[type=password]:disabled,
 input[type=date]:disabled,
 textarea.textarea:disabled {
     color: #696969;
-    background-color: white;
+    background-color: var(--bg-color);
     cursor: not-allowed;
     /* outline: none; */
 }
 
 
 select.fullSelect {
-    background-color: white;
+    color: var(--font-color);
+    background-color: var(--bg-color);
     font-size: 1rem;
-    /* color: #ffffff; */
-    color: black;
     border: 0px;
 
     border: 1px solid var(--form-border-color);
@@ -160,16 +156,15 @@ select.fullSelect:focus {
     /* outline: none; */
 }
 select.fullSelect:disabled {
-    background-color: #cfcfcf;
+    background-color: var(--bg-color-variant);
     cursor: not-allowed;
     /* outline: none; */
 }
 
 select.smallSelect {
-    background-color: white;
+    color: var(--font-color);
+    background-color: var(--bg-color);
     font-size: 1rem;
-    /* color: #ffffff; */
-    color: #000000;
     border: 0px;
 
     border: 1px solid var(--form-border-color);

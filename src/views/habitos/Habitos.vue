@@ -1,7 +1,10 @@
 <style scoped>
 
 .boxHabito{
-  background-color: #eeeeee;
+  
+  color: var(--font-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
   padding: 10px 5px;
   margin: 5px;
   display: flex;

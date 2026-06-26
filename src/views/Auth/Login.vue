@@ -1,11 +1,13 @@
 <style>
 section.login {
+  color: var(--font-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
   min-width: 400px;
   max-width: 400px;
   /* min-height: 400px; */
   /* max-height: 400px; */
   margin: inherit auto;
-  background-color: rgb(255, 255, 255);
   /* padding: 10px; */
   /* margin-top: 20px; */
   border-radius: 5px;

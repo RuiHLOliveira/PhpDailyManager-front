@@ -1,11 +1,10 @@
 
 .tarefa {
+  background-color: var(--bg-color-variant);
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
   padding-left: 10px;
-
-  background-color: #eeeeee77;
   border-radius: 5px;
 }
 
@@ -23,8 +22,8 @@
     /* font-family: 'Inconsolata'; */
     padding: 5px;
     /* novo estilo */
-    border: 1px solid #eeeeee;
-    background-color: #eeeeee;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color-variant);
     color: black;
 }
 

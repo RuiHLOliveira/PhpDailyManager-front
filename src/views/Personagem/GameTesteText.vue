@@ -7,7 +7,7 @@
   
 }
 .masmorra{
-  background-color: #dddddd;
+  background-color: var(--bg-color);
   padding: 10px;
   border-radius: 5px;
 }
@@ -61,10 +61,10 @@
 }
 
 .log-dano {
+  color: var(--font-color);
   font-family: sans-serif;
   padding: 5px;
   margin: 5px 0;
-  color: black;
   text-shadow: 1px 1px 2px black;
   animation: surgir 1s ease-out forwards;
   transition: opacity 1s, transform 1s;

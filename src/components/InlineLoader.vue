@@ -1,26 +1,15 @@
 <style scoped>
 
-/* .inlineLoaderContainer {
-  font-size: 1rem;
-  border-radius: 5px;
-  width: 100px;
-  height: 30px;
-  background: #e0e0e0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-} */
-
 .inlineLoaderContainerTexto {
+  color: var(--font-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--form-border-color);
   /* margin: 0 auto; */
   /* padding: 10px; */
   font-size: 1rem;
   border-radius: 5px;
   width: 120px;
   height: 40px;
-  background: white;
-  color: black;
-  border: 1px solid var(--form-border-color);
   /* border: 1px solid; */
   /* border-color: #f1f1f1; */
   /* display: inline-block; */

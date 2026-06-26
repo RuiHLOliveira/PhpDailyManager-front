@@ -3,22 +3,25 @@
 h1.titulo {
 
 }
+
 .inboxItem {
+  color: var(--font-color);
+  background-color: var(--bg-color);
   border-radius: 5px;
-  background-color: white;
-  color: black;
   min-width: 285px;
   max-width: 285px;
 }
+
 .inboxItem:hover {
-  background-color: #eeeeee;
-  color: #black;
+  color: var(--font-color);
+  background-color: var(--bg-color);
   cursor: pointer;
 }
+
 .additionalTag {
+    color: var(--font-color);
+    background-color: var(--bg-color-gray);
     font-size: 0.8rem;
-    background-color: rgb(192, 192, 192);
-    color: black;
     border-radius: 5px;
 }
 a.link{

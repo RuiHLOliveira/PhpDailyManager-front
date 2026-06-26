@@ -7,7 +7,7 @@
   right: 0;
   /* width: 50vw; */
   /* height: 100vh; */
-  /* background: #0000008f; */
+  /* background-color: #0000008f; */
   display: flex;
   justify-content: center;
   align-items: top;
@@ -15,12 +15,12 @@
 }
 
 .modalNotify {
-  color: black;
+  color: var(--font-color);
   border: 2px solid #00000070;
   margin-top: 40px;
   margin-right: 20px;
-  background-color: #29bb55;
-  background-color: #67cc85;
+  /* background-color: #29bb55; */
+  /* background-color: #67cc85; */
   background-color: #8fe7a9;
   border-radius: 3px;
   padding: 20px 20px;
