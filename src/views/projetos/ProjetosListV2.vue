@@ -107,11 +107,13 @@ section.projetoList {
 .col-prioridade {
   width: 40px;
 }
-.col-texto {
-  width: 660px;
-}
-.col-acoes {
-  width: 80px;
+@media only screen and (min-width: 800px) {
+  .col-texto {
+    width: 660px;
+  }
+  .col-acoes {
+    width: 80px;
+  }
 }
 .menu-propriedades-container {
   position: relative;
@@ -135,14 +137,11 @@ section.projetoList {
     overflow-x: scroll;
     max-width: calc(95vw - 200px);
   }
+  .tarefasScroll > div {
+    width: 860px;
+  }
 }
 
-.tarefasScroll > div {
-  /* display: inline-block; */
-  /* vertical-align: top; */
-  width: 860px;
-  /* white-space: normal; */
-}
 
 .maxViewportWidth{
   max-width: 100vw;
@@ -698,6 +697,10 @@ section.projetoShow {
                   <span class="projetoShowLabel mr-15">Tarefas: </span>
                   <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
                   <button class="btn btn-sm mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
+                  <button class="btn btn-sm mr-15" type="button" @click="alternarOrdenacaoTarefasPorPrioridade()" v-if="projetoExibir.tarefas.length > 0">
+                    <i class="fi fi-rr-priority-importance"></i>
+                    {{ ordenacaoTarefasPorPrioridadeAtiva ? 'Remover ordenação' : 'Ordenar por prioridade' }}
+                  </button>
                   <button class="btn btn-sm mr-15" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">
                     <span v-if="!collapsarTarefas"><i class="fi fi-rr-eye-crossed"></i></span>
                     <span v-if="collapsarTarefas"><i class="fi fi-rr-eye"></i></span>
@@ -715,12 +718,15 @@ section.projetoShow {
                   <!-- CADA TAREFA -->
                   <div v-for="tarefa in projetoExibir.tarefas" :key="tarefa.id">
 
-                    <div class="tarefa" 
+                    <div class="tarefa"
                       :class="{ 'tarefaSelected' : tarefa.selected, 'clickableTarefa' : showBulkActionTarefa }"
                       @click="toggleTarefaSelected(tarefa)"
                       v-if="tarefa.situacao == 0 || (exibirTarefasConcluidas)">
                       
-                      <div class="flex-column">
+                      <div :class="{
+                        'flex-wrap flex-center-combo' : !isSmallScreen,
+                        'flex-column' : isSmallScreen
+                      }">
 
                         <div class="flex-wrap">
 
@@ -791,7 +797,9 @@ section.projetoShow {
                             </div>
 
                           </div>
+                        </div>
 
+                        <div class="mt-5">
                           <div class="flex-column col-texto">
                             <span class="data_com_tarefa">
                               {{
@@ -810,10 +818,7 @@ section.projetoShow {
                             :busy="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                             :center="true">
                           </InlineLoader>
-
                         </div>
-
-                        
 
                       </div>
                     </div>
@@ -974,6 +979,8 @@ export default {
       listaTags: [],
 
       showBulkActionTarefa: false,
+      ordenacaoTarefasPorPrioridadeAtiva: false,
+      tarefasOrganizadasAntesDaPrioridade: [],
 
       modoExibicao: false,
       
@@ -1029,6 +1036,24 @@ export default {
     toggleShowBulkActionTarefa() { this.showBulkActionTarefa = !this.showBulkActionTarefa },
     togglePrioridadesTarefa(tarefa) { tarefa.showMenuPrioridades = !tarefa.showMenuPrioridades },
 
+    alternarOrdenacaoTarefasPorPrioridade(){
+      if(this.ordenacaoTarefasPorPrioridadeAtiva){
+        this.projetoExibir.tarefas = [...this.tarefasOrganizadasAntesDaPrioridade];
+        this.ordenacaoTarefasPorPrioridadeAtiva = false;
+        return;
+      }
+
+      this.tarefasOrganizadasAntesDaPrioridade = [...this.projetoExibir.tarefas];
+      this.projetoExibir.tarefas = [...this.projetoExibir.tarefas].sort((tarefa1, tarefa2) => {
+        const semPrioridade1 = tarefa1.prioridade == null;
+        const semPrioridade2 = tarefa2.prioridade == null;
+        if(semPrioridade1 !== semPrioridade2) return semPrioridade1 ? 1 : -1;
+        if(semPrioridade1) return 0;
+        return Number(tarefa1.prioridade) - Number(tarefa2.prioridade);
+      });
+      this.ordenacaoTarefasPorPrioridadeAtiva = true;
+    },
+
     showProjetoFromQueryIdProjeto() {
       if(this.$route.params.idProjeto != undefined && this.$route.params.idProjeto != null && this.$route.params.idProjeto != '') {
         const projeto = this.findProjeto(this.$route.params.idProjeto)
@@ -1050,7 +1075,12 @@ export default {
      * FUNCOES TOGGLE
      */
     toggleShowProjeto(projeto) {
+      if(this.ordenacaoTarefasPorPrioridadeAtiva){
+        this.projetoExibir.tarefas = [...this.tarefasOrganizadasAntesDaPrioridade];
+      }
       this.hideProjeto(projeto)
+      this.ordenacaoTarefasPorPrioridadeAtiva = false;
+      this.tarefasOrganizadasAntesDaPrioridade = [];
       projeto.selected = true
       this.projetoExibir = projeto
     },

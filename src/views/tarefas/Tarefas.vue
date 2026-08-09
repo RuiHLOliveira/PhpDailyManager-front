@@ -266,14 +266,26 @@
                   <i class="fi fi-rr-arrow-sort"></i> Ordenação
                 </label>
                 <div>
-                  <button type="button" class="btn btn-clear btn-sm mr-5"
-                    :style="{ width: deveOrdenarPorData ? '100px' : 'calc(100% - 45px)'}"
+                  <button v-if="!ordenacaoAtiva || ordenacaoAtiva === 'data'" type="button" class="btn btn-clear btn-sm mr-5"
+                    :style="{ width: ordenacaoAtiva === 'data' ? '100px' : 'calc(50% - 5px)'}"
                     @click="ordenarPorData()"
-                    :class="{ 'sort-btn-active': deveOrdenarPorData }">
-                    <i :class="deveOrdenarPorData ? 'fi fi-sr-calendar-check' : 'fi fi-rr-calendar'"></i>
-                    {{ deveOrdenarPorData ? 'Por Data' : 'Por Data' }}
+                    :class="{ 'sort-btn-active': ordenacaoAtiva === 'data' }">
+                    <i :class="ordenacaoAtiva === 'data' ? 'fi fi-sr-calendar-check' : 'fi fi-rr-calendar'"></i>
+                    Por Data
                   </button>
-                  <button v-if="deveOrdenarPorData" type="button" class="btn btn-sm btn-clear sort-btn"
+                  <button v-if="ordenacaoAtiva === 'data'" type="button" class="btn btn-sm btn-clear sort-btn"
+                    style="width:35px"
+                    @click="inverterOrdem()">
+                    {{ ordemCrescente ? '↓' : '↑' }}
+                  </button>
+                  <button v-if="!ordenacaoAtiva || ordenacaoAtiva === 'prioridade'" type="button" class="btn btn-clear btn-sm"
+                    :style="{ width: ordenacaoAtiva === 'prioridade' ? '100px' : 'calc(50% - 5px)'}"
+                    @click="ordenarPorPrioridade()"
+                    :class="{ 'sort-btn-active': ordenacaoAtiva === 'prioridade' }">
+                    <i :class="ordenacaoAtiva === 'prioridade' ? 'fi fi-sr-priority-importance' : 'fi fi-rr-priority-importance'"></i>
+                    Por Prioridade
+                  </button>
+                  <button v-if="ordenacaoAtiva === 'prioridade'" type="button" class="btn btn-sm btn-clear sort-btn"
                     style="width:35px"
                     @click="inverterOrdem()">
                     {{ ordemCrescente ? '↓' : '↑' }}
@@ -470,8 +482,9 @@ export default {
   },  emits: ['redirectAfterLogin'],  inject: ['configuracoes'],
   data: () => {
     return {
-      deveOrdenarPorData: false,
+      ordenacaoAtiva: null,
       ordemCrescente: false,
+      tarefasOrganizadas: [],
       busyTarefasLoad: false,
       busyTarefasDelete: false,
       busyTarefasUpdate: false,
@@ -659,6 +672,11 @@ export default {
         this.$refs.notifier.notify('Prioridade editada!')
         tarefa.busyTarefasUpdate = false;
         tarefa.prioridade = prioridade
+        this.tarefas = this.aplicarOrdenacaoAtual(this.tarefas)
+        if(this.ordenacaoAtiva === 'prioridade'){
+          const indiceBase = this.tarefasOrganizadas.findIndex(item => item.id === tarefa.id);
+          if(indiceBase !== -1) this.tarefasOrganizadas[indiceBase].prioridade = prioridade;
+        }
       }).catch((error) => {
         console.error(error);
         tarefa.busyTarefasUpdate = false;
@@ -683,7 +701,11 @@ export default {
           break;
         }
       }
-      tarefas = this.ordenarTarefasPorData(tarefas)
+      if(this.ordenacaoAtiva){
+        const indiceBase = this.tarefasOrganizadas.findIndex(tarefa => tarefa.id === tarefaAtualizada.id);
+        if(indiceBase !== -1) this.tarefasOrganizadas[indiceBase] = tarefaAtualizada;
+      }
+      tarefas = this.aplicarOrdenacaoAtual(tarefas)
       this.tarefas = tarefas;
       // this.filtraListaTarefas(); // usuário irá filtrar manualmente
     },
@@ -699,7 +721,11 @@ export default {
         console.log('removido');
         tarefas.splice(indice, 1);
       }
-      tarefas = this.ordenarTarefasPorData(tarefas)
+      if(this.ordenacaoAtiva){
+        const indiceBase = this.tarefasOrganizadas.findIndex(tarefa => tarefa.id === tarefaExcluida.id);
+        if(indiceBase !== -1) this.tarefasOrganizadas.splice(indiceBase, 1);
+      }
+      tarefas = this.aplicarOrdenacaoAtual(tarefas)
       this.tarefas = tarefas;
     },
 
@@ -797,19 +823,38 @@ export default {
 
     inverterOrdem(){
       this.ordemCrescente = !this.ordemCrescente;
-      this.tarefas = this.ordenarTarefasPorData(this.tarefas, this.deveOrdenarPorData);
+      this.tarefas = this.aplicarOrdenacaoAtual(this.tarefas);
     },
 
     ordenarPorData(){
-      this.deveOrdenarPorData = !this.deveOrdenarPorData;
-      if(this.deveOrdenarPorData){
-        //guarda
-        this.tarefasOrganizadas = this.tarefas;
-      } else {
-        //restaura
-        this.tarefas = this.tarefasOrganizadas;
+      this.alternarOrdenacao('data');
+    },
+
+    ordenarPorPrioridade(){
+      this.alternarOrdenacao('prioridade');
+    },
+
+    alternarOrdenacao(tipo){
+      if(this.ordenacaoAtiva === tipo){
+        this.ordenacaoAtiva = null;
+        this.tarefas = [...this.tarefasOrganizadas];
+        return;
       }
-      this.tarefas = this.ordenarTarefasPorData(this.tarefas, this.deveOrdenarPorData);
+
+      this.tarefasOrganizadas = [...this.tarefas];
+      this.ordenacaoAtiva = tipo;
+      this.ordemCrescente = tipo === 'prioridade';
+      this.tarefas = this.aplicarOrdenacaoAtual(this.tarefas);
+    },
+
+    aplicarOrdenacaoAtual(tarefas){
+      if(this.ordenacaoAtiva === 'data'){
+        return this.ordenarTarefasPorData(tarefas, true);
+      }
+      if(this.ordenacaoAtiva === 'prioridade'){
+        return this.ordenarTarefasPorPrioridade(tarefas);
+      }
+      return tarefas;
     },
 
     ordenarTarefasPorData (tarefas, ordenarPorData = false)
@@ -843,6 +888,20 @@ export default {
       }
 
       return novoArrayTarefas;
+    },
+
+    ordenarTarefasPorPrioridade(tarefas){
+      return [...tarefas].sort((tarefa1, tarefa2) => {
+        const semPrioridade1 = tarefa1.prioridade == null;
+        const semPrioridade2 = tarefa2.prioridade == null;
+        if(semPrioridade1 !== semPrioridade2) return semPrioridade1 ? 1 : -1;
+        if(semPrioridade1) return 0;
+
+        const prioridade1 = Number(tarefa1.prioridade);
+        const prioridade2 = Number(tarefa2.prioridade);
+        const diferenca = prioridade1 - prioridade2;
+        return this.ordemCrescente ? diferenca : -diferenca;
+      });
     },
 
     tarefasFillDefaults(tarefas)
