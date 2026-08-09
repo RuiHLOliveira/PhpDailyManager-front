@@ -139,9 +139,9 @@ select.fullSelect {
     background-color: var(--bg-color);
     font-size: 1rem;
     border: 0px;
-
-    border: 1px solid var(--form-border-color);
+    /* border: 1px solid var(--form-border-color); */
     /* border: 2px solid #7da3ce; */
+    border: 1px solid var(--border-color);
     padding: 5px;
     border-radius: 3px;
     

@@ -44,47 +44,53 @@
 }
 
 /* MODERN FILTER STYLES */
-.filter-section-container {
+.boxFiltros {
   background-color: var(--bg-color);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 15px;
-  margin-top: 15px;
-  backdrop-filter: blur(10px);
+  border-radius: 5px;
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.columnPrioridade {
+  width: 150px;
 }
 
-.filter-columns-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+.columnStatus {
+  width: 150px;
 }
 
-.filter-column {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 250px;
+.columnPeriodo {
+  width: 335px;
 }
 
-.filter-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.columnOrdenacao {
+  width: 200px;
+}
+
+.columnProjeto {
+
 }
 
 .filter-label {
-  margin-top: 5px;
+  margin-top: 0px;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--font-color);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  height: 25px;
+  vertical-align: bottom;
+  display: inline-block;
+}
+
+.fieldData {
+  color: var(--font-color);
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  width: 150px;
 }
 
 .filter-select,
@@ -136,38 +142,6 @@
   background-color: var(--bg-color);
 }
 
-.filter-date-range {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.filter-date-separator {
-  color: var(--font-color);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.sort-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sort-btn {
-  color: var(--font-color);
-  background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-  font-size: 0.85rem;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.sort-btn:hover {
-  background-color: var(--bg-color-variant);
-}
-
 .sort-btn-active {
   color: var(--font-color);
   background-color: var(--bg-color);
@@ -196,18 +170,16 @@
   width: 100%;
 }
 
-@media only screen and (max-width: 1200px) {
-  .filter-column {
-    flex: 1;
-    min-width: 220px;
-  }
-}
 
 @media only screen and (max-width: 799px) {
-  .filter-column {
+  /* .columnPrioridade,
+  .columnStatus,
+  .columnPeriodo,
+  .columnOrdenacao,
+  .columnProjeto {
     flex: 1 1 100%;
-    min-width: 100%;
-  }
+    width: 100%;
+  } */
   
   .filter-date-range {
     flex-direction: column;
@@ -227,7 +199,7 @@
     <div class="div_border_bottom_gray ">
       <section class="mb-10 p-10 pb-15">
         <!-- HEADER COM TÍTULO E AÇÕES RÁPIDAS -->
-        <div class="flex-wrap justify-spacebetween alignitems-center gap-10">
+        <div class="flex-wrap justify-spacebetween alignitems-center">
           <div class="flex alignitems-center gap-5">
             <h1 class="titulo">Tarefas</h1>
             <button type="button" class="btn btn-sm btn-clear"
@@ -241,81 +213,92 @@
           </div>
         </div>
 
-        <!-- SEÇÃO MODERN DE FILTROS -->
-        <div class="filter-section-container">
-          <div class="filter-group">
-            <!-- 3 COLUNAS -->
-            <div class="filter-columns-row">
-              <!-- COLUNA 1: Prioridade e Status -->
-              <div class="filter-column">
-                <div class="filter-item">
-                  <label class="filter-label">
-                    <i class="fi fi-rr-priority-importance"></i> Prioridade
-                  </label>
-                  <select class="filter-select" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
-                    <option value="0">Todos</option>
-                    <option value="1">🔴 Prioridade 1</option>
-                    <option value="2">🟠 Prioridade 2</option>
-                    <option value="3">🟡 Prioridade 3</option>
-                    <option value="4">🟢 Prioridade 4</option>
-                    <option value="5">🔵 Prioridade 5</option>
-                  </select>
-                </div>
+        <div class="boxFiltros flex-column px-10 py-5">
 
-                <div class="filter-item">
-                  <label class="filter-label">
-                    <i class="fi fi-rr-list-check"></i> Status
-                  </label>
-                  <select class="filter-select" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
-                    <option value="0">Todos</option>
-                    <option value="1">⏳ Pendente</option>
-                    <option value="2">✓ Completa</option>
-                    <option value="3">✗ Falha</option>
-                  </select>
-                </div>
+            <!-- Filtros da linha 1 -->
+            <div class="flex-wrap">
+
+              <div class="flex-column columnPrioridade mr-5 mt-10">
+                <label class="filter-label">
+                  <i class="fi fi-rr-priority-importance"></i> Prioridade
+                </label>
+                <select class="filter-select" v-model="selectedPrioridade" name="prioridade" id="prioridade" @change="filtraListaTarefas()">
+                  <option value="0">Todos</option>
+                  <option value="1">🔴 Prioridade 1</option>
+                  <option value="2">🟠 Prioridade 2</option>
+                  <option value="3">🟡 Prioridade 3</option>
+                  <option value="4">🟢 Prioridade 4</option>
+                  <option value="5">🔵 Prioridade 5</option>
+                </select>
               </div>
 
-              <!-- COLUNA 2: Período -->
-              <div class="filter-column">
-                <div class="filter-item">
-                  <label class="filter-label">
-                    <i class="fi fi-rr-calendar"></i> Período
-                  </label>
-                  <div class="filter-date-range">
-                    <input type="date" class="filter-input" v-model="filtroDataInicio" @change="filtraListaTarefas()">
-                    <span class="filter-date-separator">até</span>
-                    <input type="date" class="filter-input" v-model="filtroDataFim" @change="filtraListaTarefas()">
-                  </div>
-                </div>
-
-                <button type="button" class="mt-20 filter-btn-secondary full-width"
-                  @click="limparFiltroDatas(); filtraListaTarefas()">
-                  <i class="fi fi-rr-refresh"></i> Limpar Datas
-                </button>
+              <div class="flex-column columnStatus mr-5 mt-10">
+                <label class="filter-label">
+                  <i class="fi fi-rr-list-check"></i> Status
+                </label>
+                <select class="filter-select" v-model="selectedSituacao" name="situacao" id="situacao" @change="filtraListaTarefas()">
+                  <option value="0">Todos</option>
+                  <option value="1">⏳ Pendente</option>
+                  <option value="2">✓ Completa</option>
+                  <option value="3">✗ Falha</option>
+                </select>
               </div>
+              
+              <div class="flex-column columnPeriodo mr-5 mt-10">
+                <label class="filter-label">
+                  <i class="fi fi-rr-calendar"></i> Período
+                  <button type="button" class="btn btn-sm btn-clear"
+                    style="font-size: 0.7rem;"
+                    @click="limparFiltroDatas(); filtraListaTarefas()">
+                    <i class="fi fi-rr-broom"></i> Limpar Datas
+                  </button>
+                </label>
 
-              <!-- COLUNA 3: Ordenação -->
-              <div class="filter-column">
-                <div class="sort-controls">
-                  <label class="filter-label">
-                    <i class="fi fi-rr-arrow-sort"></i> Ordenação
-                  </label>
-                  <button type="button" class="btn btn-sm btn-clear sort-btn"
+                <div class="flex-wrap alignitems-center">
+                  <input type="date" class="fieldData" v-model="filtroDataInicio" @change="filtraListaTarefas()">
+                  <div class="mx-5">até</div>
+                  <input type="date" class="fieldData" v-model="filtroDataFim" @change="filtraListaTarefas()">
+                </div>
+              </div>
+              
+              <div class="flex-column columnOrdenacao mt-10">
+                <label class="filter-label">
+                  <i class="fi fi-rr-arrow-sort"></i> Ordenação
+                </label>
+                <div>
+                  <button type="button" class="btn btn-clear btn-sm mr-5"
+                    :style="{ width: deveOrdenarPorData ? '100px' : 'calc(100% - 45px)'}"
                     @click="ordenarPorData()"
                     :class="{ 'sort-btn-active': deveOrdenarPorData }">
                     <i :class="deveOrdenarPorData ? 'fi fi-sr-calendar-check' : 'fi fi-rr-calendar'"></i>
-                    {{ deveOrdenarPorData ? 'Data Ativa' : 'Por Data' }}
+                    {{ deveOrdenarPorData ? 'Por Data' : 'Por Data' }}
                   </button>
                   <button v-if="deveOrdenarPorData" type="button" class="btn btn-sm btn-clear sort-btn"
+                    style="width:35px"
                     @click="inverterOrdem()">
-                    <i :class="ordemCrescente ? 'fi fi-sr-arrow-down' : 'fi fi-sr-arrow-up'"></i>
                     {{ ordemCrescente ? '↓' : '↑' }}
                   </button>
                 </div>
               </div>
             </div>
 
-          </div>
+            
+            <!-- Filtro da linha 2, ocupando toda a largura -->
+            <div class="flex-column mt-10">
+              <div class="columnProjeto">
+                <label class="filter-label">
+                  <i class="fi fi-rr-folder"></i> Projeto
+                </label>
+                <select class="fullSelect" v-model="selectedProjeto"
+                  name="projeto" id="projeto" @change="filtraListaTarefas()">
+                  <option value="0">Todos</option>
+                  <option v-for="projeto in listaProjetos" :key="projeto.id" :value="projeto.id">
+                    {{ projeto.nome }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
         </div>
       </section>
     </div>
@@ -495,6 +478,7 @@ export default {
       busyTarefasLoad: false,
       dataPrazo: '',
       tarefas: [],
+      listaProjetos: [],
       tarefasBackup: [],
       exibirModalCriarTarefa: false,
       exibirModalEditarTarefa: false,
@@ -509,6 +493,7 @@ export default {
       windowHeight: 0,
       selectedPrioridade: 0,
       selectedSituacao: 1,
+      selectedProjeto: 0,
       filtroDataInicio: null,
       filtroDataFim: null,
     }
@@ -599,6 +584,7 @@ export default {
 
       let prioridadeFiltro = this.selectedPrioridade != 0 ? this.selectedPrioridade : null;
       let situacaoFiltro = this.selectedSituacao != 0 ? this.selectedSituacao : null;
+      let projetoFiltro = this.selectedProjeto != 0 ? this.selectedProjeto : null;
       
       for (let i = 0; i < listaTarefas.length; i++) {
         listaTarefas[i].filtroNaoExibe = false;
@@ -616,6 +602,14 @@ export default {
       if(prioridadeFiltro != null && prioridadeFiltro != 0){
         for (let i = 0; i < listaTarefas.length; i++) {
           if(listaTarefas[i].prioridade != prioridadeFiltro){
+            listaTarefas[i].filtroNaoExibe = true
+          }
+        }
+      }
+
+      if(projetoFiltro != null){
+        for (let i = 0; i < listaTarefas.length; i++) {
+          if(listaTarefas[i].projeto == null || listaTarefas[i].projeto.id != projetoFiltro){
             listaTarefas[i].filtroNaoExibe = true
           }
         }
@@ -775,6 +769,24 @@ export default {
         console.error(error);
       });
     },
+
+    listarProjetos(){
+      const params = {
+        'loadTarefas': false,
+        'orderBy': 'nome,asc'
+      };
+      const requestData = {
+        'url': `${config.serverUrl}/projetos${QueryStringConverter.toQueryString(params, true)}`,
+      };
+      Request.fetch(requestData)
+      .then(([response, data]) => {
+        this.listaProjetos = data;
+      })
+      .catch((error) => {
+        this.$refs.notifier.notify(`Ocorreu um erro ao carregar os projetos: ${error}`, true)
+        console.error(error);
+      });
+    },
     
     fillShowMotivo(tarefas)
     {
@@ -860,6 +872,7 @@ export default {
   },
   created () {
     this.loadTarefas();
+    this.listarProjetos();
     this.definicaoFiltroDataPadrao();
   },
 }

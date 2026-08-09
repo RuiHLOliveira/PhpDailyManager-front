@@ -54,6 +54,9 @@
 .alignitens-end {
     align-items: flex-end;
 }
+.alignitens-stretch {
+    align-items: stretch;
+}
 
 .flex-center-combo {
     align-items: center;
