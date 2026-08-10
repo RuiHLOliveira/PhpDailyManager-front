@@ -178,6 +178,12 @@ section.projetoShow {
   border: 1px solid var(--gray1);
 }
 
+.descricaoTarefa {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 </style>
 
 <template>
@@ -209,11 +215,6 @@ section.projetoShow {
                 class="btn ml-15 mr-10 my-5 flex-center-combo" style="display: inline-flex;">
                 <i class="fi fi-rr-arrow-small-left"></i> Voltar
               </router-link>
-
-              <button v-if="projetoExibir.id != null && !projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
-                @click="toggleFixarProjeto(projetoExibir)">
-                {{ projetoExibir.fixado ? 'Desafixar' : 'Fixar' }}
-              </button>
 
               <button v-if="projetoExibir.id != null && !projetoExibir.editMode" class="btn mx-10 my-5" type="button" 
                 @click="toggleEdicaoProjeto(projetoExibir)">
@@ -695,24 +696,40 @@ section.projetoShow {
               <div class="mb-15 div_border_bottom_gray">
                 <div class="mb-15 flex-wrap">
                   <span class="projetoShowLabel mr-15">Tarefas: </span>
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleModalCriarTarefa(projetoExibir)">Criar Tarefa +</button>
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">Mostrar Concluídas</button>
-                  <button class="btn btn-sm mr-15" type="button" @click="alternarOrdenacaoTarefasPorPrioridade()" v-if="projetoExibir.tarefas.length > 0">
-                    <i class="fi fi-rr-priority-importance"></i>
-                    {{ ordenacaoTarefasPorPrioridadeAtiva ? 'Remover ordenação' : 'Ordenar por prioridade' }}
+                  <button class="btn btn-sm btn-clear mr-15" type="button" @click="showMenuTarefaSuspenso = !showMenuTarefaSuspenso">
+                    <i class="fi fi-rs-menu-dots-vertical"></i>
                   </button>
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">
-                    <span v-if="!collapsarTarefas"><i class="fi fi-rr-eye-crossed"></i></span>
-                    <span v-if="collapsarTarefas"><i class="fi fi-rr-eye"></i></span>
+                  <button type="button" class="btn btn-sm btn-clear flex alignitems-center" @click="toggleCollapsarTarefas()" v-if="projetoExibir.tarefas.length > 0">
+                    <i v-if="!collapsarTarefas" class="fi fi-rs-angle-up"></i>
+                    <i v-if="collapsarTarefas" class="fi fi-rs-angle-down"></i>
                   </button>
-                  <button class="btn btn-sm mr-15" type="button" @click="toggleShowBulkActionTarefa()" v-if="!collapsarTarefas && projetoExibir.tarefas.length > 0">
-                    <span v-if="!showBulkActionTarefa"><i class="fi fi-rr-trash"></i></span>
-                    <span v-if="showBulkActionTarefa"><i class="fi fi-rr-arrow-left"></i> <i class="fi fi-rr-ban"></i></span>
-                  </button>
-                  <button class="btn btn-sm mr-15" type="button" @click="deleteTarefasBulk(projetoExibir)" v-if="!collapsarTarefas && showBulkActionTarefa && projetoExibir.tarefas.length > 0">
-                    <i class="fi fi-rr-trash"></i> Apagar
-                  </button>
+                  <!-- MENU SUSPENSO -->
+                  <div v-if="showMenuTarefaSuspenso" class="floatingMenuSmallContainer">
+                    <div class="flex-column floatingMenuSmall">
+                      <!-- LISTA DE SELECAO -->
+                      <div class="flex-column">
+                        <button type="button" class="btn-menu-item" @click="toggleModalCriarTarefa(projetoExibir)">+ Criar tarefa</button>
+                        <button type="button" class="btn-menu-item" @click="toggleExibirTarefasConcluidas()" v-if="projetoExibir.tarefas.length > 0">
+                          {{ exibirTarefasConcluidas ? 'Ocultar Concluídas' : 'Ver Concluídas' }}
+                        </button>
+                        <button type="button" class="btn-menu-item" @click="alternarOrdenacaoTarefasPorPrioridade()" v-if="projetoExibir.tarefas.length > 0">
+                          <i class="fi fi-rr-priority-importance"></i>
+                          {{ ordenacaoTarefasPorPrioridadeAtiva ? 'Remover ordenação' : 'Ordenar prioridade' }}
+                        </button>
+                        <button type="button" class="btn-menu-item" @click="toggleShowBulkActionTarefa()" v-if="!collapsarTarefas && projetoExibir.tarefas.length > 0">
+                          <span v-if="!showBulkActionTarefa"><i class="fi fi-rr-trash"></i> Excluir em lote</span>
+                          <span v-if="showBulkActionTarefa"><i class="fi fi-rr-arrow-left"></i> <i class="fi fi-rr-ban"></i> Parar exclusão em lote</span>
+                        </button>
+                        <button type="button" class="btn-menu-item" @click="deleteTarefasBulk(projetoExibir)" v-if="!collapsarTarefas && showBulkActionTarefa && projetoExibir.tarefas.length > 0">
+                          <i class="fi fi-rr-trash"></i> Apagar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
+
+                <span v-if="showBulkActionTarefa">Modo de exclusão em lote, selecione tarefas para excluir, depois confirme.</span>
 
                 <div v-if="projetoExibir.tarefas.length > 0 && !collapsarTarefas" class="tarefasScroll">
                   <!-- CADA TAREFA -->
@@ -730,15 +747,16 @@ section.projetoShow {
 
                         <div class="flex-wrap">
 
-                          <div class="col-completa flex-wrap flex-center-combo justify-center">
+                          <!-- <div class="col-completa flex-wrap flex-center-combo justify-center">
                             <div class="iconBigTarefa flex flex-center-combo" >
                               <span class="mr-10 check-pendente" v-if="tarefa.situacao == 0"><i class="fi fi-sr-square"></i></span>
                               <span class="mr-10 check-concluido" v-if="tarefa.situacao == 1"><i class="fi fi-rr-checkbox"></i></span>
                               <span class="mr-10 check-falhado" v-if="tarefa.situacao == 2"><i class="fi fi-sr-square-x"></i></span>
                             </div>
-                          </div>
+                          </div> -->
                           
-                          <div class="mr-5 col-prioridade flex-wrap flex-center-combo justify-center">
+                          <div class="mr-5 col-prioridade flex-wrap flex-center-combo justify-center cursor-pointer"
+                            @click="togglePrioridadesTarefa(tarefa)">
                             <span :class="{
                               'prioridade semPrioridade' : tarefa.prioridade == null,
                               'prioridade p1' : tarefa.prioridade == 1,
@@ -757,11 +775,11 @@ section.projetoShow {
                               <i class="fi fi-rr-edit"></i>
                             </button>
 
-                            <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
+                            <!-- <button v-if="!tarefa.editMode" class="btn btn-sm btn-clear btn_tarefa_concluida" type="button" 
                               :disabled="tarefa.busyTarefasUpdate || tarefa.busyTarefasDelete"
                               @click="togglePrioridadesTarefa(tarefa)">
                                 <i class="fi fi-sr-priority-importance"></i>
-                            </button>
+                            </button> -->
 
                             <div class="menu-propriedades-container">
                             <span v-if="tarefa.showMenuPrioridades" class="menu-prioridades div_border_gray px-5 py-5">
@@ -808,7 +826,7 @@ section.projetoShow {
                                 '___ __/__/__ __:__'
                               }}
                             </span>
-                            <span>
+                            <span class="descricaoTarefa" :class="{ 'text-tarefa-completa' : tarefa.situacao == 1}">
                               {{ tarefa.descricao }}
                             </span>
                           </div>
@@ -976,6 +994,7 @@ export default {
       novaTagCor: null,
       tagAddProjeto: null,
       showFilterTag: false,
+      showMenuTarefaSuspenso: false,
       listaTags: [],
 
       showBulkActionTarefa: false,

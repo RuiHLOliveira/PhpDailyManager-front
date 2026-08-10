@@ -42,6 +42,11 @@ button.btn.btn-icon-bigger {
     }
 }
 
+.fi{
+    position: relative;
+    top: 2px;
+}
+
 a.btn.btn-sm-icon,
 button.btn.btn-sm-icon {
     padding: 3px 5px;
@@ -71,6 +76,29 @@ a.btn:hover,
 button:hover {
     background-color: var(--default-hover-button-color);
 }
+
+
+.btn-menu-item {
+    text-align: left;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 0px;
+    border-bottom: 1px solid var(--border-color);
+    
+    /* link */
+    text-decoration: none;
+    font-size: 0.8rem;
+
+    /* button */
+    border: 0px;
+    font-size: inherit;
+    font-family: inherit;
+    cursor:pointer;
+}
+.btn-menu-item:hover {
+    background-color: var(--bg-color-gray);
+}
+
 
 
 /* DISABLED BUTTON */

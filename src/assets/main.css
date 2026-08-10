@@ -97,6 +97,10 @@ body {
     color: #4b4b4b;
 }
 
+.text-tarefa-completa {
+  text-decoration: line-through;
+  color: var(--font-color-variant2)
+}
 
 .menuButton {
     position: fixed;
