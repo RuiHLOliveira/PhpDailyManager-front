@@ -894,6 +894,7 @@ section.projetoShow {
       v-model:exibirModal="exibirModalEditarTarefa"
       :tarefa="tarefaModalEditarTarefa"
       :projeto="projetoModalEditarTarefa"
+      :projetos="projetos"
       @updateTaskEvent="guardarTarefaAtualizada"
       @deletedTaskEvent="removeTarefaExcluida">
     </ModalEditarTarefa>
@@ -1150,14 +1151,18 @@ export default {
     },
 
     guardarTarefaAtualizada(tarefaAtualizada){
+      // A API pode retornar o projeto como objeto ou apenas como ID.
+      const projetoId = tarefaAtualizada.projeto?.id ?? tarefaAtualizada.projeto;
+      // Remove a tarefa da posição antiga para também suportar transferências.
+      for (const projeto of this.projetos) {
+        const indice = projeto.tarefas.findIndex(tarefa => tarefa.id == tarefaAtualizada.id);
+        if (indice !== -1) projeto.tarefas.splice(indice, 1);
+      }
+      // Insere a tarefa atualizada no projeto retornado pela API.
       for (let i = 0; i < this.projetos.length; i++) {
-        if(this.projetos[i].id == tarefaAtualizada.projeto){
-          for (let j = 0; j < this.projetos[i].tarefas.length; j++) {
-            if(this.projetos[i].tarefas[j].id == tarefaAtualizada.id){
-              this.projetos[i].tarefas[j] = tarefaAtualizada
-              break;
-            }
-          }
+        if(this.projetos[i].id == projetoId){
+          this.projetos[i].tarefas.push(tarefaAtualizada)
+          break;
         }
       }
       // for (let i = 0; i < this.projetoBackup.length; i++) {

@@ -15,8 +15,27 @@
               Projeto:
             </div>
             <div>
-              <h3>{{ projeto.nome }}</h3>
+              <h3>{{ tarefaLocal.projeto?.nome ?? projeto?.nome }}</h3>
             </div>
+          </div>
+
+          <div class=" mt-5 mb-10 p-10 div_border_whitegray">
+          <!-- Permite escolher o projeto de destino sem alterar o formulário existente. -->
+          <label for="projetoDestino">Transferir para o projeto:</label>
+          <div class="flex-wrap alignitems-center mb-10">
+            <select id="projetoDestino" class="fullSelect" :disabled="busy" v-model="projetoSelecionado">
+              <option v-for="projetoItem in projetos" :key="projetoItem.id" :value="projetoItem.id">
+                {{ projetoItem.nome }}
+              </option>
+            </select>
+            <button
+              class="btn btn-sm btn-clear"
+              :disabled="busy || !projetoSelecionado || Number(projetoSelecionado) === Number(tarefaLocal.projeto?.id ?? projeto?.id)"
+              @click="transferirTarefa()">
+              <!-- A ação usa a rota específica de transferência da API. -->
+              Transferir
+            </button>
+          </div>
           </div>
 
           <!-- <div class="flex-wrap mb-5 inputlikeDiv">
@@ -171,13 +190,20 @@ export default {
       exibeProjetoSemana: false,
       data: [],
       hora: [],
+      // Guarda separadamente o ID escolhido até a transferência ser confirmada.
+      projetoSelecionado: null,
     }
   },
   emits: ['reloadListaProjetosHabitTracker','update:exibirModal','updateTaskEvent'],
   props: {
     exibirModal: Boolean,
     tarefa: Object,
-    projeto: Object
+    projeto: Object,
+    // Recebe os projetos já carregados pela tela pai para evitar uma nova busca.
+    projetos: {
+      type: Array,
+      default: () => []
+    }
   },
   methods: {
     /** 
@@ -249,6 +275,37 @@ export default {
         console.error(error);
         this.busy = false;
         this.$refs.notifier.notify('Ocorreu um erro: ' + error, true)
+      });
+    },
+
+    transferirTarefa() {
+      // Usa o objeto selecionado para enviar somente o ID exigido pelo endpoint.
+      const projetoDestino = this.projetos.find(
+        projeto => Number(projeto.id) === Number(this.projetoSelecionado)
+      );
+      if (!projetoDestino) return;
+
+      // Reutiliza o estado busy do modal para impedir ações concorrentes.
+      this.busy = true;
+      const requestData = {
+        'url': config.serverUrl + '/tarefas/' + this.tarefa.id + '/projeto',
+        'headers': new Headers({'Content-Type': 'application/json'}),
+        'method': 'PUT',
+        'data': {'projeto': projetoDestino.id}
+      };
+      Request.fetch(requestData).then(([response, data]) => {
+        // Normaliza o projeto como objeto para manter o formato usado pela interface.
+        this.tarefaLocal = Object.assign({}, data || this.tarefaLocal, {
+          projeto: projetoDestino
+        });
+        this.$refs.notifier.notify('Tarefa transferida!');
+        this.busy = false;
+        // O fechamento do modal emitirá a tarefa para atualizar a lista da tela pai.
+        this.needReload = true;
+      }).catch((error) => {
+        console.error(error);
+        this.busy = false;
+        this.$refs.notifier.notify('Ocorreu um erro: ' + error, true);
       });
     },
 
@@ -394,7 +451,13 @@ export default {
     },
     tarefa(newProp, oldProp) {
       this.tarefaLocal = deepCopy.deepCopy(newProp);
+      // Inicializa o seletor com o projeto atual ao abrir outra tarefa.
+      this.projetoSelecionado = newProp?.projeto?.id ?? newProp?.projeto ?? this.projeto?.id ?? null;
       this.processaDataHoraParaForm();
+    },
+    projeto(newProp) {
+      // Permite inicializar o seletor quando o projeto chega depois da tarefa.
+      if (this.projetoSelecionado == null) this.projetoSelecionado = newProp?.id ?? null;
     }
   },
   created () {
@@ -402,4 +465,3 @@ export default {
   },
 }
 </script>
-

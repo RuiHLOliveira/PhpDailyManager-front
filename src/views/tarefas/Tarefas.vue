@@ -463,6 +463,7 @@
     v-model:exibirModal="exibirModalEditarTarefa"
     :tarefa="tarefaModalEditarTarefa"
     :projeto="projetoModalEditarTarefa"
+    :projetos="listaProjetos"
     @updateTaskEvent="guardarTarefaAtualizada"
     @deletedTaskEvent="removeTarefaExcluida">
   </ModalEditarTarefa>
