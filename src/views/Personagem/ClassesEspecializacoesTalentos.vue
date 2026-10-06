@@ -3,9 +3,6 @@
   max-width: 900px;
 }
 
-.macroBox {
-}
-
 .box {
   border-radius: 5px;
   padding: 5px;
@@ -20,31 +17,43 @@
 
 .boxHabilidade{
   background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 5px;
   cursor: pointer;
-  width: 200px;
+  width: 270px;
+  height: 100px;
 }
 .boxHabilidade:hover {
   background-color: var(--bg-color-variant);
 }
 
 .tituloHabilidade{
-  border-bottom: 1px solid var(--border-color);
-  font-size: 1.3rem;
-  width: 100%;
-  height: 50px;
-  text-align: center;
-  padding-bottom: 5px;
+  font-size: 1rem;
 }
 .explicacaoHabilidade{
+  border-top: 1px solid #7c7c7c7a;
   font-size: 0.8rem;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
+
+
+.habilidadeImg {
+  border: 1px solid white;
+}
+
 .escolhida{
-  border: 3px solid var(--default-button-color);
+  border-color: #b48b33;
+}
+.completa{
+  border-color: var(--default-button-color);
+}
+
+.boxtop {
+  min-width: 45%;
+  max-width: 700px;
+  border: 1px solid white;
+  margin: 5px auto;
+  padding: 10px;
 }
 
 </style>
@@ -53,78 +62,86 @@
   <div class="flex-column alignitems-center">
     <div class="container">
 
-      <div class="mb-20">
-        dados personagem atributos referencia <br> 
-        <div v-for="habilidade in personagem.atributos.habilidades">
-          {{ habilidade }}
+      <div class="mb-20 flex-wrap">
+        <div class="gap-10 boxtop">
+          <div>Ativas</div>
+          <div v-for="habilidade in personagem.atributos.habilidades">
+            {{ habilidade.nome }} > {{ habilidade.dano }} | {{ habilidade.recarga }}
+          </div>
         </div>
-      </div> 
+        <div class="gap-10 boxtop">
+          <div>Passivas</div>
+          <div v-for="habilidade in personagem.atributos.habilidadesPassivas">
+            {{ habilidade.nome }} > {{ habilidade.dano }} | {{ habilidade.recarga }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-20 flex-wrap">
+
+        <div class="gap-10 boxtop">
+          <div>{{ personagem.atributos.ataque }} de Ataque</div>
+          <div>{{ personagem.atributos.defesa }} de defesa</div>
+          <div>{{ personagem.atributos.critChance }} de critico</div>
+          <div>{{ personagem.atributos.vidaMaxima }} de vida maxima</div>
+        </div>
+
+        <div class="gap-10 boxtop">
+          <div>{{ personagem.atributos.modificadores?.ATRIBUTO_DANO ?? '' }} % de Dano Adicional</div>
+          <div>{{ personagem.atributos.modificadores?.ATRIBUTO_CRITCHANCE ?? '' }} % de Chance Crítica Adicional</div>
+          <div>{{ personagem.atributos.modificadores?.ATRIBUTO_DEFESA ?? ''}} % de Defesa Adicional</div>
+          <div>{{ personagem.atributos.modificadores?.ATRIBUTO_VIDAMAXIMA ?? '' }} % de Vida Máxima Adicional</div>
+          <div>{{ personagem.atributos.modificadores?.ATRIBUTO_CURA ?? ''}} % de Cura Adicional</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="mb-10">
+        <div>Pontos usados: {{ personagem.atributos.pontosGastos }} de {{ personagem.nivel }}</div>
+      </div>
 
       <InlineLoader
         :textoAguarde="true"
-        :busy="busyLoadClasses"
+        :busy="busyLoadArvores"
         :center="true">
       </InlineLoader>
       
       <Notifier ref="notifier"></Notifier>
 
-      <!-- LISTA MASMORRAS -->
-      <div class="macroBox p-10" v-if="classesCarregadas">
+      <div class="p-10">
 
-        <button type="button" class="btn btn-sm" @click="zerarClasse()">Mudar Classe/Spec</button>
+        <button type="button" class="btn btn-sm" @click="zerarArvore()">Zerar pontos</button>
 
-        <div v-if="personagemPossuiClasse">
-          Classe: {{ personagem.atributos.classe.nome }}
-          Tipo Armadura: {{ personagem.atributos.classe.tipoArmadura.nome }}
-        </div>
-        
-        <div v-if="personagemPossuiClasse && personagemPossuiEspecializacao">
-          Spec Atual: {{ personagem.atributos.classe?.especializacao?.nome }}
-        </div>
+        <div class="flex-column">
+          <span>LISTA DE ARVORES</span>
+          <div v-for="arvore in arvores" class="flex-column mt-20">
+            <h1>{{ arvore.nome }}</h1>
 
-        <div v-if="!personagemPossuiClasse" class="flex-column alignitems-center">
-          <span>Escolha sua classe!</span>
-          <div class="mt-10 flex-wrap justify-center gap-20">
-            <div v-for="classe in classes">
-              <div class="box flex-column alignitems-center boxButton" @click="escolherClasse(classe)">
-                <span>{{ classe.nome }}</span>
-                <span>Armadura de {{ classe.tipoArmadura.nome }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="personagemPossuiClasse && !personagemPossuiEspecializacao" class="flex-column alignitems-center">
-          <span>Escolha sua especializacao!</span>
-          <div class="mt-10 flex-wrap justify-center gap-20">
-            <div v-for="especializacao in especializacoesDisponiveisClassePersonagem">
-              <div class="box flex-column alignitems-center boxButton" @click="escolherEspecializacao(especializacao)">
-                <span>{{ especializacao.nome }}</span>
-                <span>{{ especializacao.habilidadePadrao.nome }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="personagemPossuiClasse && personagemPossuiEspecializacao" class="flex-column alignitems-center">
-          <div>Árvore de Habilidades</div>
-          <div v-for="linhaArvore in arvoreHabilidades" class="mt-10 flex justify-center gap-10">
-            <div v-for="habilidade in linhaArvore.habilidades" class="" >
-              <div class="boxHabilidade flex-column alignitems-center justify-center"
-                :class="{'escolhida' : habilidade.escolhida == true}"
-                @click="personagem.atributos.linhaArvoreMaxima >= linhaArvore.rankOrdem ? escolherHabilidadeArvore(linhaArvore, habilidade) : null">
-                <!-- @click="escolherHabilidadeArvore(linhaArvore, habilidade)"> -->
-                <div class="tituloHabilidade">{{ habilidade.nome }}</div>
-                <div class="explicacaoHabilidade">
-                  Causa X {{ habilidade.dano }} de dano 
-                  <span v-if="habilidade.tipo == 'TIPO_DANO_FISICO'">físico</span>
-                  <span v-if="habilidade.tipo == 'TIPO_DANO_SAGRADO'">sagrado</span>
-                  <span v-if="habilidade.tipo == 'TIPO_DANO_FOGO'">de fogo</span>
-                  <span v-if="habilidade.tipo == 'TIPO_DANO_GELO'">de gelo</span>
-                  com recarga de {{ habilidade.recarga }} segundos.
+            <div class="flex-wrap gap-10">
+              <span v-for="linhaArvore in arvore.arvoreHabilidades" class="">
+                <div class="boxHabilidade flex"
+                  :class="{
+                    'completa' : linhaArvore.habilidade.quantidade == linhaArvore.habilidade.quantidadeMaxima,
+                    'escolhida' : linhaArvore.habilidade.quantidade > 0 && linhaArvore.habilidade.quantidade < linhaArvore.habilidade.quantidadeMaxima
+                  }"
+                  @click="escolherHabilidadeArvore(arvore, linhaArvore.habilidade)">
+                  <div>
+                    <img class="habilidadeImg"
+                      :class="{
+                        'completa' : linhaArvore.habilidade.quantidade == linhaArvore.habilidade.quantidadeMaxima,
+                        'escolhida' : linhaArvore.habilidade.quantidade > 0 && linhaArvore.habilidade.quantidade < linhaArvore.habilidade.quantidadeMaxima
+                      }"
+                      :src="'./habilidades/'+linhaArvore.habilidade.imagem" :alt="linhaArvore.habilidade.imagem">
+                  </div>
+                  <div class="ml-5">
+                    <div class="tituloHabilidade">{{ linhaArvore.habilidade.quantidade ?? 0 }}x {{ linhaArvore.habilidade.nome }}</div>
+                    <div class="explicacaoHabilidade">{{ linhaArvore.habilidade.descricao }}</div>
+                  </div>
                 </div>
-              </div>
+              </span>
             </div>
+
           </div>
         </div>
 
@@ -140,7 +157,7 @@ import Request from '@/core/request.js';
 import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js'
 import InlineLoader from '@/components/InlineLoader.vue'
-import { ClassesStorage } from '@/core/storage/ClassesStorage.js'
+import { ArvoresStorage } from '@/core/storage/ArvoresStorage.js'
 import { PersonagensStorage } from '@/core/storage/PersonagensStorage.js'
 import Notifier from '@/components/Notifier.vue';
 
@@ -156,12 +173,12 @@ function notify(text, error = false){
 }
 
 onMounted( () => {
-  loadClasses();
+  loadArvores();
 });
 
 
-const classes = ref([]);
-const busyLoadClasses = ref(false);
+const arvores = ref([]);
+const busyLoadArvores = ref(false);
 const busySavePersonagem = ref(false);
 const especializacoesDisponiveisClassePersonagem = ref([]);
 const arvoreHabilidades = ref([]);
@@ -172,7 +189,7 @@ const arvoreHabilidades = ref([]);
 
 
 const classesCarregadas = computed(() => {
-  return !busyLoadClasses.value
+  return !busyLoadArvores.value
     && classes.value != []
 })
 const personagemPossuiClasse = computed(() => {
@@ -182,28 +199,7 @@ const personagemPossuiEspecializacao = computed(() => {
   return props.personagem.atributos.classe?.especializacao?.nome;
 })
 
-// const exibirListaMasmorras = computed(() => {
-//   return masmorrasCarregadas.value
-//     && masmorraSelecionada.value == null
-// })
-// const exibirListaChefoes = computed(() => {
-//   return masmorrasCarregadas.value
-//     && masmorraSelecionada.value != null
-//     && chefaoSelecionado.value == null
-// })
-// const exibirLuta = computed(() => {
-//   return masmorrasCarregadas.value
-//     && chefaoSelecionado.value != null
-// })
-
-// function jogarMasmorra(masmorra) {
-//   masmorraSelecionada.value = masmorra
-// }
-// function voltarSelecaoMasmorras(){
-//   masmorraSelecionada.value = null
-// }
-
-function updateListaEspecializacoesClasseSelecionada() {
+function updateListaArvoreSelecionada() {
   let classeEncontrada = null;
   if(personagemPossuiClasse.value){
     for (const classe of classes.value) {
@@ -231,30 +227,6 @@ function updateListaEspecializacoesClasseSelecionada() {
   }
 }
 
-function escolherClasse(classe) {
-  props.personagem.atributos['classe'] = {
-    codigo: classe.codigo,
-    nome: classe.nome,
-    tipoArmadura: classe.tipoArmadura
-  }
-  especializacoesDisponiveisClassePersonagem.value = classe.listaEspecializacoes;
-  // salvar personagem
-  salvarPersonagem()
-}
-
-function escolherEspecializacao(especializacao){
-  props.personagem.atributos.classe['especializacao'] = {
-    codigo: especializacao.codigo,
-    nome: especializacao.nome,
-  }
-  props.personagem.atributos['habilidades'] = [
-    especializacao.habilidadePadrao
-  ];
-  arvoreHabilidades.value = especializacao.arvoreHabilidades;
-  // salvar personagem
-  salvarPersonagem()
-}
-
 function processaArvoreComHabilidadesExistentes(){
   for (const personagemHabilidade of props.personagem.atributos.habilidades){
     if(personagemHabilidade.linhaRankOrdem != undefined) {
@@ -271,11 +243,6 @@ function processaArvoreComHabilidadesExistentes(){
   }
 }
 
-function zerarClasse(){
-  props.personagem.atributos.classe = null;
-  props.personagem.atributos.habilidades = null;
-}
-
 function arvoreSetHabilidadeEscolhida(linhaArvore, habilidade){
   zeraLinhaHabilidadeArvore(linhaArvore);
   habilidade.escolhida = true;
@@ -289,20 +256,99 @@ function zeraLinhaHabilidadeArvore(linhaArvore) {
   });
 }
 
-function escolherHabilidadeArvore (linhaArvore, habilidade) {
-  if(habilidade.escolhida == true) return;
-  zeraLinhaHabilidadeArvore(linhaArvore);
-  habilidade.escolhida = true;
-  habilidade['linhaRankOrdem'] = linhaArvore.rankOrdem;
-  let listaHabilidades = props.personagem.atributos.habilidades
-  for (let i = 0; i < listaHabilidades.length; i++) {
-    if(listaHabilidades[i].linhaRankOrdem == linhaArvore.rankOrdem) {
-      listaHabilidades.splice(i,1);
-    }
-  }
-  listaHabilidades.push(habilidade);
+function zerarArvore () {
+  
+  let pontosGastos = 0;
+  let listaHabilidades = [];
+  let listaHabilidadesPassivas = [];
+
   props.personagem.atributos.habilidades = listaHabilidades;
+  props.personagem.atributos.habilidadesPassivas = listaHabilidadesPassivas;
+  props.personagem.atributos.pontosGastos = pontosGastos;
+
   salvarPersonagem()
+  arvores.value.forEach(linha => {
+    linha.arvoreHabilidades.forEach(ln => {
+      ln.habilidade.quantidade = 0;
+    });
+  });
+}
+
+function escolherHabilidadeArvore (linhaArvore, habilidade) {
+  if(props.personagem.atributos.pontosGastos == undefined) {
+    props.personagem.atributos.pontosGastos = 0;
+  }
+  if(props.personagem.atributos.pontosGastos >= props.personagem.nivel) {
+    console.log('[BLOQUEADO]')
+    return;
+  }
+  // adicionar o ponto na árvore
+  if(habilidade.quantidade == undefined) {
+    habilidade.quantidade = 0;
+  }
+  if(habilidade.tipo == 'TIPO_ATIVO' && habilidade.quantidade == 1){
+    return;
+  }
+  if(habilidade.tipo == 'TIPO_ATIVO' && habilidade.quantidade == 0){
+    habilidade.quantidade = 1;
+  }
+  if(habilidade.tipo == 'TIPO_PASSIVO'){
+    habilidade.quantidade += 1;
+  }
+
+  // reseta
+  let pontosGastos = props.personagem.atributos.pontosGastos;
+  let listaHabilidades = [];
+  let listaHabilidadesPassivas = [];
+
+  // adicionar o ponto gasto
+  pontosGastos++;
+  
+  // circular pelas arvores, guardando e somando quem está marcado
+  arvores.value.forEach(linha => {
+    linha.arvoreHabilidades.forEach(ln => {
+      if(ln.habilidade.quantidade != undefined && ln.habilidade.quantidade > 0){
+        if(ln.habilidade.tipo == 'TIPO_PASSIVO') {
+          // personagemAtributos.modificadores[ln.habilidade.atributo] = ln.habilidade.quantidade * ln.habilidade.porcentagem;
+          listaHabilidadesPassivas.push(ln.habilidade);
+        }
+        if(ln.habilidade.tipo == 'TIPO_ATIVO') {
+          listaHabilidades.push(ln.habilidade);
+        }
+      }
+    });
+  });
+
+  props.personagem.atributos.habilidades = listaHabilidades;
+  props.personagem.atributos.habilidadesPassivas = listaHabilidadesPassivas;
+  props.personagem.atributos.pontosGastos = pontosGastos;
+
+  salvarPersonagem()
+}
+
+function updateArvoresDadosPersonagem() {
+  if(props.personagem.atributos.habilidades != undefined) {
+    props.personagem.atributos.habilidades.forEach(h => {
+      arvores.value.forEach(linha => {
+        linha.arvoreHabilidades.forEach(ln => {
+          if(ln.habilidade.nome == h.nome){
+            ln.habilidade.quantidade = h.quantidade;
+          }
+        });
+      });
+    })
+  }
+  if(props.personagem.atributos.habilidadesPassivas != undefined) {
+    props.personagem.atributos.habilidadesPassivas.forEach(hp => {
+      arvores.value.forEach(linha => {
+        linha.arvoreHabilidades.forEach(ln => {
+          if(ln.habilidade.nome == hp.nome){
+            ln.habilidade.quantidade = hp.quantidade;
+          }
+        });
+      });
+    })
+  }
 }
 
 function salvarPersonagem(){
@@ -311,6 +357,7 @@ function salvarPersonagem(){
   PersonagensStorage.salvarAtributos(props.personagem)
   .then(([response, data]) => {
     busySavePersonagem.value = false;
+    props.personagem.atributos = JSON.parse(data.atributosjson);
   })
   .catch((error) => {
     busySavePersonagem.value = false;
@@ -319,16 +366,16 @@ function salvarPersonagem(){
   });
 }
 
-function loadClasses () {
-  busyLoadClasses.value = true;
-  ClassesStorage.index().then(([response, data]) => {
-    console.log('[classes] ', data)
-    classes.value = data
-    busyLoadClasses.value = false;
-    updateListaEspecializacoesClasseSelecionada()
+function loadArvores () {
+  busyLoadArvores.value = true;
+  ArvoresStorage.index().then(([response, data]) => {
+    console.log('[arvores] ', data)
+    arvores.value = data
+    busyLoadArvores.value = false;
+    updateArvoresDadosPersonagem()
   })
   .catch((error) => {
-    busyLoadClasses.value = false;
+    busyLoadArvores.value = false;
     console.error(error);
     notify(`Ocorreu um erro: ${error}`, true)
   });

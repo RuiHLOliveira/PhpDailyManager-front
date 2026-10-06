@@ -52,7 +52,7 @@
 
 
 .container-batalha{
-  max-height: 120px;
+  max-height: 1200px;
   overflow-y: scroll;
   text-align: center;
   border: 2px solid #757575;
@@ -107,6 +107,19 @@
     opacity: 0;
     transform: translateY(10px);
   }
+}
+
+.habilidadeBox{
+  border: 1px solid white;
+  width: 50px;
+}
+
+.overImage {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.486);
 }
 
 </style>
@@ -182,13 +195,27 @@
                   :vidaAtual="personagem.atributos.vidaAtual"
                 ></BarraDeVida>
               </div>
-              <div class="flex-column gap-10 mt-10">
+              <div class="flex-wrap gap-10 mt-10">
+
                 <div v-for="habilidade in personagem.atributos.habilidades" :key="habilidade.nome">
-                  <button type="button" class="btn btn-sm"
+
+                  <button type="button" class="btn btn-sm btn-clear tooltip"
                     :disabled="batalhaFinalizada || habilidade.recargaRestante > 0"
                     @click="usaHabilidade(personagem, habilidade, chefaoSelecionado)">
-                    {{ habilidade.teclaCorrespondente }} : {{ habilidade.nome }} > {{ habilidade.dano }}
-                    {{ habilidade.recargaRestante > 0 ? `(${habilidade.recargaRestante})` : '' }}
+
+                    <img class="habilidadeBox" :src="'./habilidades/'+habilidade.imagem" :alt="habilidade.imagem">
+                    
+                    <div class="overImage">
+                      {{ habilidade.recargaRestante > 0 ? `(${habilidade.recargaRestante})` : '' }}
+                    </div>
+
+                    <span class="tooltiptext">
+                      {{ habilidade.teclaCorrespondente }} : {{ habilidade.nome }}
+                      Dano: {{ habilidade.dano }} | Recarga {{ habilidade.recarga }} s
+                      <br>
+                      {{ habilidade.recargaRestante > 0 ? `(${habilidade.recargaRestante})` : '' }}
+                    </span>
+                    
                   </button>
                 </div>
               </div>
@@ -209,7 +236,7 @@
                 <div v-for="habilidade in chefaoSelecionado.habilidades" :key="habilidade.nome">
                   <button type="button" class="btn btn-sm"
                     :disabled="batalhaFinalizada || habilidade.recargaRestante > 0">
-                    {{ habilidade.nome }}
+                    {{ habilidade.nome }} > {{ habilidade.dano }}
                     {{ habilidade.recargaRestante > 0 ? `(${habilidade.recargaRestante})` : '' }}
                   </button>
                 </div>
@@ -218,6 +245,9 @@
             </div>
             <img class="imgPersonagemChefao" :src="'./masmorras/'+chefaoSelecionado.imagem" alt="">
           </div>
+        </div>
+        <div class="batalhaFinalizada" v-if="batalhaFinalizada">
+          {{ jogardorVenceu ? 'Você venceu!' : 'Batalha perdida!' }}
         </div>
         <div>
           <div class="container-batalha">
@@ -234,7 +264,7 @@
 
               <span>
                 {{ animacao.quem }} {{ animacao.oque }} {{ animacao.alvo }} : 
-                <strong class="texto-dano">{{ animacao.dano }}</strong>
+                <strong class="texto-dano">{{ animacao.dano }} (-{{ animacao.defesa }})</strong>
               </span>
               
               <span v-if="animacao.alvo == chefaoSelecionado.nome && animacao.oque == 'atacou'"
@@ -244,9 +274,6 @@
 
             </div>
           </div>
-        </div>
-        <div class="batalhaFinalizada" v-if="batalhaFinalizada">
-          {{ jogardorVenceu ? 'Você venceu!' : 'Batalha perdida!' }}
         </div>
       </div>
 
@@ -274,12 +301,13 @@ const props = defineProps(['runGameText','personagem'])
 function notify(text, error = false){
   notifier.value.notify(text,error)
 }
+
 onMounted( () => {
-  // loadClasses();
   loadMasmorras();
   loadHabilidades();
   window.addEventListener('keydown', tratarTeclado);
 });
+
 onUnmounted(() => {
   clearInterval(chefeAggradoInterval.value);
   window.removeEventListener('keydown', tratarTeclado);
@@ -307,14 +335,19 @@ const chefeAggradoInterval = ref(null);
 
 function loadHabilidades() {
   const habilidades = [...props.personagem.atributos.habilidades];
-  habilidades.sort((a, b) => {
-    if (a.linhaRankOrdem === undefined || a.linhaRankOrdem === null) return -1;
-    if (b.linhaRankOrdem === undefined || b.linhaRankOrdem === null) return 1;
-    return a.linhaRankOrdem - b.linhaRankOrdem;
-  });
+  // ordena
+  // habilidades.sort((a, b) => {
+  //   if (a.linhaRankOrdem === undefined || a.linhaRankOrdem === null) return -1;
+  //   if (b.linhaRankOrdem === undefined || b.linhaRankOrdem === null) return 1;
+  //   return a.linhaRankOrdem - b.linhaRankOrdem;
+  // });
+
+  // define o dano
   habilidades.forEach(habilidade => {
-    habilidade.dano = habilidade.multiplicador * props.personagem.atributos.ataque;
+    habilidade.dano = ((props.personagem.atributos.ataque * habilidade.porcentagem) / 100).toFixed(2);
   });
+
+  // atribui a tecla
   for(let i = 0; i < habilidades.length; i++){
     habilidades[i].teclaCorrespondente = i+1;
   }
@@ -323,20 +356,22 @@ function loadHabilidades() {
 
 function tecladoExecutaHabilidadePersonagem (eventKey) {
   let habilidadeEscolhida = null;
+  console.log('tecla', parseInt(eventKey))
   for (const key in props.personagem.atributos.habilidades){
-    if(props.personagem.atributos.habilidades[key].linhaRankOrdem == parseInt(eventKey)-1){
+    if(props.personagem.atributos.habilidades[key].teclaCorrespondente == parseInt(eventKey)){
+      console.log('encontrada!')
       habilidadeEscolhida = props.personagem.atributos.habilidades[key];
       break;
     }
   }
-  if(habilidadeEscolhida == null){
-    for (const key in props.personagem.atributos.habilidades){
-      if(props.personagem.atributos.habilidades[key].linhaRankOrdem == undefined){
-        habilidadeEscolhida = props.personagem.atributos.habilidades[key];
-        break;
-      }
-    }
-  }
+  // if(habilidadeEscolhida == null){
+  //   for (const key in props.personagem.atributos.habilidades){
+  //     if(props.personagem.atributos.habilidades[key].linhaRankOrdem == undefined){
+  //       habilidadeEscolhida = props.personagem.atributos.habilidades[key];
+  //       break;
+  //     }
+  //   }
+  // }
 
   usaHabilidade(props.personagem, habilidadeEscolhida, chefaoSelecionado.value)
 }
@@ -365,9 +400,12 @@ function chefaoAggroAutoAtaque(){
 }
 
 function usaHabilidade (atacante, habilidade, defensor) {
+  // impede habilidade em recarga
   if(habilidade.recargaRestante > 0) return;
+
   // começa batalha caso não tenha iniciado
   chefaoAggroAutoAtaque()
+  
   //aplica cd
   habilidade.recargaRestante = habilidade.recarga;
   for (let i = 0; i < habilidade.recarga; i++){
@@ -378,9 +416,9 @@ function usaHabilidade (atacante, habilidade, defensor) {
       // console.log('rodou timeout em', habilidade.nome, habilidade.recargaRestante);
     }, timeout);
   }
+
   // calcula dano
-  
-  const defesa = parseFloat( (defensor.defesa ?? defensor.atributos.defesa).toFixed(0));
+  const defesa = parseFloat( (defensor.defesa ?? defensor.atributos.defesa).toFixed(2));
   const dano = parseFloat((habilidade.dano - defesa).toFixed(2));
 
   console.log('[habilidade.dano]',habilidade.dano)
@@ -397,7 +435,7 @@ function usaHabilidade (atacante, habilidade, defensor) {
     if(defensor.pontosVidaAtuais < 0) defensor.pontosVidaAtuais = 0;
   }
   // invoca texto animado
-  animacaoRegistroBatalha(atacante.nome, 'atacou', defensor.nome, dano);
+  animacaoRegistroBatalha(atacante.nome, 'atacou', defensor.nome, dano, defesa);
   // handle fim batalha
   handleFimBatalha()
 }
@@ -419,13 +457,14 @@ function handleFimBatalha(){
   }
 }
 
-function animacaoRegistroBatalha(quem, oque, alvo, dano) {
+function animacaoRegistroBatalha(quem, oque, alvo, dano, defesa) {
   let novaAnimacao = {
     id: Date.now() + Math.random(),
     quem: quem, 
     oque: oque, 
     alvo: alvo, 
     dano: dano, 
+    defesa: defesa, 
     mostrar: true,
     mostrar2: true,
   };
@@ -465,16 +504,20 @@ const exibirLuta = computed(() => {
     && chefaoSelecionado.value != null
 })
 
-
 function jogarMasmorra(masmorra) {
   masmorraSelecionada.value = masmorra
 }
+
 function voltarSelecaoMasmorras(){
   masmorraSelecionada.value = null
 }
+
 function lutarContraChefao(chefao){
   chefaoSelecionado.value = chefao
   chefaoSelecionado.value.pontosVidaAtuais = chefaoSelecionado.value.pontosVida;
+  chefaoSelecionado.value.habilidades.forEach(habilidade => {
+    habilidade.dano = ((chefaoSelecionado.value.ataque * habilidade.porcentagem) / 100).toFixed(2);
+  });
   console.log('props.personagem.atributos.vidaAtual',props.personagem.atributos.vidaAtual)
   console.log('props.personagem.atributos.vidaMaxima',props.personagem.atributos.vidaMaxima)
 }
@@ -493,18 +536,5 @@ function loadMasmorras () {
   });
 }
 
-function loadClasses () {
-  busyLoadClasses.value = true;
-  ClassesStorage.index().then(([response, data]) => {
-    console.log('[classe] ', data)
-    classes.value = data
-    busyLoadClasses.value = false;
-  })
-  .catch((error) => {
-    busyLoadClasses.value = false;
-    console.error(error);
-    notify(`Ocorreu um erro: ${error}`, true)
-  });
-}
 
 </script>

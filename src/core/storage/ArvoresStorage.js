@@ -3,20 +3,20 @@ import config from '@/core/config.js'
 import QueryStringConverter from '@/core/QueryStringConverter.js';
 import { reactive } from 'vue';
 
-export const ClassesStorage = reactive({
+export const ArvoresStorage = reactive({
     
-    classes: [],
+    arvores: [],
     forceNextReload: [],
 
     // funcionalidades de storage
     index(){
         return new Promise((resolve, reject) => {
 
-            const name = 'classes';
+            const name = 'arvores';
 
-            if(this.classes != undefined && this.classes.length > 0 && !this.forceNextReload) {
+            if(this.arvores != undefined && this.arvores.length > 0 && !this.forceNextReload) {
                 console.log(`[${name}] loadFromCache`)
-                resolve([null,this.classes]);
+                resolve([null,this.arvores]);
             } else {
                 console.log(`[${name}] loadFromApi`)
                 this.loadFromApi(resolve, reject);
@@ -26,7 +26,7 @@ export const ClassesStorage = reactive({
 
     loadFromApi(resolve, reject) {
         this.apiLoad().then(([response,data]) => {
-            this.classes = data
+            this.arvores = data
             this.forceNextReload = false;
             resolve([response,data]);
         }).catch((error) => {
@@ -42,7 +42,7 @@ export const ClassesStorage = reactive({
         };
         params = QueryStringConverter.toQueryString(params, true);
         let requestData = {
-            'url': `${config.serverUrl}/classes${params}`,
+            'url': `${config.serverUrl}/arvores${params}`,
         };
         return Request.fetch(requestData)
     },
