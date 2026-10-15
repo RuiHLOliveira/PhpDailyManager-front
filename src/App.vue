@@ -52,10 +52,29 @@
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/invitations">
               <i class="fi fi-rs-file-user"></i> Convites
           </router-link>
+          <!-- <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/obras">
+              <i class="fi fi-rs-book"></i> Obras
+          </router-link> -->
           <router-link v-if="loggedIn" class="menuItem" @click="toggleMenu()" to="/configuracoes">
               <i class="fi fi-rs-gears"></i> Configurações
           </router-link>
           <span class="menuItem" v-if="loggedIn" @click="logout()"><i class="fi fi-rs-sign-out-alt"></i> Logout</span>
+          
+          <span v-if="loggedIn" class="mt-10" >
+            <span class="menuItem" @click="toggleMusic()">
+              <i class="fi fi-rs-play" v-if="ashenvaleMusic == null || ashenvaleMusic?.paused"></i>
+              <i class="fi fi-rs-pause" v-if="ashenvaleMusic != null && !ashenvaleMusic?.paused"></i>
+            </span>
+            <span class="menuItem" @click="musicVolumeUp()">
+              <i class="fi fi-rs-volume"></i>
+            </span>
+            <span class="menuItem" @click="musicVolumeDown()">
+              <i class="fi fi-rs-volume-down"></i>
+            </span>
+            <span class="menuItem" v-if="ashenvaleMusic != null">
+              {{ ashenvaleMusicVolume }}
+            </span>
+          </span>
         </nav>
 
         <div class="mainPageDiv mainBackground"
@@ -110,6 +129,8 @@ export default {
       showMenu: false,
       windowWidth: 0,
       windowHeight: 0,
+      ashenvaleMusic: null,
+      ashenvaleMusicVolume: null,
     }
   },
   computed: {
@@ -171,6 +192,40 @@ export default {
     redirectAfterLogin(){
       this.updateLoggedIn()
       this.$router.push({ path: '/personagem' })
+    },
+
+    toggleMusic() {
+      if(this.ashenvaleMusic === null) {
+        console.log('[LOG] loaded');
+        this.ashenvaleMusic = new Audio('./musicas/ashenvalemini.mp3')
+        this.ashenvaleMusic.loop = true;
+        this.ashenvaleMusic.volume = 0.1;
+        this.setAshenvaleMusicVolumeVar(this.ashenvaleMusic.volume);
+      }
+      console.log('[LOG] PAUSED', this.ashenvaleMusic.paused);
+      if(this.ashenvaleMusic.paused) {
+        console.log('[LOG] play');
+        this.ashenvaleMusic.play();
+      } else {
+        console.log('[LOG] pause');
+        this.ashenvaleMusic.pause();
+      }
+    },
+
+    setAshenvaleMusicVolumeVar(value){
+      this.ashenvaleMusicVolume = Math.round(value * 10);
+    },
+
+    musicVolumeUp(){
+      if(this.ashenvaleMusic.volume >= 1) return;
+      this.ashenvaleMusic.volume = this.ashenvaleMusic.volume + 0.1;
+      this.setAshenvaleMusicVolumeVar(this.ashenvaleMusic.volume);
+    },
+
+    musicVolumeDown(){
+      if(this.ashenvaleMusic.volume <= 0) return;
+      this.ashenvaleMusic.volume = this.ashenvaleMusic.volume - 0.1;
+      this.setAshenvaleMusicVolumeVar(this.ashenvaleMusic.volume);
     },
 
     logout() {

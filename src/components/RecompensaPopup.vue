@@ -95,7 +95,13 @@ export default {
     // message: String
   },
   methods:{
+    playAudioQuestComplete(){
+      let audio = new Audio('./sons/iQuestComplete.ogg')
+      audio.volume = 0.3;
+      audio.play();
+    },
     show(requestData){
+      this.playAudioQuestComplete()
       let dados = JSON.parse(requestData.historico.dadosjson);
       let recompensas = dados.recompensas
       this.subiuNivelTexto = requestData.historicoSubiuNivel?.texto ?? null;
