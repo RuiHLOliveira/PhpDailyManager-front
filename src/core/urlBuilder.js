@@ -8,4 +8,11 @@ export default {
         }
         return url;
     },
+    getObjetivoUrl(objetivo, fullpath = false) {
+        let url = '/objetivosList/objetivo/' + objetivo.id;
+        if(fullpath) {
+            url = config.frontSubfolderUrl + url;
+        }
+        return url;
+    },
 }

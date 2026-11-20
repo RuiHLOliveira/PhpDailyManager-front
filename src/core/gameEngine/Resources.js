@@ -2,7 +2,7 @@ class Resources {
     constructor(){
 
         this.toLoad ={
-            goldMoeda: '/sprites/goldmoeda.png',
+            goldMoeda: '/sprites/money-gold.gif',
             inimigo: '/sprites/goldmoeda.png'
         };
 

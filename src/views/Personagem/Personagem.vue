@@ -22,14 +22,22 @@
   padding: 20px
 }
 
+.grayBox { 
+  background-color: var(--bg-color-gray);
+  margin-bottom: 5px;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 .boxImgInline {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
 }
+
 .boxImgInline img.imgInline{
-  max-width: 32px;
+  width: 24px;
+  max-width: 24px;
 }
 
 .listaHistoricosPersonagem{
@@ -68,27 +76,43 @@
 
             <span class="personagem__titulo">{{ personagem.nome }}</span>
 
-            <div class="flex gap-20">
+            <div class="flex-column">
+              
+              <div class="flex-row">
+                <span class="boxImgInline grayBox">
+                  <img class="imgInline ml-5" src="/habilidades/fisico/lancadocampeao.jpg" alt=""> 
+                  <span class="ml-5">
+                    {{ personagem.atributos.ataque }}
+                  </span>
+                
+                  <img class="imgInline ml-20" src="/habilidades/fisico/posturadefensiva.jpg" alt=""> 
+                  <span class="ml-5">
+                    {{ personagem.atributos.defesa }}
+                  </span>
 
-              <div class="flex-column">
-                <!-- <span>{{ personagem.atributos }}</span> -->
-                <span>Ataque {{ personagem.atributos.ataque }}</span>
-                <span>Defesa {{ personagem.atributos.defesa }}</span>
-                <span>Vida {{ personagem.atributos.vidaMaxima }}</span>
+                  <img class="imgInline ml-20" src="/habilidades/fisico/treinamentobarbaro.jpg" alt=""> 
+                  <span class="ml-5">
+                    {{ personagem.atributos.vidaMaxima }}
+                  </span>
+                </span>
               </div>
 
-              <div class="flex-column">
-                <span class="boxImgInline">
+              <div class="flex-row">
+                <span class="boxImgInline grayBox">
                   <img class="imgInline" src="/fc865.png" alt="">
-                  {{ personagem.nivel }}
-                </span>
-                <span class="boxImgInline">
-                  <img class="imgInline" src="/fc865.png" alt="">
-                  {{ personagem.experiencia }} / {{ personagem.expProximoNivel }}
-                </span>
-                <span class="boxImgInline">
-                  <img class="imgInline" src="/fc131.png" alt="">
-                  {{ personagem.ouro }}
+                  <span class="ml-5">
+                    {{ personagem.nivel }}
+                  </span>
+                
+                  <img class="imgInline ml-20 " src="/moeda/xp_icon.jpg" alt="">
+                  <span class="ml-5">
+                    {{ personagem.experiencia }} / {{ personagem.expProximoNivel }}
+                  </span>
+
+                  <img class="imgInline ml-20" src="/moeda/gold_icon.jpg" alt="">
+                  <span class="ml-5">
+                    {{ personagem.ouro }}
+                  </span>
                 </span>
               </div>
             </div>
@@ -100,15 +124,16 @@
                 <span>{{ historico.createdatFormatted }}</span>
                 <span>{{ historico.texto }}</span>
                 <span class="boxImgInline">
-                  <span v-for="recompensa in historico.dadosjson.recompensas" class="boxImgInline">
+                  <span v-for="recompensa in historico.dadosjson.recompensas" class="boxImgInline ml-10">
                     {{ recompensa.quantidade }}
-                    <img v-if="recompensa.moeda == 'ouro'" class="imgInline" src="/fc131.png" alt="">
-                    <img v-if="recompensa.moeda == 'experiencia'" class="imgInline" src="/fc865.png" alt="">
+                    <img v-if="recompensa.moeda == 'ouro'" class="imgInline ml-5" src="/moeda/gold_icon.jpg" alt="">
+                    <img v-if="recompensa.moeda == 'experiencia'" class="imgInline ml-5" src="/moeda/xp_icon.jpg" alt="">
                   </span>
                 </span>
               </div>
             </div>
           </div>
+          
         </div>
 
       </section>

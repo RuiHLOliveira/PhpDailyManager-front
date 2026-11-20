@@ -5,6 +5,7 @@ import Register from '../views/Auth/Register.vue'
 import Inbox from '../views/inbox/Inbox.vue'
 import PrimeiraPagina from '../views/PrimeiraPagina.vue'
 import ProjetosListV2 from '../views/projetos/ProjetosListV2.vue'
+import ObjetivosList from '../views/objetivos/ObjetivosList.vue'
 import Inspiracao from '../views/projetos/Inspiracao.vue'
 import Tarefas from '../views/tarefas/Tarefas.vue'
 import Habitos from '../views/habitos/Habitos.vue'
@@ -15,6 +16,7 @@ import Configuracoes from '../views/Configuracoes.vue'
 import Backup from '../views/Backup.vue'
 import Historicos from '../views/Historicos/Historicos.vue'
 import DailySummary from '@/views/tarefas/DailySummary.vue'
+// import Obras from '@/views/obras/Obras.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -49,6 +51,18 @@ const router = createRouter({
       path: '/projetosListV2/projeto/:idProjeto',
       name: 'Projeto',
       component: ProjetosListV2,
+      props: true
+    },
+    {
+      path: '/objetivosList',
+      name: 'ObjetivosList',
+      component: ObjetivosList,
+      props: true
+    },
+    {
+      path: '/objetivosList/objetivo/:idObjetivo',
+      name: 'Objetivos',
+      component: ObjetivosList,
       props: true
     },
     {
@@ -117,6 +131,11 @@ const router = createRouter({
       name: 'DailySummary',
       component: DailySummary,
     },
+    // {
+    //   path: '/obras',
+    //   name: 'Obras',
+    //   component: Obras,
+    // },
     // {
     //   path: '/listaContas',
     //   name: 'listaContas',

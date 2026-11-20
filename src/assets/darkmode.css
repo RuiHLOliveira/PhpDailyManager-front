@@ -8,9 +8,11 @@
 
     --bg-color-gray: #575757;
 
-    --border-color: #dfdfdf;
+    --border-color: #b4b4b4;
 
     --border-color-onlydark: #dfdfdf;
     --bg-projeto-selected: #425546;
     --bg-color-invert: #ffffff;
+    
+    --form-border-color: #646464;
 }

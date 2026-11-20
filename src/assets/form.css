@@ -11,6 +11,7 @@ label {
     border: 0px;
 
     border: 1px solid var(--gray1);
+    border: 1px solid var(--form-border-color);
     padding: 5px;
     border-radius: 3px;
 }
@@ -21,9 +22,9 @@ textarea.textarea {
     font-weight: normal;
     background-color: var(--bg-color);
     border: 1px solid var(--gray1);
-    /* border: 2px solid #7da3ce; */
+    border: 1px solid var(--form-border-color);
     padding: 5px;
-    border-radius: 3px;
+    border-radius: 5px;
     display: block;
     width: 100%;
     min-width: 100%;
@@ -88,7 +89,7 @@ input[type=date]
     border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
-    border-radius: 3px;
+    border-radius: 5px;
     
     /* mobile */
     width: 100%;
@@ -142,8 +143,9 @@ select.fullSelect {
     /* border: 1px solid var(--form-border-color); */
     /* border: 2px solid #7da3ce; */
     border: 1px solid var(--border-color);
+    border: 1px solid var(--form-border-color);
     padding: 5px;
-    border-radius: 3px;
+    border-radius: 5px;
     
     /* mobile */
     width: 95%;
@@ -170,7 +172,7 @@ select.smallSelect {
     border: 1px solid var(--form-border-color);
     /* border: 2px solid #7da3ce; */
     padding: 5px;
-    border-radius: 3px;
+    border-radius: 5px;
     
     /* mobile */
     /* width: 95%; */
